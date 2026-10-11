@@ -1,0 +1,42 @@
+# nnU-Net v2 baseline (Phase 0). Official framework, nnunetv2==2.8.1 (pip), 2d configuration only.
+# Everything not listed here is nnU-Net's self-configured default (plans: patch size, batch size,
+# network topology, normalisation) and is recorded from the generated nnUNetPlans.json in
+# reports/PHASE0_MODEL_SETUP.md.
+method: nnunet
+framework: nnunetv2 2.8.1
+configuration: 2d                      # the 3d configurations are never planned or trained
+trainer: nnUNetTrainerLGMS             # = nnUNetTrainer + seed + 50-epoch snapshots (src/nnunet_ext/)
+plans: nnUNetPlans                     # default planner (ExperimentPlanner)
+datasets:
+  QaTa-COV19: Dataset501_QaTaCOV19
+  MosMedData+: Dataset502_MosMedDataPlus
+input: common 224x224 prepared data (Task 0.2), PNG, 1 channel named "gray" -> z-score normalisation
+pretrained: none                       # nnU-Net trains from scratch
+split: custom splits_final.json, single fold 0 = LViT train (train) / LViT val (val)
+fold: 0
+
+# nnU-Net defaults (nnUNetTrainer, v2.8.1) -- not changed
+loss: Dice + CE (DC_and_CE_loss), deep supervision
+optimizer: SGD, lr 1e-2, momentum 0.99, nesterov, weight decay 3e-5
+scheduler: PolyLRScheduler (exponent 0.9), per epoch
+max_epochs: 1000
+iterations_per_epoch: 250
+val_iterations_per_epoch: 50           # nnU-Net's internal pseudo-Dice only (not used for selection)
+augmentation: nnU-Net default 2D pipeline (rotation, scaling, Gaussian noise/blur, brightness, contrast,
+  low resolution, gamma, mirroring)
+
+# Mirroring (decision of 2026-10-11): nnU-Net default kept -- mirroring augmentation during training,
+# and mirroring test-time augmentation both for the validation predictions used to select the checkpoint
+# and for the test predictions.
+mirroring:
+  training_augmentation: true
+  tta_validation_selection: true
+  tta_test: true
+inference: nnUNetPredictor, tile_step_size 0.5, Gaussian weighting
+
+# Checkpoint selection (common rule: validation Dice only)
+snapshot_every_epochs: 50              # checkpoint_ep0050.pth ... checkpoint_ep1000.pth (20 candidates)
+selection: highest mean per-case Dice on the full LViT validation set, common evaluator (prob > 0.5);
+  ties -> earlier epoch. nnU-Net's checkpoint_best.pth (EMA pseudo-Dice) is not used.
+
+seed: environment variable LGMS_SEED (python / numpy / torch + data-augmentation workers)

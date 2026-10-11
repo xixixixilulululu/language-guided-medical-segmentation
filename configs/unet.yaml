@@ -1,0 +1,59 @@
+# U-Net baseline (Phase 0). Read by src/train_unet.py.
+# Source: LViT official repository, external/LViT/nets/UNet.py (commit ba90775); training procedure
+# from external/LViT/train_model.py, Train_one_epoch.py, utils.py and Config.py of the same commit.
+method: unet
+model:
+  implementation: external/LViT/nets/UNet.py  # class UNet, base width 64, 4 down / 4 up blocks
+  n_channels: 3          # LViT Config.n_channels = 3; the grayscale channel is duplicated
+  n_classes: 1           # LViT Config.n_labels = 1 -> sigmoid output (foreground probability)
+pretrained: none         # LViT Config.pretrain = False; U-Net is trained from scratch
+input_size: 224          # LViT Config.img_size
+
+# Batch size and learning rate: LViT paper (Li et al., IEEE TMI 2023), Sec. IV-C "Implementation
+# Details": "The initial learning rate is set to 3e-4 for the QaTa-COV19 dataset and 1e-3 for the
+# MosMedData+ dataset ... The default batch size is 24 for the QaTa-COV19 dataset and the MosMedData+
+# dataset." The paper gives no separate setting for its U-Net comparison model; we use these general
+# settings, and check our U-Net against the U-Net scores reported in the paper (Table II) after training.
+# Config.py (batch_size = 2) is NOT used: its comment says "For LViT-T, 2 is better than 4".
+# (Decision of 2026-10-11.)
+batch_size: 24
+
+optimizer:
+  type: Adam             # train_model.py: torch.optim.Adam(params, lr), no weight decay
+  lr:                    # LViT paper Sec. IV-C
+    QaTa-COV19: 3.0e-4
+    MosMedData+: 1.0e-3
+  weight_decay: 0.0
+
+scheduler:
+  type: CosineAnnealingWarmRestarts   # LViT utils.py implementation, Config.cosineLR = True
+  T_0: 10
+  T_mult: 1
+  eta_min: 1.0e-4
+  step: per_epoch                     # stepped once per epoch, after validation (Train_one_epoch.py)
+
+loss:
+  type: WeightedDiceBCE  # LViT utils.py: 0.5 * Dice + 0.5 * class-balanced BCE on sigmoid output
+  dice_weight: 0.5
+  bce_weight: 0.5
+
+# LViT Load_Dataset.py RandomGenerator (train only; validation/test: no augmentation):
+#   with p = 0.5 : random rot90 (k in {0,1,2,3}) followed by a random flip (axis 0 or 1)
+#   else p = 0.5 : random rotation, integer angle in [-20, 20), nearest-neighbour, same size
+#   otherwise    : unchanged     (overall: 50 % rot/flip, 25 % rotation, 25 % none)
+# Intensity: uint8 / 255 (torchvision to_tensor), no normalisation.
+augmentation: lvit_random_generator
+
+max_epochs: 2000                 # LViT Config.epochs
+early_stopping_patience: 50      # LViT Config.early_stopping_patience
+# LViT saves a "best" model only when epoch + 1 > 5, i.e. from the 6th epoch on; kept as is.
+first_epoch_for_best: 6
+
+# Model selection: mean per-case validation Dice of the common evaluator (prob > 0.5), every epoch.
+# (LViT uses its own batch-averaged Dice of the same thresholded masks; the selection criterion of the
+# plan is the validation Dice of the common evaluator.)
+selection_metric: val_dice
+
+num_workers: 8                   # LViT train_model.py
+deterministic: true              # LViT train_model.py: cudnn.deterministic = True, benchmark = False
+val_batch_size: 32               # inference only; does not change any value

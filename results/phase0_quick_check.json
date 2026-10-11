@@ -1,0 +1,494 @@
+{
+  "steps1_4": {
+    "nnunet_MosMedData+": {
+      "method": "nnunet",
+      "dataset": "MosMedData+",
+      "batch_image": {
+        "shape": [
+          65,
+          1,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": -2.2053909301757812,
+        "max": 6.329102516174316
+      },
+      "batch_mask": {
+        "shape": [
+          65,
+          224,
+          224
+        ],
+        "dtype": "int16",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "mask_values": [
+        0,
+        1
+      ],
+      "output": {
+        "shape": [
+          65,
+          2,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": -11.991101264953613,
+        "max": 9.79638957977295
+      },
+      "shapes_ok": true,
+      "loss": 1.1707768440246582,
+      "loss_finite": true,
+      "all_grads_finite": true,
+      "n_params_M": 20.619082,
+      "gpu": "NVIDIA GB10",
+      "torch": "2.14.0+cu130",
+      "n_train_keys": 2183,
+      "n_val_keys": 273,
+      "patch_size": [
+        224,
+        224
+      ],
+      "batch_size": 65,
+      "deep_supervision_outputs": [
+        [
+          65,
+          2,
+          224,
+          224
+        ],
+        [
+          65,
+          2,
+          112,
+          112
+        ],
+        [
+          65,
+          2,
+          56,
+          56
+        ],
+        [
+          65,
+          2,
+          28,
+          28
+        ],
+        [
+          65,
+          2,
+          14,
+          14
+        ]
+      ],
+      "network": "dynamic_network_architectures.architectures.unet.PlainConvUNet",
+      "passed": true
+    },
+    "nnunet_QaTa-COV19": {
+      "method": "nnunet",
+      "dataset": "QaTa-COV19",
+      "batch_image": {
+        "shape": [
+          65,
+          1,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": -5.712584018707275,
+        "max": 2.789931297302246
+      },
+      "batch_mask": {
+        "shape": [
+          65,
+          224,
+          224
+        ],
+        "dtype": "int16",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "mask_values": [
+        0,
+        1
+      ],
+      "output": {
+        "shape": [
+          65,
+          2,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": -16.668838500976562,
+        "max": 11.714885711669922
+      },
+      "shapes_ok": true,
+      "loss": 0.9626317024230957,
+      "loss_finite": true,
+      "all_grads_finite": true,
+      "n_params_M": 20.619082,
+      "gpu": "NVIDIA GB10",
+      "torch": "2.14.0+cu130",
+      "n_train_keys": 5716,
+      "n_val_keys": 1429,
+      "patch_size": [
+        224,
+        224
+      ],
+      "batch_size": 65,
+      "deep_supervision_outputs": [
+        [
+          65,
+          2,
+          224,
+          224
+        ],
+        [
+          65,
+          2,
+          112,
+          112
+        ],
+        [
+          65,
+          2,
+          56,
+          56
+        ],
+        [
+          65,
+          2,
+          28,
+          28
+        ],
+        [
+          65,
+          2,
+          14,
+          14
+        ]
+      ],
+      "network": "dynamic_network_architectures.architectures.unet.PlainConvUNet",
+      "passed": true
+    },
+    "transunet_MosMedData+": {
+      "method": "transunet",
+      "dataset": "MosMedData+",
+      "batch_image": {
+        "shape": [
+          24,
+          1,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "batch_mask": {
+        "shape": [
+          24,
+          224,
+          224
+        ],
+        "dtype": "int64",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "mask_values": [
+        0,
+        1
+      ],
+      "output": {
+        "shape": [
+          24,
+          2,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": -1.9638253450393677,
+        "max": 2.037402629852295
+      },
+      "shapes_ok": true,
+      "loss": 0.6202189922332764,
+      "loss_finite": true,
+      "all_grads_finite": true,
+      "n_params_M": 105.276066,
+      "gpu": "NVIDIA GB10",
+      "torch": "2.14.0+cu130",
+      "passed": true
+    },
+    "transunet_QaTa-COV19": {
+      "method": "transunet",
+      "dataset": "QaTa-COV19",
+      "batch_image": {
+        "shape": [
+          24,
+          1,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "batch_mask": {
+        "shape": [
+          24,
+          224,
+          224
+        ],
+        "dtype": "int64",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "mask_values": [
+        0,
+        1
+      ],
+      "output": {
+        "shape": [
+          24,
+          2,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": -2.3036231994628906,
+        "max": 1.9080874919891357
+      },
+      "shapes_ok": true,
+      "loss": 0.5666056871414185,
+      "loss_finite": true,
+      "all_grads_finite": true,
+      "n_params_M": 105.276066,
+      "gpu": "NVIDIA GB10",
+      "torch": "2.14.0+cu130",
+      "passed": true
+    },
+    "unet_MosMedData+": {
+      "method": "unet",
+      "dataset": "MosMedData+",
+      "batch_image": {
+        "shape": [
+          24,
+          3,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "batch_mask": {
+        "shape": [
+          24,
+          224,
+          224
+        ],
+        "dtype": "int64",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "mask_values": [
+        0,
+        1
+      ],
+      "output": {
+        "shape": [
+          24,
+          1,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": 0.007931005209684372,
+        "max": 0.8705878257751465
+      },
+      "shapes_ok": true,
+      "loss": 0.8604881763458252,
+      "loss_finite": true,
+      "all_grads_finite": true,
+      "n_params_M": 14.751873,
+      "gpu": "NVIDIA GB10",
+      "torch": "2.14.0+cu130",
+      "passed": true
+    },
+    "unet_QaTa-COV19": {
+      "method": "unet",
+      "dataset": "QaTa-COV19",
+      "batch_image": {
+        "shape": [
+          24,
+          3,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "batch_mask": {
+        "shape": [
+          24,
+          224,
+          224
+        ],
+        "dtype": "int64",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "mask_values": [
+        0,
+        1
+      ],
+      "output": {
+        "shape": [
+          24,
+          1,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "min": 0.001584059908054769,
+        "max": 0.9525220394134521
+      },
+      "shapes_ok": true,
+      "loss": 0.671411395072937,
+      "loss_finite": true,
+      "all_grads_finite": true,
+      "n_params_M": 14.751873,
+      "gpu": "NVIDIA GB10",
+      "torch": "2.14.0+cu130",
+      "passed": true
+    }
+  },
+  "subset_training": {
+    "unet_QaTa-COV19": {
+      "epochs": 60,
+      "first_train_loss": 0.64345,
+      "last_train_loss": 0.266591,
+      "min_train_loss": 0.266591,
+      "best_val_dice_32_cases": 0.616461
+    },
+    "unet_MosMedData+": {
+      "epochs": 60,
+      "first_train_loss": 0.764372,
+      "last_train_loss": 0.132984,
+      "min_train_loss": 0.132984,
+      "best_val_dice_32_cases": 0.776869
+    },
+    "transunet_QaTa-COV19": {
+      "epochs": 60,
+      "first_train_loss": 0.551134,
+      "last_train_loss": 0.0868035,
+      "min_train_loss": 0.0852461,
+      "best_val_dice_32_cases": 0.740334
+    },
+    "transunet_MosMedData+": {
+      "epochs": 60,
+      "first_train_loss": 0.602362,
+      "last_train_loss": 0.0797086,
+      "min_train_loss": 0.0797086,
+      "best_val_dice_32_cases": 0.479813
+    }
+  },
+  "epoch_seconds": {
+    "transunet_MosMedData+": {
+      "epochs_measured": 2,
+      "train_s": [
+        56.9,
+        57.1
+      ],
+      "val_s": [
+        2.7,
+        2.8
+      ],
+      "last_epoch_total_s": 59.9,
+      "max_memory_gb": 9.05
+    },
+    "transunet_QaTa-COV19": {
+      "epochs_measured": 2,
+      "train_s": [
+        148.0,
+        147.6
+      ],
+      "val_s": [
+        13.9,
+        13.8
+      ],
+      "last_epoch_total_s": 161.3,
+      "max_memory_gb": 9.05
+    },
+    "unet_bs24_MosMedData+": {
+      "epochs_measured": 2,
+      "train_s": [
+        41.8,
+        40.5
+      ],
+      "val_s": [
+        2.1,
+        2.1
+      ],
+      "last_epoch_total_s": 42.7,
+      "max_memory_gb": 5.99
+    },
+    "unet_bs24_QaTa-COV19": {
+      "epochs_measured": 2,
+      "train_s": [
+        105.7,
+        105.0
+      ],
+      "val_s": [
+        10.3,
+        9.7
+      ],
+      "last_epoch_total_s": 114.7,
+      "max_memory_gb": 5.99
+    }
+  },
+  "nnunet": {
+    "QaTa-COV19": {
+      "epoch_seconds": [
+        138.21,
+        80.42,
+        80.27
+      ],
+      "val_prediction_seconds_per_snapshot": [
+        51.0,
+        52.2,
+        45.0
+      ],
+      "val_dice_per_snapshot": [
+        0.5965,
+        0.6729,
+        0.6977
+      ],
+      "final_pipeline_complete": true
+    },
+    "MosMedData+": {
+      "epoch_seconds": [
+        95.26,
+        80.68,
+        80.51
+      ],
+      "val_prediction_seconds_per_snapshot": [
+        13.9,
+        10.5,
+        11.3
+      ],
+      "val_dice_per_snapshot": [
+        0.5068,
+        0.5191,
+        0.5557
+      ],
+      "final_pipeline_complete": true
+    }
+  }
+}

@@ -1,0 +1,45 @@
+# TransUNet baseline (Phase 0). Read by src/train_transunet.py.
+# Source: official repository, external/TransUNet (commit 02ef001): networks/vit_seg_modeling.py,
+# train.py and trainer.py (trainer_synapse). Values below are the official defaults unless stated.
+method: transunet
+model:
+  vit_name: R50-ViT-B_16       # train.py --vit_name; CONFIGS_ViT_seg['R50-ViT-B_16']
+  n_classes: 2                 # background, lesion (softmax)
+  n_skip: 3                    # train.py --n_skip
+  vit_patches_size: 16         # train.py --vit_patches_size; R50 grid = 224 / 16 = 14 x 14
+  in_channels: 1               # the network repeats a 1-channel input to 3 channels itself (forward)
+pretrained:
+  weights: ImageNet-21k R50+ViT-B_16  # net.load_from(np.load(config_vit.pretrained_path))
+  file: ~/pretrained/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz
+  url: https://storage.googleapis.com/vit_models/imagenet21k/R50%2BViT-B_16.npz
+  sha256: ff009bf39bb4f9198b834cfe46aba2bfdaf730e933ab3e3c4b1edf4226eaafbe
+input_size: 224                # train.py --img_size
+
+batch_size: 24                 # train.py --batch_size (official default, per GPU, 1 GPU)
+optimizer:
+  type: SGD                    # trainer.py: optim.SGD(lr=base_lr, momentum=0.9, weight_decay=1e-4)
+  lr: 0.01                     # train.py --base_lr
+  momentum: 0.9
+  weight_decay: 1.0e-4
+scheduler:
+  type: poly                   # lr = base_lr * (1 - iter / max_iterations) ** 0.9, updated every iteration
+  power: 0.9
+loss:                          # trainer.py: 0.5 * CrossEntropy + 0.5 * Dice(softmax, 2 classes)
+  ce_weight: 0.5
+  dice_weight: 0.5
+
+# dataset_synapse.py RandomGenerator (train only):
+#   with p = 0.5 : random rot90 (k in {0,1,2,3}) + random flip;  else p = 0.5 : random rotation in
+#   [-20, 20), nearest neighbour (order 0) for image and label;  otherwise unchanged.
+# Intensity: the official Synapse data are pre-scaled to [0, 1]; here uint8 / 255 -> [0, 1].
+augmentation: transunet_random_generator
+
+max_epochs: 150                # train.py --max_epochs; max_iterations = max_epochs * iterations per epoch
+# The official trainer has no validation and keeps the last epoch. As in the agreed plan, the
+# validation Dice (common evaluator, prob > 0.5, i.e. argmax) is computed after every epoch and the
+# best epoch is kept; the training schedule itself (150 epochs, poly LR) is unchanged.
+selection_metric: val_dice
+
+num_workers: 8                 # trainer.py DataLoader(num_workers=8, pin_memory=True)
+deterministic: true            # train.py --deterministic 1
+val_batch_size: 32             # inference only

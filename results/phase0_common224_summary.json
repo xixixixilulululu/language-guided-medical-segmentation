@@ -1,0 +1,42 @@
+{
+  "QaTa-COV19": {
+    "train": {
+      "n": 5716,
+      "empty_masks": 0,
+      "mean_lesion_fraction": 0.12222871573237849,
+      "median_lesion_fraction": 0.10033681441326531
+    },
+    "val": {
+      "n": 1429,
+      "empty_masks": 0,
+      "mean_lesion_fraction": 0.11893333506644437,
+      "median_lesion_fraction": 0.09943000637755102
+    },
+    "test": {
+      "n": 2113,
+      "empty_masks": 0,
+      "mean_lesion_fraction": 0.1189345732081285,
+      "median_lesion_fraction": 0.10712292729591837
+    }
+  },
+  "MosMedData+": {
+    "train": {
+      "n": 2183,
+      "empty_masks": 1,
+      "mean_lesion_fraction": 0.016958327758210472,
+      "median_lesion_fraction": 0.00874920280612245
+    },
+    "val": {
+      "n": 273,
+      "empty_masks": 0,
+      "mean_lesion_fraction": 0.012714147300403678,
+      "median_lesion_fraction": 0.007613201530612245
+    },
+    "test": {
+      "n": 273,
+      "empty_masks": 0,
+      "mean_lesion_fraction": 0.01777070718397249,
+      "median_lesion_fraction": 0.0059590242346938774
+    }
+  }
+}

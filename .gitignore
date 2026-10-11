@@ -31,3 +31,6 @@ __pycache__/
 
 # Local Chinese reading copies of the docs; GitHub content is English only
 *_zh_CN.md
+
+# Personal Claude Code overrides (the shared hooks are in .claude/settings.json)
+.claude/settings.local.json

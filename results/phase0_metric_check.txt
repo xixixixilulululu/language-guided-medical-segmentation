@@ -1,0 +1,51 @@
+case                                         metric  evaluator   expected  ok
+identical (40x40 square)                     dice       1.0000     1.0000  yes
+identical (40x40 square)                     miou       1.0000     1.0000  yes
+identical (40x40 square)                     hd95       0.0000     0.0000  yes
+identical (40x40 square)                     assd       0.0000     0.0000  yes
+disjoint single pixels 10 px apart           dice       0.0000     0.0000  yes
+disjoint single pixels 10 px apart           miou       0.0000     0.0000  yes
+disjoint single pixels 10 px apart           hd95      10.0000    10.0000  yes
+disjoint single pixels 10 px apart           assd      10.0000    10.0000  yes
+disjoint squares (no overlap, 30 px gap)     dice       0.0000     0.0000  yes
+disjoint squares (no overlap, 30 px gap)     miou       0.0000     0.0000  yes
+disjoint squares (no overlap, 30 px gap)     hd95      40.0000    40.0000  yes
+disjoint squares (no overlap, 30 px gap)     assd      35.5000    35.5000  yes
+half overlap (10x10 shifted by 5 px)         dice       0.5000     0.5000  yes
+half overlap (10x10 shifted by 5 px)         miou       0.3333     0.3333  yes
+half overlap (10x10 shifted by 5 px)         hd95       5.0000     5.0000  yes
+half overlap (10x10 shifted by 5 px)         assd       2.5000     2.5000  yes
+empty prediction                             dice       0.0000     0.0000  yes
+empty prediction                             miou       0.0000     0.0000  yes
+empty prediction                             hd95     316.7838   316.7838  yes
+empty prediction                             assd     316.7838   316.7838  yes
+empty ground truth                           dice       0.0000     0.0000  yes
+empty ground truth                           miou       0.0000     0.0000  yes
+empty ground truth                           hd95     316.7838   316.7838  yes
+empty ground truth                           assd     316.7838   316.7838  yes
+both empty                                   dice       1.0000     1.0000  yes
+both empty                                   miou       1.0000     1.0000  yes
+both empty                                   hd95       0.0000     0.0000  yes
+both empty                                   assd       0.0000     0.0000  yes
+random blobs #0                              dice       0.2788     0.2788  yes
+random blobs #0                              miou       0.1620     0.1620  yes
+random blobs #0                              hd95      95.0991    95.0991  yes
+random blobs #0                              assd      29.0799    29.0799  yes
+random blobs #1                              dice       0.0000     0.0000  yes
+random blobs #1                              miou       0.0000     0.0000  yes
+random blobs #1                              hd95     115.0028   115.0028  yes
+random blobs #1                              assd      66.3908    66.3908  yes
+random blobs #2                              dice       0.0222     0.0222  yes
+random blobs #2                              miou       0.0112     0.0112  yes
+random blobs #2                              hd95      57.7204    57.7204  yes
+random blobs #2                              assd      33.2994    33.2994  yes
+random blobs #3                              dice       0.0000     0.0000  yes
+random blobs #3                              miou       0.0000     0.0000  yes
+random blobs #3                              hd95      58.4123    58.4123  yes
+random blobs #3                              assd      28.5911    28.5911  yes
+random blobs #4                              dice       0.0551     0.0551  yes
+random blobs #4                              miou       0.0283     0.0283  yes
+random blobs #4                              hd95      69.5151    69.5151  yes
+random blobs #4                              assd      29.1548    29.1548  yes
+threshold prob > 0.5 on [0, .4999, .5, .5001, 1] -> [0, 0, 0, 1, 1]  yes
+ALL CHECKS PASSED
