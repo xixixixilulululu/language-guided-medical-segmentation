@@ -1,0 +1,33 @@
+# Raw and prepared datasets live in ~/datasets/, never in git
+data/*
+!data/.gitkeep
+*.zip
+*.nii
+*.nii.gz
+
+# External repositories are cloned locally; their exact commits are pinned in external/VERSIONS.md
+external/*
+!external/VERSIONS.md
+
+# Checkpoints and pretrained weights
+*.pt
+*.pth
+*.pth.tar
+*.ckpt
+*.npz
+pretrained/
+
+# Large training artefacts (logs, checkpoints, predicted masks, nnU-Net folders)
+runs/*
+!runs/.gitkeep
+nnUNet_raw/
+nnUNet_preprocessed/
+nnUNet_results/
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Local Chinese reading copies of the docs; GitHub content is English only
+*_zh_CN.md

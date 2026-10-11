@@ -1,0 +1,207 @@
+{
+  "QaTa-COV19": {
+    "Train": {
+      "n": 5716,
+      "unpaired_masks": 0,
+      "unpaired_images": 0,
+      "image_channels": {
+        "1": 5716
+      },
+      "image_dtype": {
+        "uint8": 5716
+      },
+      "images_3ch_with_identical_channels": 0,
+      "n_distinct_image_sizes": 1,
+      "top_image_sizes_WxH": {
+        "224x224": 5716
+      },
+      "mask_ndim": {
+        "2": 5716
+      },
+      "mask_values": [
+        0,
+        255
+      ],
+      "mask_image_size_mismatch": 0,
+      "empty_masks_original": 0,
+      "empty_masks_after_lvit_224": 0,
+      "lesion_fraction_224": {
+        "mean": 0.1222,
+        "median": 0.1003,
+        "min": 0.004,
+        "max": 0.6711
+      }
+    },
+    "Val": {
+      "n": 1429,
+      "unpaired_masks": 0,
+      "unpaired_images": 0,
+      "image_channels": {
+        "1": 1429
+      },
+      "image_dtype": {
+        "uint8": 1429
+      },
+      "images_3ch_with_identical_channels": 0,
+      "n_distinct_image_sizes": 1,
+      "top_image_sizes_WxH": {
+        "224x224": 1429
+      },
+      "mask_ndim": {
+        "2": 1429
+      },
+      "mask_values": [
+        0,
+        255
+      ],
+      "mask_image_size_mismatch": 0,
+      "empty_masks_original": 0,
+      "empty_masks_after_lvit_224": 0,
+      "lesion_fraction_224": {
+        "mean": 0.1189,
+        "median": 0.0994,
+        "min": 0.004,
+        "max": 0.6047
+      }
+    },
+    "Test": {
+      "n": 2113,
+      "unpaired_masks": 0,
+      "unpaired_images": 0,
+      "image_channels": {
+        "1": 2113
+      },
+      "image_dtype": {
+        "uint8": 2113
+      },
+      "images_3ch_with_identical_channels": 0,
+      "n_distinct_image_sizes": 1,
+      "top_image_sizes_WxH": {
+        "224x224": 2113
+      },
+      "mask_ndim": {
+        "2": 2113
+      },
+      "mask_values": [
+        0,
+        255
+      ],
+      "mask_image_size_mismatch": 0,
+      "empty_masks_original": 0,
+      "empty_masks_after_lvit_224": 0,
+      "lesion_fraction_224": {
+        "mean": 0.1189,
+        "median": 0.1071,
+        "min": 0.004,
+        "max": 0.4448
+      }
+    }
+  },
+  "MosMedData+": {
+    "Train": {
+      "n": 2183,
+      "unpaired_masks": 0,
+      "unpaired_images": 0,
+      "image_channels": {
+        "3": 2183
+      },
+      "image_dtype": {
+        "uint8": 2183
+      },
+      "images_3ch_with_identical_channels": 2183,
+      "n_distinct_image_sizes": 1,
+      "top_image_sizes_WxH": {
+        "512x512": 2183
+      },
+      "mask_ndim": {
+        "3": 2183
+      },
+      "mask_values": [
+        0,
+        12,
+        17,
+        21,
+        255
+      ],
+      "mask_image_size_mismatch": 0,
+      "empty_masks_original": 1,
+      "empty_masks_after_lvit_224": 1,
+      "lesion_fraction_224": {
+        "mean": 0.017,
+        "median": 0.0087,
+        "min": 0.0,
+        "max": 0.2916
+      }
+    },
+    "Val": {
+      "n": 273,
+      "unpaired_masks": 0,
+      "unpaired_images": 0,
+      "image_channels": {
+        "3": 273
+      },
+      "image_dtype": {
+        "uint8": 273
+      },
+      "images_3ch_with_identical_channels": 273,
+      "n_distinct_image_sizes": 1,
+      "top_image_sizes_WxH": {
+        "512x512": 273
+      },
+      "mask_ndim": {
+        "3": 273
+      },
+      "mask_values": [
+        0,
+        12,
+        17,
+        21,
+        255
+      ],
+      "mask_image_size_mismatch": 0,
+      "empty_masks_original": 0,
+      "empty_masks_after_lvit_224": 0,
+      "lesion_fraction_224": {
+        "mean": 0.0127,
+        "median": 0.0076,
+        "min": 0.0001,
+        "max": 0.21
+      }
+    },
+    "Test": {
+      "n": 273,
+      "unpaired_masks": 0,
+      "unpaired_images": 0,
+      "image_channels": {
+        "3": 273
+      },
+      "image_dtype": {
+        "uint8": 273
+      },
+      "images_3ch_with_identical_channels": 273,
+      "n_distinct_image_sizes": 1,
+      "top_image_sizes_WxH": {
+        "512x512": 273
+      },
+      "mask_ndim": {
+        "3": 273
+      },
+      "mask_values": [
+        0,
+        12,
+        17,
+        21,
+        255
+      ],
+      "mask_image_size_mismatch": 0,
+      "empty_masks_original": 0,
+      "empty_masks_after_lvit_224": 0,
+      "lesion_fraction_224": {
+        "mean": 0.0178,
+        "median": 0.006,
+        "min": 0.0003,
+        "max": 0.2201
+      }
+    }
+  }
+}
