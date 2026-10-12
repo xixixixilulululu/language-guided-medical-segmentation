@@ -1,0 +1,89 @@
+{
+  "archive_top_level": {
+    "frames": 2729,
+    "masks": 2729
+  },
+  "non_png_files": [],
+  "sources": {
+    "Jun_coronacases": {
+      "slices": 1351,
+      "volumes": 10,
+      "shapes": [
+        "[512, 512, 3]"
+      ],
+      "dtypes": [
+        "uint8"
+      ],
+      "png": [
+        "8-bit, colour type 2"
+      ],
+      "mean_intensity": 40.2,
+      "pct_pixels_0": 1.8,
+      "pct_pixels_255": 0.0,
+      "grey_levels": 233,
+      "p1": 0,
+      "p99": 137,
+      "sampled": 60
+    },
+    "Jun_radiopaedia": {
+      "slices": 493,
+      "volumes": 10,
+      "shapes": [
+        "[512, 512, 3]"
+      ],
+      "dtypes": [
+        "uint8"
+      ],
+      "png": [
+        "8-bit, colour type 2"
+      ],
+      "mean_intensity": 121.3,
+      "pct_pixels_0": 8.69,
+      "pct_pixels_255": 0.41,
+      "grey_levels": 248,
+      "p1": 14,
+      "p99": 253,
+      "sampled": 60
+    },
+    "Morozov": {
+      "slices": 785,
+      "volumes": 50,
+      "shapes": [
+        "[512, 512, 3]"
+      ],
+      "dtypes": [
+        "uint8"
+      ],
+      "png": [
+        "8-bit, colour type 2"
+      ],
+      "mean_intensity": 90.7,
+      "pct_pixels_0": 21.17,
+      "pct_pixels_255": 0.0,
+      "grey_levels": 216,
+      "p1": 0,
+      "p99": 179,
+      "sampled": 60
+    },
+    "bjorke": {
+      "slices": 100,
+      "volumes": 1,
+      "shapes": [
+        "[512, 512, 3]"
+      ],
+      "dtypes": [
+        "uint8"
+      ],
+      "png": [
+        "8-bit, colour type 2"
+      ],
+      "mean_intensity": 136.1,
+      "pct_pixels_0": 5.33,
+      "pct_pixels_255": 0.76,
+      "grey_levels": 253,
+      "p1": 12,
+      "p99": 251,
+      "sampled": 60
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # Phase 0 — Common Data and Model Setup (Tasks 0.2 and 0.3)
 
 Status: data prepared, all three models set up, quick checks passed on both datasets. The 18 main runs
-(Task 0.4) have **not** been started; they wait for confirmation of the schedule below.
+(Task 0.4) were submitted on 2026-10-11 in the order of section 6 (Slurm jobs 212–229) and are running.
 
 | Method | Source | Configuration | Input | Pretraining | Notes |
 |---|---|---|---|---|---|
@@ -143,8 +143,8 @@ afterwards that our pipeline has no gross error. They are never used to tune any
 | MosMedData+ | nnUNet | 72.59 | 60.36 |
 
 The paper lists the same parameter counts as our models: U-Net 14.8 M (ours 14.75 M) and TransUNet 105 M
-(ours 105.3 M). The LViT README repeats the U-Net values. Our U-Net results will be compared with these
-after the runs.
+(ours 105.3 M). The LViT README repeats the U-Net values. The comparison of our U-Net seed-1001 results
+with these values is in section 7.
 
 ---
 
@@ -276,7 +276,136 @@ the job ID and the best validation Dice.
 
 ---
 
-## 7. Infrastructure notes
+## 7. U-Net on MosMedData+ vs. the LViT paper
+
+The first two main runs (U-Net, seed 1001) were compared with the LViT paper as the agreed pipeline check.
+On QaTa-COV19 they match the paper. On MosMedData+ our U-Net is 9.3 Dice points **above** the value the
+paper reports. This section records what was checked. No setting of any run was changed, and all runs
+continue.
+
+**Test-set comparison (seed 1001 only; seeds 1002 / 1003 are pending).** Values in %:
+
+| Dataset | Ours, Dice | LViT paper, Dice | Δ | Ours, mIoU | LViT paper, mIoU | Δ |
+|---|---:|---:|---:|---:|---:|---:|
+| QaTa-COV19 | 79.12 | 79.02 | +0.10 | 69.68 | 69.46 | +0.22 |
+| MosMedData+ | 73.92 | 64.60 | +9.32 | 60.86 | 50.73 | +10.13 |
+
+**The same predictions under different scoring rules** (`src/analysis/lvit_metric_check.py`,
+`results/phase0_lvit_metric_check.json`). Dice in %:
+
+| Scoring of the seed-1001 test predictions | QaTa-COV19 | MosMedData+ |
+|---|---:|---:|
+| Common evaluator (per image, prob > 0.5, 224×224) | 79.12 | 73.92 |
+| LViT `test_model.py` algorithm, re-implemented exactly | 79.12 | 73.92 |
+| LViT algorithm, threshold ≥ 0.5 | 79.12 | 73.92 |
+| Pooled over the whole test set (global Dice) | 87.41 | 78.21 |
+| Per image at the native 512×512 resolution (MosMed masks > 0) | — | 72.62 |
+
+### Confirmed facts
+
+1. **The LViT evaluation algorithm gives exactly our values.** `external/LViT/test_model.py` is unchanged
+   since the first upload (2022-06-30). It scores each test image separately:
+   - batch size 1, at `config.img_size` = 224, prediction = sigmoid output `> 0.5`;
+   - Dice = `2·Σ(G·P) / (ΣG + ΣP + 1e-5)`;
+   - IoU = sklearn `jaccard_score` of the binary lesion mask;
+   - both are summed over images and divided by the number of test images.
+
+   This is the same per-image mean as our common evaluator. Re-implemented on our predictions it
+   reproduces our numbers exactly (table above). None of the other scoring variants gives 64.60.
+2. **The released LViT code has no MosMedData+ path.** No `.py` file in the LViT repository mentions
+   MosMed. `Config.py`, `train_model.py` and `test_model.py` only have the `MoNuSeg` and `Covid19`
+   branches. The MosMed numbers in the paper were therefore produced with code that is not public.
+3. **We use the same MosMed data as LViT.**
+   - The LViT README links the Kaggle mirror `maedemaftouni/covid19-ct-scan-lesion-segmentation-dataset`
+     for MosMedData+, and that is the mirror we use.
+   - The 2729 image ids in the LViT split lists are exactly the 2729 frames of this mirror (identical sets).
+4. **The LViT paper and repository do not describe how the comparison models were trained.**
+   - Table II gives one value per comparison model, without standard deviation. Only the LViT variants are
+     reported as mean ± std over three runs.
+   - In GitHub issue #4 (2022-09) the authors state that some comparison results and models were taken
+     from UCTransNet and that the U-Net setting and results follow UCTransNet. UCTransNet does not cover
+     QaTa-COV19 or MosMedData+. The U-Net setting used for these two datasets is not published.
+   - Issue #18 concerns U-Net *construction arguments*: the reported error comes from passing the ViT
+     config to `UNet(...)`. It says nothing about the training settings.
+5. **U-Net is not the only comparison model that is low on MosMedData+ in LViT Table II.** MosMed Dice
+   values of the comparison models without text:
+
+   | Group | Model | MosMed Dice |
+   |---|---|---:|
+   | between 63 and 66 | Swin-Unet | 63.29 |
+   | | U-Net | 64.60 |
+   | | UCTransNet | 65.90 |
+   | | AttUNet | 66.34 |
+   | between 71 and 73 | TransUNet | 71.24 |
+   | | UNet++ | 71.75 |
+   | | nnUNet | 72.59 |
+
+   On QaTa-COV19 the same models lie within 78.07–80.42.
+6. **No public report of reproducing or failing to reproduce the MosMed U-Net value was found.**
+   - No LViT GitHub issue reports re-training U-Net on MosMedData+ (all 61 issues and pull requests checked on 2026-10-12).
+   - Later papers that use the LViT benchmark list identical U-Net values (79.02 / 69.46 / 64.60 /
+     50.73):
+     - FMISeg (arXiv 2509.19719) states that its uni-modal results "are taken from the reproduction
+       provided by LViT";
+     - RecLMIS (arXiv 2404.02845) lists the same row without stating its source.
+7. **The Kaggle mirror is a curated merge, not the original medicalsegmentation.com release**
+   (`src/analysis/inspect_mosmed_sources.py`, `results/phase0_mosmed_sources.json`).
+   - **Sources.** Its description states that it merges the lesion masks and the corresponding frames of
+     three public datasets: MosMedData (Morozov et al.), COVID-19-CT-Seg (Jun Ma et al., Zenodo) and the
+     medicalsegmentation.com (MedSeg) data. It also states that "all different types of lesions are mapped
+     to white color".
+   - **Composition** (from the file names):
+
+     | Source | Slices | Volumes |
+     |---|---:|---:|
+     | `Morozov_study_*` (MosMedData) | 785 | 50 |
+     | `Jun_coronacases_*` | 1351 | 10 |
+     | `Jun_radiopaedia_*` | 493 | 10 |
+     | `bjorke_*` (MedSeg 100 axial images) | 100 | — |
+
+   - **Slice selection.** Only slices that have a lesion mask are included: 1 of 2729 masks is empty.
+   - **Encoding.** Every image is an 8-bit, 3-channel PNG (identical channels), 512×512. The original
+     NIfTI / JPG data were therefore converted.
+   - **Intensity.** The scaling differs by source and is not documented. Mean grey value and share of
+     pixels at 0, in a fixed sample of 60 slices per source:
+
+     | Source | Mean grey value | Pixels at 0 |
+     |---|---:|---:|
+     | `Jun_coronacases_*` | 40 | 2% |
+     | `Jun_radiopaedia_*` | 121 | 9% |
+     | `Morozov_study_*` | 91 | 21% |
+     | `bjorke_*` | 136 | 5% |
+
+   - **Relation to the "original" link.** The medicalsegmentation.com page that the LViT README calls
+     "Link (Original)" now redirects to medseg.ai, which no longer describes the data. Secondary sources
+     describe the original MedSeg release as 100 axial images (converted from SIRM JPGs) plus 9 Radiopaedia
+     volumes. The Morozov and Jun Ma parts of the mirror therefore do not come from that link.
+
+   This affects all three methods in the same way, because every method reads the same prepared files.
+   By fact 3 it is the same data that LViT used.
+
+### Possible causes of the MosMed gap (not confirmed)
+
+- **Different, unpublished training of the LViT comparison models on MosMed** (number of epochs, early
+  stopping, learning rate, batch size, input pipeline). This cannot be checked, because the MosMed code
+  and the comparison-model settings are not public (facts 2 and 4).
+  - Several comparison models in the paper are in the same low range on MosMed (fact 5). This would fit a
+    common cause in how those models were trained or evaluated on MosMed, but it does not identify one.
+- **Variance of a single run.** The paper's comparison values are single numbers, and ours is one seed so
+  far. The spread over our seeds 1001–1003 will show how stable 73.9 is (to be reported in
+  PHASE0_RESULTS.md).
+- **Not a cause:** the evaluation algorithm (fact 1) and the data (fact 3). The MosMed slice-level split
+  (Task 0.1) makes absolute scores optimistic. But LViT used the same split, so the split cannot explain a
+  difference between our run and theirs.
+
+**Decision (2026-10-12):** the common evaluator is not changed, and all runs continue unchanged. The
+TransUNet and nnU-Net results will be compared with LViT Table II in the same way in PHASE0_RESULTS.md:
+- TransUNet: QaTa 78.63 / MosMed 71.24;
+- nnUNet: QaTa 80.42 / MosMed 72.59.
+
+---
+
+## 8. Infrastructure notes
 
 - **nnU-Net I/O.** The compute nodes reach `/mnt/cv_data` over NFS. Small-file writes run at about
   2–3 files/s there: nnU-Net preprocessing of QaTa was projected at about 2 h.
@@ -299,6 +428,8 @@ sbatch slurm/quick_check_unet_transunet.slurm     # TransUNet steps 1-5 + epoch 
 sbatch slurm/quick_check_unet_final.slurm         # U-Net steps 1-5 with the final configuration
 sbatch slurm/quick_check_nnunet.slurm             # nnU-Net preprocessing (node-local) + steps 1-5
 python src/summarize_quick_check.py               # -> results/phase0_quick_check.json
+python src/analysis/lvit_metric_check.py --runs runs/unet/QaTa-COV19/seed1001 runs/unet/MosMedData+/seed1001
+python src/analysis/inspect_mosmed_sources.py     # MosMed Kaggle mirror: sources and image encoding
 # Task 0.4 (after confirmation), e.g.:
 sbatch --export=ALL,DATASET=QaTa-COV19,SEED=1001 slurm/train_unet.slurm
 ```

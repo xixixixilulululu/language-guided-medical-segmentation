@@ -1,0 +1,27 @@
+[
+  {
+    "run": "runs/unet/QaTa-COV19/seed1001",
+    "dataset": "QaTa-COV19",
+    "n_test": 2113,
+    "ours_dice": 79.12,
+    "ours_miou": 69.68,
+    "lvit_dice": 79.12,
+    "lvit_miou": 69.68,
+    "lvit_ge05_dice": 79.12,
+    "global_dice": 87.41,
+    "global_iou": 77.64
+  },
+  {
+    "run": "runs/unet/MosMedData+/seed1001",
+    "dataset": "MosMedData+",
+    "n_test": 273,
+    "ours_dice": 73.92,
+    "ours_miou": 60.86,
+    "lvit_dice": 73.92,
+    "lvit_miou": 60.86,
+    "lvit_ge05_dice": 73.92,
+    "global_dice": 78.21,
+    "global_iou": 64.22,
+    "native512_dice": 72.62
+  }
+]
