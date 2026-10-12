@@ -80,3 +80,62 @@ How these scores were used:
     settings in `configs/` (commit 97a2330);
   - the analysis methods above were fixed afterwards, but without reference to any test score. The
     choices that the plan left open were decided by the project lead from the options listed in advance.
+
+### nnU-Net runs trained in segments (12-hour job limit)
+
+*This subsection was added on 2026-10-12, after the analysis plan was fixed (commit 6ed8aa7). It documents
+how some runs were executed. It changes no training setting, no checkpoint-selection rule and no analysis
+method.*
+
+**Why the runs were split.**
+- All jobs were submitted without an explicit time limit, so each job received the `gpu` partition's
+  MaxTime at the moment it started. That value was changed at run time by the cluster administrators:
+  - at submission on 2026-10-11 it was "infinite";
+  - for jobs starting from 2026-10-11 evening it was 24 h;
+  - for jobs starting from 2026-10-12 evening it was 12 h.
+
+  `/etc/slurm/slurm.conf` still lists `MaxTime=INFINITE`.
+- One nnU-Net run needs about 23 h, and a user cannot request more than the partition MaxTime. The runs
+  that started under the 12-hour limit were therefore trained in segments.
+
+**How segmentation works** (`slurm/train_nnunet.slurm`):
+- Each segment resumes with nnU-Net's own `nnUNetv2_train --c`, starting from `checkpoint_latest.pth`.
+  That file is written every 50 epochs and restores the network, optimiser, grad-scaler and logger state
+  and the epoch counter.
+- Up to 50 epochs (≈ 68 min) are recomputed after each interruption.
+- Snapshot selection on the full validation set and the final evaluation run after epoch 1000, as for
+  the unsegmented runs.
+
+**Effect on reproducibility.** On every resume the data-augmentation worker processes restart with their
+fixed seeds, so their random stream starts again from the beginning. Segmented runs are therefore not
+bit-identical to an uninterrupted run with the same seed. The training recipe is unchanged, and nnU-Net
+runs are seeded but not bit-reproducible in any case (multi-process data loading).
+
+| Run | Segments (Slurm jobs) | Resumed after epoch | Continuity check at the first resume |
+|---|---|---|---|
+| nnU-Net QaTa-COV19 seed 1001 | 1 (job 214, 24 h limit) — training not segmented | — | — |
+| nnU-Net MosMedData+ seed 1001 | 1 (job 215, 24 h limit) — not segmented | — | — |
+| nnU-Net QaTa-COV19 seed 1002 | *[placeholder: from runs/nnunet/QaTa-COV19/seed1002/segments.tsv; first segment = job 216]* | *[placeholder]* | *[placeholder]* |
+| nnU-Net MosMedData+ seed 1002 | *[placeholder; first segment = job 217]* | *[placeholder]* | *[placeholder]* |
+| nnU-Net QaTa-COV19 seed 1003 | *[placeholder; first segment = job 218]* | *[placeholder]* | *[placeholder]* |
+| nnU-Net MosMedData+ seed 1003 | *[placeholder; first segment = job 219]* | *[placeholder]* | *[placeholder]* |
+
+The continuity check, done on the training log at the first resume, verifies four things:
+- the epoch numbers continue without a gap after the resume point;
+- the learning rate continues on the original poly schedule, lr = 0.01 · (1 − epoch/1000)^0.9;
+- the training loss shows no jump;
+- the 50-epoch snapshots continue to be written.
+
+**Job 214 (nnU-Net QaTa-COV19 seed 1001).**
+- Training (1000 epochs), snapshot selection (epoch 250 selected on the validation set) and the
+  per-case test metrics (`per_case.csv`, `summary.json`) were complete when the 24-hour limit stopped
+  the job, while it was writing the predicted test masks (1217 of 2113 written, the last one truncated
+  to 0 bytes).
+- The missing masks were then regenerated from the stored `test_probs.npz`. A check against
+  `per_case.csv` found 221 of these 896 masks differing from the scored predictions by 1–21 boundary
+  pixels. The reason is that `test_probs.npz` stores the probabilities as float16 (`runner.save_probs`),
+  and pixels within one float16 step of the 0.5 threshold flip. The masks written by job 214 itself
+  (1217) all match.
+- *[placeholder: how the 896 masks were finally produced, and the result of the consistency check]*
+- `per_case.csv` — the input of every statistic in this report — was computed by the job from float32
+  probabilities and is not affected.

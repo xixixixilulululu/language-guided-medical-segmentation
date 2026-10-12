@@ -8,6 +8,9 @@
 #   JOB_LABEL      short task name, e.g. "U-Net QaTa-COV19 seed1001" (default: the Slurm job name)
 #   NOTIFY_RESULT  short result, e.g. "best val Dice 0.7912"
 #   LGMS_CLEANUP   a command run at exit before the notification (e.g. removing node-local data)
+#   LGMS_SEGMENT_NEXT  id of the queued next segment of a segmented run (slurm/train_nnunet.slurm); a segment
+#                  stopped by SIGTERM (the 12 h partition time limit, or scancel) is then reported as
+#                  "segment ended ... continues in job <id>" instead of CANCELLED
 
 _LGMS_NOTIFY=/mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation/src/notify.sh
 _lgms_cancelled=0
@@ -15,7 +18,11 @@ _lgms_cancelled=0
 _lgms_on_term() {
   _lgms_cancelled=1
   eval "${LGMS_CLEANUP:-true}"
-  "$_LGMS_NOTIFY" "${JOB_LABEL:-${SLURM_JOB_NAME:-job}} CANCELLED (job ${SLURM_JOB_ID:-?})" "Slurm"
+  if [ -n "${LGMS_SEGMENT_NEXT:-}" ]; then
+    "$_LGMS_NOTIFY" "${JOB_LABEL:-${SLURM_JOB_NAME:-job}}: segment ended (job ${SLURM_JOB_ID:-?}, time limit or scancel); training continues in job $LGMS_SEGMENT_NEXT" "Slurm"
+  else
+    "$_LGMS_NOTIFY" "${JOB_LABEL:-${SLURM_JOB_NAME:-job}} CANCELLED (job ${SLURM_JOB_ID:-?})" "Slurm"
+  fi
   exit 143
 }
 
