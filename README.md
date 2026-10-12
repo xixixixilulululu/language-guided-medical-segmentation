@@ -11,7 +11,8 @@ QaTa-COV19 and MosMedData+, LViT split, seeds 1001/1002/1003). Plan: [`reports/P
 | 0.1 Project and data | done | [`reports/PHASE0_DATA_SUMMARY.md`](reports/PHASE0_DATA_SUMMARY.md), `results/phase0_data_check.json`, `reports/figures/data_examples.png` |
 | 0.2 Common 224×224 data preparation | done | [`reports/PHASE0_MODEL_SETUP.md`](reports/PHASE0_MODEL_SETUP.md) §1, `results/phase0_common224_summary.json` |
 | 0.3 Model setup (U-Net, TransUNet, nnU-Net) | done, quick checks passed | [`reports/PHASE0_MODEL_SETUP.md`](reports/PHASE0_MODEL_SETUP.md), `configs/*.yaml`, `results/phase0_quick_check.json`, `results/phase0_metric_check.txt` |
-| 0.4–0.7 18 runs, evaluation, comparison | waiting for confirmation of the schedule | |
+| 0.4 18 main runs | running (Slurm jobs 212–229, submitted 2026-10-11) | `runs/` (not committed) |
+| 0.5–0.7 Evaluation, summary, pairwise comparison | analysis plan fixed in code, tested on synthetic / validation data; to be run once after the 18 runs | `src/analyze_phase0.py`, `src/test_analyze_phase0.py`, `reports/templates/PHASE0_RESULTS_methods.md` |
 
 ## Layout
 
