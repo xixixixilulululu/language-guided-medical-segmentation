@@ -81,6 +81,18 @@ How these scores were used:
   - the analysis methods above were fixed afterwards, but without reference to any test score. The
     choices that the plan left open were decided by the project lead from the options listed in advance.
 
+### Stored probabilities (`test_probs.npz`, `val_probs.npz`)
+
+These archives store the lesion probabilities as **float16**. They are a backup only and take part in no
+scoring. Every per-case metric (`per_case.csv`) and every predicted mask was computed inside the run
+from the float32 probabilities. Masks re-derived from the float16 archive can differ in boundary pixels
+whose probability lies within one float16 step of the 0.5 threshold. To keep the code identical for all
+18 runs, the format is not changed during Phase 0; it will become float32 in Phase 1.
+
+The investigation of the MosMed gap (`src/analysis/lvit_metric_check.py`, PHASE0_MODEL_SETUP.md §7)
+re-scored U-Net seed-1001 predictions from these float16 archives. It is an analysis outside the
+statistics of this report, and its two-decimal values agreed with `per_case.csv`.
+
 ### nnU-Net runs trained in segments (12-hour job limit)
 
 *This subsection was added on 2026-10-12, after the analysis plan was fixed (commit 6ed8aa7). It documents
@@ -136,6 +148,16 @@ The continuity check, done on the training log at the first resume, verifies fou
   pixels. The reason is that `test_probs.npz` stores the probabilities as float16 (`runner.save_probs`),
   and pixels within one float16 step of the 0.5 threshold flip. The masks written by job 214 itself
   (1217) all match.
-- *[placeholder: how the 896 masks were finally produced, and the result of the consistency check]*
+- Repair, decided on 2026-10-12 and run exactly once (job 237, `src/analysis/repredict_214_masks.py`):
+  1. Before and after the repair, the sha256 of `per_case.csv` and `summary.json` is recorded and compared.
+  2. The test set is predicted once with the already selected checkpoint (epoch 250), with exactly the
+     original inference settings (including mirroring TTA). The new masks are written to a separate
+     folder; nothing is scored or re-selected.
+  3. Check 1: the new masks of the 1217 original cases vs. the masks job 214 wrote, pixel by pixel.
+  4. Check 2: the new masks of the 896 missing cases vs. `per_case.csv` (Dice difference < 1e-6).
+  5. Only if both checks show no mismatch are those 896 masks copied into the official folder.
+     Otherwise the float16-derived masks remain, with the 221 cases that differ by 1–21 boundary pixels.
+- *[placeholder: outcome of job 237 — mismatching cases in checks 1 and 2, whether the masks were copied,
+  sha256 unchanged]*
 - `per_case.csv` — the input of every statistic in this report — was computed by the job from float32
   probabilities and is not affected.
