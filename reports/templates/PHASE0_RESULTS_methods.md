@@ -127,16 +127,38 @@ runs are seeded but not bit-reproducible in any case (multi-process data loading
 |---|---|---|---|
 | nnU-Net QaTa-COV19 seed 1001 | 1 (job 214, 24 h limit) — training not segmented | — | — |
 | nnU-Net MosMedData+ seed 1001 | 1 (job 215, 24 h limit) — not segmented | — | — |
-| nnU-Net QaTa-COV19 seed 1002 | *[placeholder: from runs/nnunet/QaTa-COV19/seed1002/segments.tsv; first segment = job 216]* | *[placeholder]* | *[placeholder]* |
-| nnU-Net MosMedData+ seed 1002 | *[placeholder; first segment = job 217]* | *[placeholder]* | *[placeholder]* |
+| nnU-Net QaTa-COV19 seed 1002 | job 216 (epochs 0–510, stopped by the 12 h limit), job 249 (from epoch 500), *[placeholder: further segments from runs/nnunet/QaTa-COV19/seed1002/segments.tsv]* | 500 *[+ placeholder]* | passed (see below) |
+| nnU-Net MosMedData+ seed 1002 | job 217 (epochs 0–506, stopped by the 12 h limit), job 250 (from epoch 500), *[placeholder: further segments]* | 500 *[+ placeholder]* | passed (see below) |
 | nnU-Net QaTa-COV19 seed 1003 | *[placeholder; first segment = job 218]* | *[placeholder]* | *[placeholder]* |
 | nnU-Net MosMedData+ seed 1003 | *[placeholder; first segment = job 219]* | *[placeholder]* | *[placeholder]* |
+
+**Queue removal and resubmission.**
+- Between 2026-10-12 19:50 and 2026-10-13 01:16 (EDT), all 14 jobs of this project that were waiting
+  in the queue (218–229, 233–237) were removed by someone else before they ran. Cluster accounting is
+  disabled, so who removed them and why could not be determined.
+- On the project lead's decision, the remaining work was resubmitted unchanged on 2026-10-13 as jobs
+  248–262.
+- A watchdog (`src/queue_watchdog.sh`) now raises an alert, and never resubmits, if jobs disappear
+  from the queue again.
 
 The continuity check, done on the training log at the first resume, verifies four things:
 - the epoch numbers continue without a gap after the resume point;
 - the learning rate continues on the original poly schedule, lr = 0.01 · (1 − epoch/1000)^0.9;
 - the training loss shows no jump;
 - the 50-epoch snapshots continue to be written.
+
+Result at the first resume (2026-10-13, seed 1002; the resumed segments 249 / 250 had run 68 / 39
+epochs). Both runs passed:
+
+| Check | QaTa-COV19 seed 1002 | MosMedData+ seed 1002 |
+|---|---|---|
+| Epoch numbers | resumed exactly at epoch 500, no gap | resumed exactly at epoch 500, no gap |
+| Learning rate | equal to the poly schedule at every epoch (deviation 0 at the printed 5 decimals); identical to segment 1 on the re-run epochs 500–510 | same; identical on the re-run epochs 500–506 |
+| Training loss | re-run epochs 500–510 within 0.0024 of segment 1 (mean difference +0.0002); mean of epochs 480–499 −0.8944 vs. first 20 resumed epochs −0.8955 | re-run epochs within 0.0009 (mean −0.0003); −0.9363 vs. −0.9376 |
+| Snapshots | `checkpoint_ep0550.pth` written in the resumed segment | next one due at epoch 550 (not yet reached at the check) |
+
+The resume checkpoint was verified before each resumed segment started (`current_epoch` 500 in both
+runs).
 
 **Job 214 (nnU-Net QaTa-COV19 seed 1001).**
 - Training (1000 epochs), snapshot selection (epoch 250 selected on the validation set) and the
@@ -157,7 +179,19 @@ The continuity check, done on the training log at the first resume, verifies fou
   4. Check 2: the new masks of the 896 missing cases vs. `per_case.csv` (Dice difference < 1e-6).
   5. Only if both checks show no mismatch are those 896 masks copied into the official folder.
      Otherwise the float16-derived masks remain, with the 221 cases that differ by 1–21 boundary pixels.
-- *[placeholder: outcome of job 237 — mismatching cases in checks 1 and 2, whether the masks were copied,
-  sha256 unchanged]*
+- Outcome:
+  - Job 237 was removed from the queue by someone else before it ran (see below), so the repair ran
+    once as job 248 on 2026-10-13.
+  - The sha256 of `per_case.csv` and `summary.json` matched the recorded values before the job and was
+    unchanged after it.
+  - **Check 1: 389 of the 1217 original cases differ.** A second GPU inference with the same checkpoint
+    and the same settings is not bit-identical to the first one.
+  - **Check 2: 249 of the 896 missing cases** do not reproduce the scored Dice.
+  - As decided in advance, nothing was copied, and the inference was not repeated.
+  - The 896 masks in `eval_test/masks/` are therefore the float16-derived ones (option 2): 221 of them
+    differ from the scored predictions by 1–21 boundary pixels whose probability lies within one float16
+    step of the 0.5 threshold.
+  - These masks are only drawn in the case figures. All statistics, and the Dice / HD95 labels in the
+    figures, come from `per_case.csv`.
 - `per_case.csv` — the input of every statistic in this report — was computed by the job from float32
   probabilities and is not affected.
