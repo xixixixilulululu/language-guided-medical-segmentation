@@ -5,7 +5,8 @@
 # SEGMENTED, because the gpu partition limits a job to 12 h (since 2026-10-12) while one nnU-Net run
 # needs ~23 h. Every job is one segment:
 #   1. If the run is complete (DONE marker), exit silently.
-#   2. Otherwise first queue the next segment (--dependency=afterany on this job), so that the run goes
+#   2. Otherwise (after checking that checkpoint_latest.pth loads and holds the last snapshot epoch)
+#      first queue the next segment (--dependency=afterany on this job), so that the run goes
 #      on whatever stops this one.
 #   3. If training is not finished (no checkpoint_final.pth): continue training with nnU-Net's own resume
 #      (nnUNetv2_train --c, from checkpoint_latest.pth, written every 50 epochs). The time limit stops
@@ -57,9 +58,23 @@ if [ -n "$prev_point" ] && [ "$prev_point" = "$start_point" ]; then
   exit 3                                     # -> "FAILED" notification; needs a manual look
 fi
 
-# 2. queue the next segment first
+# Check the resume checkpoint before going on: it must load and hold the epoch of the last snapshot.
+if [ "$start_point" != 0 ] && [ "$start_point" != final ]; then
+  python - "$FOLD/checkpoint_latest.pth" "$start_point" <<'PYEOF' || { echo "checkpoint_latest.pth check FAILED"; exit 4; }
+import sys, torch
+ck = torch.load(sys.argv[1], map_location="cpu", weights_only=False)
+need = {"network_weights", "optimizer_state", "grad_scaler_state", "logging", "current_epoch", "init_args"}
+missing = need - set(ck)
+assert not missing, f"missing keys: {missing}"
+assert int(ck["current_epoch"]) == int(sys.argv[2]), f"current_epoch {ck['current_epoch']} != last snapshot {sys.argv[2]}"
+print(f"checkpoint_latest.pth OK: current_epoch {ck['current_epoch']}, {len(ck['network_weights'])} weight tensors")
+PYEOF
+fi
+
+# 2. queue the next segment first (registered with the queue watchdog)
 LGMS_SEGMENT_NEXT=$(sbatch --parsable --dependency=afterany:$SLURM_JOB_ID --job-name="$SLURM_JOB_NAME" \
     --export=ALL,DATASET=$DATASET,SEED=$SEED $REPO/slurm/train_nnunet.slurm)
+printf "%s\t%s\n" "$LGMS_SEGMENT_NEXT" "$JOB_LABEL (next segment after job $SLURM_JOB_ID)" >> "$LGMS_WATCH_FILE"
 echo "next segment queued: job $LGMS_SEGMENT_NEXT"
 
 # 3. training (one segment)
@@ -75,6 +90,7 @@ fi
 # 4. training finished: selection on the full validation set, final prediction and common evaluation
 python src/nnunet_select.py --dataset "$DATASET" --model-dir "$MODEL_DIR" --out "$OUT"
 touch "$OUT/DONE"
+printf "%s\tSELF_CANCELLED\n" "$LGMS_SEGMENT_NEXT" >> "$LGMS_WATCH_FILE"   # expected removal, not an alarm
 scancel "$LGMS_SEGMENT_NEXT" || true          # the queued next segment is not needed any more
 LGMS_SEGMENT_NEXT=""
 NOTIFY_RESULT="best val Dice $(json_value $OUT/selection.json best_val_dice) at epoch $(json_value $OUT/selection.json best_epoch 0)"
