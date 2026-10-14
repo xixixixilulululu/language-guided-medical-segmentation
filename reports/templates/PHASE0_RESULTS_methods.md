@@ -127,8 +127,8 @@ runs are seeded but not bit-reproducible in any case (multi-process data loading
 |---|---|---|---|
 | nnU-Net QaTa-COV19 seed 1001 | 1 (job 214, 24 h limit) — training not segmented | — | — |
 | nnU-Net MosMedData+ seed 1001 | 1 (job 215, 24 h limit) — not segmented | — | — |
-| nnU-Net QaTa-COV19 seed 1002 | job 216 (epochs 0–510, stopped by the 12 h limit), job 249 (from epoch 500), *[placeholder: further segments from runs/nnunet/QaTa-COV19/seed1002/segments.tsv]* | 500 *[+ placeholder]* | passed (see below) |
-| nnU-Net MosMedData+ seed 1002 | job 217 (epochs 0–506, stopped by the 12 h limit), job 250 (from epoch 500), *[placeholder: further segments]* | 500 *[+ placeholder]* | passed (see below) |
+| nnU-Net QaTa-COV19 seed 1002 | 2: job 216 (epochs 0–510, stopped by the 12 h limit), job 249 (epochs 500–1000, snapshot selection and final evaluation; stopped by the 12 h limit 12 s before its last log line — all outputs verified complete and consistent with `per_case.csv`, DONE marker written by hand) | 500 | passed (see below) |
+| nnU-Net MosMedData+ seed 1002 | 2: job 217 (epochs 0–506, stopped by the 12 h limit), job 250 (epochs 500–1000, snapshot selection and final evaluation, completed) | 500 | passed (see below) |
 | nnU-Net QaTa-COV19 seed 1003 | *[placeholder; first segment = job 218]* | *[placeholder]* | *[placeholder]* |
 | nnU-Net MosMedData+ seed 1003 | *[placeholder; first segment = job 219]* | *[placeholder]* | *[placeholder]* |
 
@@ -140,6 +140,11 @@ runs are seeded but not bit-reproducible in any case (multi-process data loading
   248–262.
 - A watchdog (`src/queue_watchdog.sh`) now raises an alert, and never resubmits, if jobs disappear
   from the queue again.
+- On 2026-10-13 between 09:25 and 09:30 (EDT), all 14 jobs of this project waiting in the queue
+  (251–264) were again removed before they ran. The watchdog reported it, and nothing was resubmitted.
+  On the project lead's decision, no jobs are kept waiting in the queue from then on. The remaining
+  runs are submitted later according to the rules agreed with the supervisor:
+  *[placeholder: rule and final job list]*.
 
 The continuity check, done on the training log at the first resume, verifies four things:
 - the epoch numbers continue without a gap after the resume point;
