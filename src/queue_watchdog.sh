@@ -1,4 +1,5 @@
 #!/bin/bash
+# RETIRED (2026-10-13): must not be started again - no background processes on the login node (CLAUDE.md).
 # Queue watchdog for the Phase 0 jobs (runs on the login node; there is no cron on this cluster).
 #
 # Every 5 minutes it compares the watched jobs (runs/phase0_watch_jobs.tsv: job_id <TAB> label) with squeue:

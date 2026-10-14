@@ -22,6 +22,11 @@
   that submit jobs automatically (no self-resubmitting jobs, no submit loops, no cron-like submitters).
   The user submits with `slurm/submit_next.sh`, which submits exactly one job per call and refuses when
   the user already has 2 jobs.
+- No background processes on the login node (no `nohup`/`setsid` loops, no daemons).
+  `src/queue_watchdog.sh` is retired and must not be started again.
+- If a U-Net run is stopped by the 12 h limit before early stopping: tell the user first. Then, with
+  the user's approval, write a separate evaluation-only script for its best validation-Dice checkpoint
+  (`train_unet.py` is not changed). Mark the run separately in the report.
 
 ## Data and large files
 - Datasets live in `~/datasets/`. Raw data, checkpoints and pretrained weights are never committed to git.
