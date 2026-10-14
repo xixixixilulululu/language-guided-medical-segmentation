@@ -13,6 +13,10 @@ How the project follows them:
 - **One job per call.** The user submits with `slurm/submit_next.sh`. Each call submits exactly one job,
   the next row of `slurm/phase0_plan.tsv`, and refuses when 2 jobs exist or a job is already waiting.
   `--dry-run` shows what would be submitted.
+- **The cluster orders the jobs itself.** Its admission filter (`/etc/slurm/job_submit.lua`) chains our
+  second job behind the running one with `afterany`, so a queued job shows the reason "Dependency"
+  until the running one ends. User-supplied `--dependency` is refused, so `submit_next.sh` never
+  passes one.
 - **No job submits another job.** nnU-Net segments no longer queue their successor. When a segment
   reaches the 12 h limit, its phone notification says that the next segment must be submitted by hand.
 - **Notifications.** Every job notifies at start and at end; each message ends with "You can run

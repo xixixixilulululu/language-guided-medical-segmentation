@@ -10,9 +10,12 @@ Each call:
      a. an extra nnU-Net segment, if a run has used all its planned segments, is not complete (no DONE
         marker) and has no job in the queue (e.g. snapshot selection was cut by the time limit);
      b. otherwise the first not yet submitted row of slurm/phase0_plan.tsv. Rows whose run is already
-        complete are recorded as skipped. An nnU-Net segment > 1 whose previous segment is still in the
-        queue is submitted with --dependency=afterany:<previous job>, but only once that segment is
-        running (if it is still waiting, the call refuses).
+        complete are recorded as skipped. An nnU-Net segment > 1 is only submitted once the previous
+        segment is running or has ended (if it is still waiting, the call refuses).
+     Ordering: the cluster's admission filter (/etc/slurm/job_submit.lua, since 2026-10-13) chains a
+     user's second job behind the first with afterany:<first job> itself, and REFUSES user-supplied
+     dependencies. This tool therefore never passes --dependency; a job submitted while another one
+     runs starts when that one ends.
   3. Submits it with sbatch (each .slurm file sets --time=12:00:00) and records it in
      runs/phase0_submit_log.tsv.
   4. Shows: what was just submitted, what is running, what is waiting, and what comes next.
@@ -100,7 +103,7 @@ def pick_next(plan, log, jobs):
             if not any(i in in_queue for i in ids):
                 n = len(extra) + 1
                 return ({"method": "nnunet", "dataset": ds, "seed": seed, "segment": f"extra{n}",
-                         "est_hours": "1-12", "dependency": None,
+                         "est_hours": "1-12", "after": None,
                          "why": "all planned segments ended but the run is not complete"}, None, skipped)
     # b. first not yet submitted plan row
     for r in plan:
@@ -110,7 +113,7 @@ def pick_next(plan, log, jobs):
         if run_complete(r["method"], r["dataset"], r["seed"]):
             skipped.append(r)
             continue
-        item = dict(r, dependency=None, why=f"plan row {r['order']}")
+        item = dict(r, after=None, why=f"plan row {r['order']}")
         if r["method"] == "nnunet" and r["segment"] not in ("1", "-"):
             prev = submitted.get(f"nnunet|{r['dataset']}|{r['seed']}|{int(r['segment']) - 1}")
             if prev is None:
@@ -120,7 +123,7 @@ def pick_next(plan, log, jobs):
                 return (item, f"the previous segment (job {prev['job_id']}) has not started yet - submit this "
                               "one after it starts running", skipped)
             if state is not None:
-                item["dependency"] = prev["job_id"]          # starts only after the previous segment ends
+                item["after"] = prev["job_id"]               # the cluster chains it behind this running job
         return (item, None, skipped)
     return (None, None, skipped)
 
@@ -166,9 +169,7 @@ def main():
     jobname = f"{item['method']}-{item['dataset'].split('-')[0]}-{item['seed']}"
     cmd = ["sbatch", "--parsable", f"--job-name={jobname}",
            f"--export=ALL,DATASET={item['dataset']},SEED={item['seed']}"]
-    if item["dependency"]:
-        cmd.append(f"--dependency=afterany:{item['dependency']}")
-    cmd.append(script)
+    cmd.append(script)                                   # no --dependency: refused by the cluster filter
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     if dry:
         print("DRY RUN - would run:", " ".join(cmd))
@@ -183,10 +184,12 @@ def main():
     job_id = sh(cmd).strip().split(";")[0]
     k = (f"nnunet|{item['dataset']}|{item['seed']}|{item['segment']}" if str(item["segment"]).startswith("extra")
          else key(item))
-    append_log({"time": now, "job_id": job_id, "key": k, "label": lab,
-                "note": item["why"] + (f"; after job {item['dependency']}" if item["dependency"] else "")})
+    running = [j[0] for j in jobs if j[1] == "R"]
+    note = item["why"] + (f"; queued behind running job {running[0]} by the cluster (afterany)" if running else "")
+    append_log({"time": now, "job_id": job_id, "key": k, "label": lab, "note": note})
     print(f"SUBMITTED: job {job_id} - {lab} (~{item['est_hours']} h, 12 h limit)"
-          + (f", starts after job {item['dependency']} ends" if item["dependency"] else "") + "\n")
+          + (f"; the cluster queues it behind running job {running[0]} (starts when that one ends)" if running else "")
+          + "\n")
     show_status(my_jobs(), plan, read_log())
 
 

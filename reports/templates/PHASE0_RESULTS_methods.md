@@ -152,6 +152,8 @@ the queued jobs had been removed:
 
 How the project complies:
 - All `.slurm` files request `--time=12:00:00`.
+- The cluster enforces the policy with an admission filter. It chains a user's second job behind the
+  first (`afterany`) and refuses user-supplied dependencies.
 - nnU-Net segments no longer submit their successor. Each segment is submitted by hand with
   `slurm/submit_next.sh`, which submits exactly one job per call from `slurm/phase0_plan.tsv` and
   refuses when the limits would be exceeded.
