@@ -66,7 +66,13 @@
   `~/.cache/lgms/claude_status` (e.g. "Waiting for your confirmation: quick checks done"); the Stop
   hook sends it.
 - Notifications go through `src/notify.sh`. The channel name is in `~/.ntfy_topic`; never write it
-  into the repository. Messages contain only a task name, a status and a short result — no data,
+  into the repository.
+- E-mail channel (since 2026-10-14): only for messages that need an action (priority >= 4, titles
+  "👉 RUN ..." and "🆘 ASK CLAUDE ..."; never "✅ No action needed"). It uses ntfy's e-mail forwarding as a
+  separate request, so it can never block the phone push or a job. The cluster's own Slurm mail cannot be
+  used (MailProg `/bin/mail` and `sendmail` do not exist). Configuration: `~/.config/lgms/push.env`
+  (`NOTIFY_EMAIL`, and `NTFY_TOKEN`, because ntfy.sh refuses anonymous e-mail). Never print these
+  values or write them into the repository. Messages contain only a task name, a status and a short result — no data,
   file contents, paths or credentials.
 
 ## Reference
