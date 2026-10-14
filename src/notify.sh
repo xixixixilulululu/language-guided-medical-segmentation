@@ -13,13 +13,15 @@
 # LGMS_NOTIFY_DRYRUN=1 prints the message instead of sending it (for testing).
 #
 # E-mail channel (since 2026-10-14) for messages the user must act on: priority >= 4 and a title that is not
-# "✅ No action needed" (i.e. "👉 RUN ..." and "🆘 ASK CLAUDE ..."). The cluster has no working mail program
-# (Slurm MailProg /bin/mail and sendmail do not exist), so ntfy's e-mail forwarding (header "Email") is used.
-# ntfy.sh refuses anonymous e-mail ("anonymous email sending is not allowed", code 40053), so an ntfy
-# account access token is required: NTFY_TOKEN in the same file. Without it the e-mail is skipped.
-# The address is NOTIFY_EMAIL in ~/.config/lgms/push.env (never printed, never committed). The e-mail goes
-# as a SEPARATE request to the private topic "<topic>-mail" (nobody subscribes to it): the phone push above
-# is never affected by e-mail limits or errors, and the app shows no duplicate. Failures only log a line.
+# "✅ No action needed" (i.e. "👉 RUN ..." and "🆘 ASK CLAUDE ..."). Settings: ~/.config/lgms/push.env (never
+# printed, never committed).
+#   1. SMTP with the user's own account (QQ Mail, smtp.qq.com:465) via src/send_email.py, if SMTP_USER and
+#      SMTP_PASS are set. (The cluster's own Slurm mail cannot be used: /bin/mail and sendmail are missing.)
+#   2. otherwise ntfy e-mail forwarding with an account token (NTFY_TOKEN), sent to the private topic
+#      "<topic>-mail"; ntfy.sh refuses anonymous e-mail (code 40053).
+#   3. otherwise the e-mail is skipped with one log line.
+# The e-mail is always sent after, and separately from, the phone push: its failure never affects the push
+# or the job (only one line is logged).
 
 topic_file="$HOME/.ntfy_topic"
 [ -r "$topic_file" ] || { echo "notify.sh: $topic_file not found, no notification sent" >&2; exit 0; }
@@ -43,17 +45,19 @@ curl -fsS --connect-timeout 5 --max-time 15 \
 # E-mail channel: only messages that need an action (priority >= 4, not "✅ No action needed")
 if [ "$priority" -ge 4 ] && [[ "$title" != "✅"* ]] && [ -r "$HOME/.config/lgms/push.env" ]; then
   _env() { sed -n "s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*//p" "$HOME/.config/lgms/push.env" | head -1 | tr -d "\"' \r\t"; }
-  email=$(_env NOTIFY_EMAIL); token=$(_env NTFY_TOKEN)
-  if [ -n "$email" ] && [ -z "$token" ]; then
-    echo "notify.sh: e-mail channel not configured (no NTFY_TOKEN in ~/.config/lgms/push.env); e-mail skipped" >&2
-  elif [ -n "$email" ]; then
+  if [ -n "$(_env SMTP_USER)" ] && [ -n "$(_env SMTP_PASS)" ]; then
+    timeout 40 python3 "$(dirname "$0")/send_email.py" "$title" "$msg" \
+      || echo "notify.sh: e-mail (SMTP) failed; the phone push is not affected" >&2
+  elif [ -n "$(_env NTFY_TOKEN)" ] && [ -n "$(_env NOTIFY_EMAIL)" ]; then
     curl -fsS --connect-timeout 5 --max-time 20 \
-         -H "Authorization: Bearer ${token}" \
+         -H "Authorization: Bearer $(_env NTFY_TOKEN)" \
          -H "Title: ${title}" \
          -H "Priority: ${priority}" \
-         -H "Email: ${email}" \
+         -H "Email: $(_env NOTIFY_EMAIL)" \
          -d "${msg}" "https://ntfy.sh/${topic}-mail" > /dev/null 2>&1 \
-      || echo "notify.sh: e-mail channel failed (ntfy e-mail limit or network); the phone push is not affected" >&2
+      || echo "notify.sh: e-mail (ntfy) failed; the phone push is not affected" >&2
+  else
+    echo "notify.sh: e-mail channel not configured (SMTP_USER/SMTP_PASS or NTFY_TOKEN in ~/.config/lgms/push.env)" >&2
   fi
 fi
 exit 0
