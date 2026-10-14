@@ -32,5 +32,5 @@ case "$1" in
     exit 0
     ;;
 esac
-"$here/notify.sh" "$msg" "Claude Code"
+"$here/notify.sh" "$msg" "✅ No action needed"   # title = action for the user (none)
 exit 0

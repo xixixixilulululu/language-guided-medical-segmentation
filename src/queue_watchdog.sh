@@ -38,11 +38,11 @@ while true; do
   if [ ${#removed[@]} -gt 0 ]; then
     msg="ALERT: ${#removed[@]} queued job(s) were removed from the queue without running: $(IFS='; '; echo "${removed[*]}"). Nothing resubmitted - waiting for your decision."
     echo "$(date '+%F %T') $msg"
-    "$REPO/src/notify.sh" "$msg" "Slurm queue" 4
+    "$REPO/src/notify.sh" "$msg" "🆘 ASK CLAUDE IN VS CODE" 4
   fi
   if [ "$active" -eq 0 ]; then
     echo "$(date '+%F %T') no watched job left in the queue - watchdog exits"
-    "$REPO/src/notify.sh" "Queue watchdog: no watched job left in the queue (all ended or removed)" "Slurm queue"
+    "$REPO/src/notify.sh" "Queue watchdog: no watched job left in the queue (all ended or removed)" "✅ No action needed"
     exit 0
   fi
   sleep "$INTERVAL"

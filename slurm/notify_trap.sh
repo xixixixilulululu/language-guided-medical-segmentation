@@ -18,13 +18,17 @@
 
 _LGMS_NOTIFY=/mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation/src/notify.sh
 _LGMS_HINT="You can run slurm/submit_next.sh to submit the next job."
+# Notification titles = the action the user has to take
+_T_RUN="👉 RUN: slurm/submit_next.sh"      # started; next nnU-Net segment must be submitted by hand
+_T_ASK="🆘 ASK CLAUDE IN VS CODE"          # FAILED; stopped at the 12 h limit (U-Net/TransUNet); cancelled early
+_T_OK="✅ No action needed"                # finished; segment ended with its next segment already queued
 _lgms_cancelled=0
 
 _lgms_label() { echo "${JOB_LABEL:-${SLURM_JOB_NAME:-job}}"; }
 
 # Called by the job script once JOB_LABEL is set; optional argument = extra information.
 lgms_notify_start() {
-  "$_LGMS_NOTIFY" "$(_lgms_label) started (job ${SLURM_JOB_ID:-?})${1:+, $1}. $_LGMS_HINT" "Slurm" 4
+  "$_LGMS_NOTIFY" "$(_lgms_label) started (job ${SLURM_JOB_ID:-?})${1:+, $1}. $_LGMS_HINT" "$_T_RUN" 4
 }
 
 # True if SIGTERM came from the job's time limit (job end time reached, within 3 min), not from scancel.
@@ -48,13 +52,19 @@ _lgms_on_term() {
   local label info; label=$(_lgms_label)
   if _lgms_at_time_limit; then
     if [ "${LGMS_SEGMENTED:-0}" = 1 ]; then
-      "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "Slurm" 4
+      # Is the next segment of this run (same job name) already in the queue?
+      local next; next=$(squeue -h -u "$USER" -n "${SLURM_JOB_NAME:-}" -o %i 2>/dev/null | grep -vx "${SLURM_JOB_ID:-}" | head -1 || true)
+      if [ -n "$next" ]; then
+        "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - the next segment (job $next) is already queued. $_LGMS_HINT" "$_T_OK" 4
+      else
+        "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "$_T_RUN" 4
+      fi
     else
       info=$(_lgms_epoch_info)
-      "$_LGMS_NOTIFY" "$label STOPPED at the 12 h time limit (job ${SLURM_JOB_ID:-?})${info:+, $info}; not handled automatically - needs your decision. $_LGMS_HINT" "Slurm" 4
+      "$_LGMS_NOTIFY" "$label STOPPED at the 12 h time limit (job ${SLURM_JOB_ID:-?})${info:+, $info}; not handled automatically - needs your decision. $_LGMS_HINT" "$_T_ASK" 4
     fi
   else
-    "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}). $_LGMS_HINT" "Slurm" 4
+    "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}). $_LGMS_HINT" "$_T_ASK" 4
   fi
   exit 143
 }
@@ -65,9 +75,9 @@ _lgms_on_exit() {
   eval "${LGMS_CLEANUP:-true}"
   local label; label=$(_lgms_label)
   if [ "$rc" = 0 ]; then
-    "$_LGMS_NOTIFY" "$label finished (job ${SLURM_JOB_ID:-?})${NOTIFY_RESULT:+, $NOTIFY_RESULT}. $_LGMS_HINT" "Slurm"
+    "$_LGMS_NOTIFY" "$label finished (job ${SLURM_JOB_ID:-?})${NOTIFY_RESULT:+, $NOTIFY_RESULT}. $_LGMS_HINT" "$_T_OK"
   else
-    "$_LGMS_NOTIFY" "$label FAILED (job ${SLURM_JOB_ID:-?}, exit $rc). $_LGMS_HINT" "Slurm" 4
+    "$_LGMS_NOTIFY" "$label FAILED (job ${SLURM_JOB_ID:-?}, exit $rc). $_LGMS_HINT" "$_T_ASK" 4
   fi
 }
 
