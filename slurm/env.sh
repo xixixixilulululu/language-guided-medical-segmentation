@@ -14,7 +14,6 @@ export nnUNet_preprocessed=$HOME/datasets/nnunet/nnUNet_preprocessed
 export nnUNet_extTrainer=$REPO/src/nnunet_ext                # nnUNetTrainerLGMS
 export nnUNet_n_proc_DA=12                                   # nnU-Net's default for unknown hosts (20 CPUs/node)
 export PYTHONUNBUFFERED=1
-export LGMS_WATCH_FILE=$REPO/runs/phase0_watch_jobs.tsv   # jobs watched by src/queue_watchdog.sh
 cd "$REPO"
 echo "host $(hostname) | job ${SLURM_JOB_ID:-none} | $(date)"
 nvidia-smi --query-gpu=name,memory.total --format=csv || true

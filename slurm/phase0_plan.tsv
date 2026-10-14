@@ -1,0 +1,15 @@
+order	method	dataset	seed	segment	est_hours	when
+1	nnunet	QaTa-COV19	1003	1	12.0	night
+2	transunet	MosMedData+	1001	-	2.5	day
+3	transunet	QaTa-COV19	1001	-	6.8	day
+4	nnunet	QaTa-COV19	1003	2	11.8	night
+5	unet	QaTa-COV19	1002	-	3.8	day
+6	unet	MosMedData+	1002	-	2.1	day
+7	transunet	MosMedData+	1002	-	2.5	day
+8	unet	MosMedData+	1003	-	2.1	day
+9	transunet	MosMedData+	1003	-	2.5	day
+10	nnunet	MosMedData+	1003	1	12.0	night
+11	transunet	QaTa-COV19	1002	-	6.8	day
+12	unet	QaTa-COV19	1003	-	3.8	day
+13	nnunet	MosMedData+	1003	2	11.6	night
+14	transunet	QaTa-COV19	1003	-	6.8	day

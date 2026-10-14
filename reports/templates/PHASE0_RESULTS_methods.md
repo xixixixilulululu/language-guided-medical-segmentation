@@ -142,9 +142,33 @@ runs are seeded but not bit-reproducible in any case (multi-process data loading
   from the queue again.
 - On 2026-10-13 between 09:25 and 09:30 (EDT), all 14 jobs of this project waiting in the queue
   (251–264) were again removed before they ran. The watchdog reported it, and nothing was resubmitted.
-  On the project lead's decision, no jobs are kept waiting in the queue from then on. The remaining
-  runs are submitted later according to the rules agreed with the supervisor:
-  *[placeholder: rule and final job list]*.
+  On the project lead's decision, no jobs were kept waiting in the queue from then on.
+
+**Cluster fair-use policy (from 2026-10-13).** The supervisor then communicated the rules under which
+the queued jobs had been removed:
+- at most 2 jobs per user (1 running + 1 waiting);
+- at most 12 h per job;
+- jobs submitted by hand, no batch submission.
+
+How the project complies:
+- All `.slurm` files request `--time=12:00:00`.
+- nnU-Net segments no longer submit their successor. Each segment is submitted by hand with
+  `slurm/submit_next.sh`, which submits exactly one job per call from `slurm/phase0_plan.tsv` and
+  refuses when the limits would be exceeded.
+- The remaining 12 runs are executed one at a time, with ~12 h nnU-Net segments placed overnight
+  (`reports/PHASE0_SUBMISSION_PLAN.md`). This moves the estimated completion from 2026-10-15 to about
+  2026-10-17.
+- The rules change only how and when jobs run. They change no training setting, no checkpoint-selection
+  rule and no analysis method.
+- Submission log: `runs/phase0_submit_log.tsv` (job ids, times). *[placeholder: final list of the job ids
+  of all 18 runs]*
+
+**12 h limit for U-Net and TransUNet** (no resume function):
+- TransUNet always ends within the limit (150 epochs ≤ 6.8 h).
+- A U-Net run that has not met the early-stopping rule after 12 h (about 375 QaTa-COV19 epochs; seed 1001
+  stopped at epoch 119) is stopped by the limit and is not handled automatically. *[placeholder: whether
+  this happened; if so: which run, the last completed epoch, and the epoch of the best validation-Dice
+  checkpoint (best_model.pt) that was then evaluated — handling as decided by the project lead]*
 
 The continuity check, done on the training log at the first resume, verifies four things:
 - the epoch numbers continue without a gap after the resume point;

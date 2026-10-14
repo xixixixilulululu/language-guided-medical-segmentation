@@ -1,20 +1,31 @@
-# Phone notification at the end of every Slurm job (sourced first by slurm/env.sh).
+# Phone notifications for every Slurm job (sourced first by slurm/env.sh).
 #
-# Sends one ntfy message (src/notify.sh) when the job script ends:
-#   success   "<label> finished (job <id>)[, <NOTIFY_RESULT>]"
-#   failure   "<label> FAILED (job <id>, exit <code>)"
-#   cancelled "<label> CANCELLED (job <id>)"   (scancel / time limit: Slurm sends SIGTERM first)
-# A job script may set, at any point before it ends:
-#   JOB_LABEL      short task name, e.g. "U-Net QaTa-COV19 seed1001" (default: the Slurm job name)
-#   NOTIFY_RESULT  short result, e.g. "best val Dice 0.7912"
-#   LGMS_CLEANUP   a command run at exit before the notification (e.g. removing node-local data)
-#   LGMS_SEGMENT_NEXT  id of the queued next segment of a segmented run (slurm/train_nnunet.slurm). A segment
-#                  stopped by its 12 h time limit is reported as "segment ended ... continues in job <id>".
-#                  A segment stopped by scancel BEFORE its time limit withdraws the queued next segment and
-#                  asks the user to decide (no automatic continuation after someone cancelled a job).
+# Cluster fair-use policy (2026-10-13): at most 1 running + 1 queued job per user, 12 h per job, jobs are
+# submitted by hand. Therefore every notification ends with the hint to submit the next job by hand.
+#
+#   start     "<label> started (job <id>). <hint>"                       -- lgms_notify_start, called by the job
+#   success   "<label> finished (job <id>)[, <NOTIFY_RESULT>]. <hint>"
+#   failure   "<label> FAILED (job <id>, exit <code>). <hint>"
+#   time limit:
+#     nnU-Net segment (LGMS_SEGMENTED=1): "segment ended at the 12 h time limit ...; the run is not
+#                     complete - submit the next segment by hand. <hint>"
+#     other jobs:     "STOPPED at the 12 h time limit[, last completed epoch N, best validation Dice at
+#                     epoch M]; not handled automatically - needs your decision. <hint>"
+#   cancelled before the time limit (scancel): "<label> CANCELLED before its time limit (job <id>). <hint>"
+# A job script may set: JOB_LABEL (task name), NOTIFY_RESULT (short result), LGMS_CLEANUP (command run at
+# exit), LGMS_SEGMENTED=1 (nnU-Net segment), LGMS_EPOCHS_CSV (U-Net / TransUNet epochs.csv, used by the
+# time-limit message). Nothing here ever submits a job.
 
 _LGMS_NOTIFY=/mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation/src/notify.sh
+_LGMS_HINT="You can run slurm/submit_next.sh to submit the next job."
 _lgms_cancelled=0
+
+_lgms_label() { echo "${JOB_LABEL:-${SLURM_JOB_NAME:-job}}"; }
+
+# Called by the job script once JOB_LABEL is set; optional argument = extra information.
+lgms_notify_start() {
+  "$_LGMS_NOTIFY" "$(_lgms_label) started (job ${SLURM_JOB_ID:-?})${1:+, $1}. $_LGMS_HINT" "Slurm"
+}
 
 # True if SIGTERM came from the job's time limit (job end time reached, within 3 min), not from scancel.
 _lgms_at_time_limit() {
@@ -24,19 +35,26 @@ _lgms_at_time_limit() {
   [ "$(date +%s)" -ge $(( $(date -d "$end" +%s) - 180 )) ]
 }
 
+# "last completed epoch N, best validation Dice at epoch M (best_model.pt)" from an epochs.csv
+# (columns: epoch, lr, train_loss, val_dice, best_val_dice, best_epoch, ...)
+_lgms_epoch_info() {
+  [ -n "${LGMS_EPOCHS_CSV:-}" ] && [ -f "$LGMS_EPOCHS_CSV" ] || return 0
+  tail -n 1 "$LGMS_EPOCHS_CSV" | awk -F, '$1 ~ /^[0-9]+$/ {printf "last completed epoch %s, best validation Dice at epoch %s (best_model.pt)", $1, $6}'
+}
+
 _lgms_on_term() {
   _lgms_cancelled=1
   eval "${LGMS_CLEANUP:-true}"
-  local label="${JOB_LABEL:-${SLURM_JOB_NAME:-job}}"
-  if [ -n "${LGMS_SEGMENT_NEXT:-}" ] && _lgms_at_time_limit; then
-    "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); training continues in job $LGMS_SEGMENT_NEXT" "Slurm"
-  elif [ -n "${LGMS_SEGMENT_NEXT:-}" ]; then
-    # stopped by someone before the time limit: do NOT continue automatically -- the user decides
-    printf "%s\tSELF_CANCELLED\n" "$LGMS_SEGMENT_NEXT" >> "${LGMS_WATCH_FILE:-/dev/null}"
-    scancel "$LGMS_SEGMENT_NEXT" 2>/dev/null || true
-    "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}); next segment $LGMS_SEGMENT_NEXT withdrawn, nothing resubmitted - waiting for your decision" "Slurm"
+  local label info; label=$(_lgms_label)
+  if _lgms_at_time_limit; then
+    if [ "${LGMS_SEGMENTED:-0}" = 1 ]; then
+      "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "Slurm"
+    else
+      info=$(_lgms_epoch_info)
+      "$_LGMS_NOTIFY" "$label STOPPED at the 12 h time limit (job ${SLURM_JOB_ID:-?})${info:+, $info}; not handled automatically - needs your decision. $_LGMS_HINT" "Slurm"
+    fi
   else
-    "$_LGMS_NOTIFY" "$label CANCELLED (job ${SLURM_JOB_ID:-?})" "Slurm"
+    "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}). $_LGMS_HINT" "Slurm"
   fi
   exit 143
 }
@@ -45,11 +63,11 @@ _lgms_on_exit() {
   local rc=$?
   [ "$_lgms_cancelled" = 1 ] && return
   eval "${LGMS_CLEANUP:-true}"
-  local label="${JOB_LABEL:-${SLURM_JOB_NAME:-job}}"
+  local label; label=$(_lgms_label)
   if [ "$rc" = 0 ]; then
-    "$_LGMS_NOTIFY" "$label finished (job ${SLURM_JOB_ID:-?})${NOTIFY_RESULT:+, $NOTIFY_RESULT}" "Slurm"
+    "$_LGMS_NOTIFY" "$label finished (job ${SLURM_JOB_ID:-?})${NOTIFY_RESULT:+, $NOTIFY_RESULT}. $_LGMS_HINT" "Slurm"
   else
-    "$_LGMS_NOTIFY" "$label FAILED (job ${SLURM_JOB_ID:-?}, exit $rc)" "Slurm"
+    "$_LGMS_NOTIFY" "$label FAILED (job ${SLURM_JOB_ID:-?}, exit $rc). $_LGMS_HINT" "Slurm"
   fi
 }
 

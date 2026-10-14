@@ -14,6 +14,14 @@
 
 ## Compute
 - Training runs are submitted as `.slurm` files to the Slurm partition `gpu`. Never train on the login node.
+- Cluster fair-use policy (set by the supervisor, 2026-10-13; earlier queued jobs were removed under it):
+  1. At most 2 jobs per user: 1 running and 1 waiting in the queue.
+  2. Every job is limited to 12 hours (`#SBATCH --time=12:00:00` in every `.slurm` file).
+  3. Jobs are submitted by hand, one at a time. No batch submission.
+- **Claude never submits Slurm jobs itself.** It also never writes scripts, hooks or background processes
+  that submit jobs automatically (no self-resubmitting jobs, no submit loops, no cron-like submitters).
+  The user submits with `slurm/submit_next.sh`, which submits exactly one job per call and refuses when
+  the user already has 2 jobs.
 
 ## Data and large files
 - Datasets live in `~/datasets/`. Raw data, checkpoints and pretrained weights are never committed to git.
