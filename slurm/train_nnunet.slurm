@@ -82,10 +82,15 @@ esac
 # 3. training (one segment)
 if [ ! -f "$FOLD/checkpoint_final.pth" ]; then
   stage_dataset ${NAME[$DATASET]}
-  nnUNetv2_train ${ID[$DATASET]} 2d 0 -tr nnUNetTrainerLGMS --c
+  # The long command runs in the background and the script waits for it: bash handles SIGTERM (time limit /
+  # scancel) only between commands, so a foreground child that is slow to exit (data-loader workers) would
+  # delay the notification trap past Slurm's kill timeout. 'wait' returns at once on a signal.
+  nnUNetv2_train ${ID[$DATASET]} 2d 0 -tr nnUNetTrainerLGMS --c &
+  wait $!
 fi
 
 # 4. training finished: selection on the full validation set, final prediction and common evaluation
-python src/nnunet_select.py --dataset "$DATASET" --model-dir "$MODEL_DIR" --out "$OUT"
+python src/nnunet_select.py --dataset "$DATASET" --model-dir "$MODEL_DIR" --out "$OUT" &
+wait $!
 touch "$OUT/DONE"
 NOTIFY_RESULT="run complete, best val Dice $(json_value $OUT/selection.json best_val_dice) at epoch $(json_value $OUT/selection.json best_epoch 0)"

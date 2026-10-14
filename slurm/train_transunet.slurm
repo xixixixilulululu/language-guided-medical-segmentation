@@ -15,5 +15,9 @@ JOB_LABEL="TransUNet $DATASET seed$SEED"
 OUT="runs/transunet/$DATASET/seed$SEED"
 LGMS_EPOCHS_CSV="$OUT/epochs.csv"          # time-limit notification: last / best epoch
 lgms_notify_start
-python src/train_transunet.py --dataset "$DATASET" --seed "$SEED" --out "$OUT"
+# The long command runs in the background and the script waits for it: bash handles SIGTERM (time limit /
+# scancel) only between commands, so a foreground child that is slow to exit (data-loader workers) would
+# delay the notification trap past Slurm's kill timeout. 'wait' returns at once on a signal.
+python src/train_transunet.py --dataset "$DATASET" --seed "$SEED" --out "$OUT" &
+wait $!
 NOTIFY_RESULT="best val Dice $(json_value $OUT/training_summary.json best_val_dice)"
