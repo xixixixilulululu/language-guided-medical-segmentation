@@ -51,7 +51,7 @@ _lgms_on_term() {
       "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "Slurm" 4
     else
       info=$(_lgms_epoch_info)
-      "$_LGMS_NOTIFY" "$label STOPPED at the 12 h time limit (job ${SLURM_JOB_ID:-?})${info:+, $info}; not handled automatically - needs your decision. $_LGMS_HINT" "Slurm"
+      "$_LGMS_NOTIFY" "$label STOPPED at the 12 h time limit (job ${SLURM_JOB_ID:-?})${info:+, $info}; not handled automatically - needs your decision. $_LGMS_HINT" "Slurm" 4
     fi
   else
     "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}). $_LGMS_HINT" "Slurm" 4

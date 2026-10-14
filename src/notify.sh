@@ -5,7 +5,7 @@
 #   e.g.  src/notify.sh "U-Net QaTa seed1001 finished (job 1234), val Dice 0.79" "Slurm"
 #   priority: ntfy "Priority" header, 1 (min) .. 5 (max); default 3. The project uses 4 (high) for messages
 #   that need the user to act: job started (submit the next one), FAILED, ALERT, next nnU-Net segment to be
-#   submitted by hand, cancelled before the time limit.
+#   submitted by hand, U-Net / TransUNet stopped at the 12 h limit, cancelled before the time limit.
 #
 # The channel (topic) name is read from ~/.ntfy_topic, which is never committed to git.
 # Messages contain only a task name, a status and a short result -- never data, file contents,
