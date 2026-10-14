@@ -55,7 +55,7 @@ _lgms_on_term() {
       # Is the next segment of this run (same job name) already in the queue?
       local next; next=$(squeue -h -u "$USER" -n "${SLURM_JOB_NAME:-}" -o %i 2>/dev/null | grep -vx "${SLURM_JOB_ID:-}" | head -1 || true)
       if [ -n "$next" ]; then
-        "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - the next segment (job $next) is already queued. $_LGMS_HINT" "$_T_OK" 4
+        "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - the next segment (job $next) is already queued. $_LGMS_HINT" "$_T_OK"
       else
         "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "$_T_RUN" 4
       fi
