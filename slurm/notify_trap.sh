@@ -21,7 +21,7 @@ _LGMS_HINT="You can run slurm/submit_next.sh to submit the next job."
 # Notification titles = the action the user has to take
 _T_RUN="👉 RUN: slurm/submit_next.sh"      # started; next nnU-Net segment must be submitted by hand
 _T_ASK="🆘 ASK CLAUDE IN VS CODE"          # FAILED; stopped at the 12 h limit (U-Net/TransUNet); cancelled early
-_T_OK="✅ No action needed"                # finished; segment ended with its next segment already queued
+_T_OK="✅ No action needed"                # finished; segment ended while another job is already queued
 _lgms_cancelled=0
 
 _lgms_label() { echo "${JOB_LABEL:-${SLURM_JOB_NAME:-job}}"; }
@@ -52,10 +52,11 @@ _lgms_on_term() {
   local label info; label=$(_lgms_label)
   if _lgms_at_time_limit; then
     if [ "${LGMS_SEGMENTED:-0}" = 1 ]; then
-      # Is the next segment of this run (same job name) already in the queue?
-      local next; next=$(squeue -h -u "$USER" -n "${SLURM_JOB_NAME:-}" -o %i 2>/dev/null | grep -vx "${SLURM_JOB_ID:-}" | head -1 || true)
+      # Does the user already have a job waiting in the queue (any job)? Then it starts now and nothing has
+      # to be done; the next segment is submitted later with submit_next.sh, following the plan.
+      local next; next=$(squeue -h -u "$USER" -t PD -o "%i %j" 2>/dev/null | grep -v "^${SLURM_JOB_ID:-x} " | head -1 || true)
       if [ -n "$next" ]; then
-        "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - the next segment (job $next) is already queued. $_LGMS_HINT" "$_T_OK"
+        "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete. Job ${next%% *} (${next#* }) is already queued and starts now; submit the next segment later, following the plan. $_LGMS_HINT" "$_T_OK"
       else
         "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "$_T_RUN" 4
       fi
