@@ -24,7 +24,7 @@ _lgms_label() { echo "${JOB_LABEL:-${SLURM_JOB_NAME:-job}}"; }
 
 # Called by the job script once JOB_LABEL is set; optional argument = extra information.
 lgms_notify_start() {
-  "$_LGMS_NOTIFY" "$(_lgms_label) started (job ${SLURM_JOB_ID:-?})${1:+, $1}. $_LGMS_HINT" "Slurm"
+  "$_LGMS_NOTIFY" "$(_lgms_label) started (job ${SLURM_JOB_ID:-?})${1:+, $1}. $_LGMS_HINT" "Slurm" 4
 }
 
 # True if SIGTERM came from the job's time limit (job end time reached, within 3 min), not from scancel.
@@ -48,13 +48,13 @@ _lgms_on_term() {
   local label info; label=$(_lgms_label)
   if _lgms_at_time_limit; then
     if [ "${LGMS_SEGMENTED:-0}" = 1 ]; then
-      "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "Slurm"
+      "$_LGMS_NOTIFY" "$label: segment ended at the 12 h time limit (job ${SLURM_JOB_ID:-?}); the run is not complete - submit the next segment by hand. $_LGMS_HINT" "Slurm" 4
     else
       info=$(_lgms_epoch_info)
       "$_LGMS_NOTIFY" "$label STOPPED at the 12 h time limit (job ${SLURM_JOB_ID:-?})${info:+, $info}; not handled automatically - needs your decision. $_LGMS_HINT" "Slurm"
     fi
   else
-    "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}). $_LGMS_HINT" "Slurm"
+    "$_LGMS_NOTIFY" "$label CANCELLED before its time limit (job ${SLURM_JOB_ID:-?}). $_LGMS_HINT" "Slurm" 4
   fi
   exit 143
 }
@@ -67,7 +67,7 @@ _lgms_on_exit() {
   if [ "$rc" = 0 ]; then
     "$_LGMS_NOTIFY" "$label finished (job ${SLURM_JOB_ID:-?})${NOTIFY_RESULT:+, $NOTIFY_RESULT}. $_LGMS_HINT" "Slurm"
   else
-    "$_LGMS_NOTIFY" "$label FAILED (job ${SLURM_JOB_ID:-?}, exit $rc). $_LGMS_HINT" "Slurm"
+    "$_LGMS_NOTIFY" "$label FAILED (job ${SLURM_JOB_ID:-?}, exit $rc). $_LGMS_HINT" "Slurm" 4
   fi
 }
 
