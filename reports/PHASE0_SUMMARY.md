@@ -117,8 +117,9 @@ LViT values are single numbers from the paper; ours are means over 3 seeds. Dice
 **Not confirmed:** the cause of the U-Net MosMedData+ gap. The paper's setting for this model is not
 published, so it cannot be compared with ours.
 Our three seeds (73.21–74.91, SD 0.86) indicate that seed-to-seed variation alone cannot account for a
-value of 64.60 (8.61 points below our lowest seed). The paper's U-Net was more likely obtained under a
-different or weaker training setting, which is not published; this cannot be verified.
+value of 64.60 (8.61 points below our lowest seed). The paper's U-Net result more likely reflects a
+difference in the training setting or data processing, neither of which is published; this cannot be
+verified.
 
 **Planned (to be confirmed with the supervisor):** in Phase 1 the language-guided models are compared
 with the baselines trained here (same data, split, evaluator and seeds), not with the values copied from
