@@ -129,8 +129,8 @@ runs are seeded but not bit-reproducible in any case (multi-process data loading
 | nnU-Net MosMedData+ seed 1001 | 1 (job 215, 24 h limit) — not segmented | — | — |
 | nnU-Net QaTa-COV19 seed 1002 | 2: job 216 (epochs 0–510, stopped by the 12 h limit), job 249 (epochs 500–1000, snapshot selection and final evaluation; stopped by the 12 h limit 12 s before its last log line — all outputs verified complete and consistent with `per_case.csv`, DONE marker written by hand) | 500 | passed (see below) |
 | nnU-Net MosMedData+ seed 1002 | 2: job 217 (epochs 0–506, stopped by the 12 h limit), job 250 (epochs 500–1000, snapshot selection and final evaluation, completed) | 500 | passed (see below) |
-| nnU-Net QaTa-COV19 seed 1003 | *[placeholder; first segment = job 218]* | *[placeholder]* | *[placeholder]* |
-| nnU-Net MosMedData+ seed 1003 | *[placeholder; first segment = job 219]* | *[placeholder]* | *[placeholder]* |
+| nnU-Net QaTa-COV19 seed 1003 | 3: job 282 (epochs 0–515, stopped by the 12 h limit), job 290 (epochs 500–1000; stopped by the 12 h limit during nnU-Net's built-in validation after epoch 1000, before snapshot selection), job 305 (snapshot selection and final evaluation only, completed in 30 min). The originally planned jobs 218 / 219 for seed 1003 were removed from the queue (see below). | 500 | passed (see below) |
+| nnU-Net MosMedData+ seed 1003 | 2: job 309 (epochs 0–508, stopped by the 12 h limit), job 314 (epochs 500–1000, snapshot selection and final evaluation, completed after 11 h 40 min) | 500 | passed (see below) |
 
 **Queue removal and resubmission.**
 - Between 2026-10-12 19:50 and 2026-10-13 01:16 (EDT), all 14 jobs of this project that were waiting
@@ -138,8 +138,9 @@ runs are seeded but not bit-reproducible in any case (multi-process data loading
   disabled, so who removed them and why could not be determined.
 - On the project lead's decision, the remaining work was resubmitted unchanged on 2026-10-13 as jobs
   248–262.
-- A watchdog (`src/queue_watchdog.sh`) now raises an alert, and never resubmits, if jobs disappear
-  from the queue again.
+- A watchdog (`src/queue_watchdog.sh`) then raised an alert, and never resubmitted, if jobs disappeared
+  from the queue. It was retired on 2026-10-13 under the fair-use policy (no background processes on the
+  login node).
 - On 2026-10-13 between 09:25 and 09:30 (EDT), all 14 jobs of this project waiting in the queue
   (251–264) were again removed before they ran. The watchdog reported it, and nothing was resubmitted.
   On the project lead's decision, no jobs were kept waiting in the queue from then on.
@@ -162,15 +163,22 @@ How the project complies:
   2026-10-17.
 - The rules change only how and when jobs run. They change no training setting, no checkpoint-selection
   rule and no analysis method.
-- Submission log: `runs/phase0_submit_log.tsv` (job ids, times). *[placeholder: final list of the job ids
-  of all 18 runs]*
+- Submission log: `runs/phase0_submit_log.tsv` (job ids, times). Slurm jobs that produced the 18 runs
+  (Slurm logs in `runs/slurm_logs/`):
+
+  | Method | QaTa-COV19 s1001 | QaTa-COV19 s1002 | QaTa-COV19 s1003 | MosMedData+ s1001 | MosMedData+ s1002 | MosMedData+ s1003 |
+  |---|---|---|---|---|---|---|
+  | U-Net | 212 | 288 | 308 | 213 | 285 | 303 |
+  | TransUNet | 289 | 311 | 312 | 287 | 307 | 310 |
+  | nnU-Net | 214 (+ repair job 248) | 216, 249 | 282, 290, 305 | 215 | 217, 250 | 309, 314 |
 
 **12 h limit for U-Net and TransUNet** (no resume function):
 - TransUNet always ends within the limit (150 epochs ≤ 6.8 h).
 - A U-Net run that has not met the early-stopping rule after 12 h (about 375 QaTa-COV19 epochs; seed 1001
-  stopped at epoch 119) is stopped by the limit and is not handled automatically. *[placeholder: whether
-  this happened; if so: which run, the last completed epoch, and the epoch of the best validation-Dice
-  checkpoint (best_model.pt) that was then evaluated — handling as decided by the project lead]*
+  stopped at epoch 119) is stopped by the limit and is not handled automatically. **This did not happen:**
+  all six U-Net runs met the early-stopping rule well within the limit (QaTa-COV19: epochs 119 / 120 / 130,
+  3.8–4.2 h; MosMedData+: epochs 179 / 209 / 160, 2.0–2.5 h, for seeds 1001 / 1002 / 1003). All six
+  TransUNet runs completed their 150 epochs.
 
 The continuity check, done on the training log at the first resume, verifies four things:
 - the epoch numbers continue without a gap after the resume point;
@@ -178,7 +186,7 @@ The continuity check, done on the training log at the first resume, verifies fou
 - the training loss shows no jump;
 - the 50-epoch snapshots continue to be written.
 
-Result at the first resume (2026-10-13, seed 1002; the resumed segments 249 / 250 had run 68 / 39
+Result at the first resume, seed 1002 (checked on 2026-10-13; the resumed segments 249 / 250 had run 68 / 39
 epochs). Both runs passed:
 
 | Check | QaTa-COV19 seed 1002 | MosMedData+ seed 1002 |
@@ -188,7 +196,16 @@ epochs). Both runs passed:
 | Training loss | re-run epochs 500–510 within 0.0024 of segment 1 (mean difference +0.0002); mean of epochs 480–499 −0.8944 vs. first 20 resumed epochs −0.8955 | re-run epochs within 0.0009 (mean −0.0003); −0.9363 vs. −0.9376 |
 | Snapshots | `checkpoint_ep0550.pth` written in the resumed segment | next one due at epoch 550 (not yet reached at the check) |
 
-The resume checkpoint was verified before each resumed segment started (`current_epoch` 500 in both
+Result at the first resume, seed 1003 (checked on 2026-10-18 on the complete training logs). Both runs passed:
+
+| Check | QaTa-COV19 seed 1003 | MosMedData+ seed 1003 |
+|---|---|---|
+| Epoch numbers | resumed exactly at epoch 500, epochs 500–999 without a gap | resumed exactly at epoch 500, epochs 500–999 without a gap |
+| Learning rate | equal to the poly schedule at every resumed epoch (deviation 0 at the printed 5 decimals); identical to segment 1 on the re-run epochs 500–515 | same; identical on the re-run epochs 500–508 |
+| Training loss | re-run epochs 500–515 within 0.0045 of segment 1 (mean difference +0.0000); mean of epochs 480–499 −0.8945 vs. first 20 resumed epochs −0.8950 | re-run epochs within 0.0019 (mean −0.0004); −0.9356 vs. −0.9367 |
+| Snapshots | written up to `checkpoint_ep1000.pth` | written up to `checkpoint_ep1000.pth` |
+
+The resume checkpoint was verified before each resumed segment started (`current_epoch` 500 in all four
 runs).
 
 **Job 214 (nnU-Net QaTa-COV19 seed 1001).**
@@ -197,9 +214,14 @@ runs).
   the job, while it was writing the predicted test masks (1217 of 2113 written, the last one truncated
   to 0 bytes).
 - The missing masks were then regenerated from the stored `test_probs.npz`. A check against
-  `per_case.csv` found 221 of these 896 masks differing from the scored predictions by 1–21 boundary
-  pixels. The reason is that `test_probs.npz` stores the probabilities as float16 (`runner.save_probs`),
-  and pixels within one float16 step of the 0.5 threshold flip. The masks written by job 214 itself
+  `per_case.csv` found 221 of these 896 masks differing from the scored predictions. The reason is that
+  `test_probs.npz` stores the probabilities as float16 (`runner.save_probs`). A float32 probability just
+  above 0.5 can round to exactly 0.5 in float16 and then fails `prob > 0.5`; no other pixel can flip
+  (a probability ≤ 0.5 never rounds to a value above 0.5). The float16-derived mask therefore misses a few
+  scored foreground pixels and never adds one.
+  *Corrected on 2026-10-18 (an earlier version said "1–21 boundary pixels").* The exact number of missing
+  pixels per case follows from the scored Dice in `per_case.csv` and the pixels stored as exactly 0.5
+  (it was uniquely determined in all 221 cases): **1–6 pixels, median 1**. The masks written by job 214 itself
   (1217) all match.
 - Repair, decided on 2026-10-12 and run exactly once (job 237, `src/analysis/repredict_214_masks.py`):
   1. Before and after the repair, the sha256 of `per_case.csv` and `summary.json` is recorded and compared.
@@ -209,7 +231,7 @@ runs).
   3. Check 1: the new masks of the 1217 original cases vs. the masks job 214 wrote, pixel by pixel.
   4. Check 2: the new masks of the 896 missing cases vs. `per_case.csv` (Dice difference < 1e-6).
   5. Only if both checks show no mismatch are those 896 masks copied into the official folder.
-     Otherwise the float16-derived masks remain, with the 221 cases that differ by 1–21 boundary pixels.
+     Otherwise the float16-derived masks remain, with the 221 cases that differ from the scored predictions.
 - Outcome:
   - Job 237 was removed from the queue by someone else before it ran (see below), so the repair ran
     once as job 248 on 2026-10-13.
@@ -219,9 +241,11 @@ runs).
     and the same settings is not bit-identical to the first one.
   - **Check 2: 249 of the 896 missing cases** do not reproduce the scored Dice.
   - As decided in advance, nothing was copied, and the inference was not repeated.
+  - Size of the GPU re-inference differences (prediction vs. prediction; no test score involved): in the
+    389 differing original cases, the two inferences differ by **at most 10 pixels (median 1)**, and the
+    lowest Dice between the two predictions of one case is **0.9935**.
   - The 896 masks in `eval_test/masks/` are therefore the float16-derived ones (option 2): 221 of them
-    differ from the scored predictions by 1–21 boundary pixels whose probability lies within one float16
-    step of the 0.5 threshold.
+    miss 1–6 scored foreground pixels (median 1) whose float32 probability was just above 0.5.
   - These masks are only drawn in the case figures. All statistics, and the Dice / HD95 labels in the
     figures, come from `per_case.csv`.
 - `per_case.csv` — the input of every statistic in this report — was computed by the job from float32

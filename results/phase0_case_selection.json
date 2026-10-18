@@ -1,0 +1,56 @@
+{
+  "QaTa-COV19": [
+    {
+      "quantile": 0.1,
+      "sample_id": "sub-S09867_ses-E21485_run-1_bp-chest_vp-ap_dx",
+      "score": 0.5275875555555555
+    },
+    {
+      "quantile": 0.3,
+      "sample_id": "sub-S09741_ses-E16691_run-1_bp-chest_cr",
+      "score": 0.7538903333333332
+    },
+    {
+      "quantile": 0.5,
+      "sample_id": "sub-S09379_ses-E16621_run-1_bp-chest_vp-ap_cr",
+      "score": 0.8597443333333333
+    },
+    {
+      "quantile": 0.7,
+      "sample_id": "sub-S09340_ses-E21534_run-1_bp-chest_vp-ap_cr",
+      "score": 0.9260229999999999
+    },
+    {
+      "quantile": 0.9,
+      "sample_id": "sub-S09583_ses-E20786_run-1_bp-chest_vp-ap_cr",
+      "score": 0.9681195555555556
+    }
+  ],
+  "MosMedData+": [
+    {
+      "quantile": 0.1,
+      "sample_id": "Morozov_study_0297_7",
+      "score": 0.522998
+    },
+    {
+      "quantile": 0.3,
+      "sample_id": "Jun_coronacases_case8_264",
+      "score": 0.7046078888888889
+    },
+    {
+      "quantile": 0.5,
+      "sample_id": "Jun_coronacases_case8_236",
+      "score": 0.7805141111111111
+    },
+    {
+      "quantile": 0.7,
+      "sample_id": "Jun_coronacases_case8_163",
+      "score": 0.8264680000000001
+    },
+    {
+      "quantile": 0.9,
+      "sample_id": "Jun_radiopaedia_40_86625_0_case18_62",
+      "score": 0.8606327777777779
+    }
+  ]
+}

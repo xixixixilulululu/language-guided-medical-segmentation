@@ -1,0 +1,7 @@
+{
+  "best_epoch": 150,
+  "best_checkpoint": "checkpoint_ep0150.pth",
+  "best_val_dice": 0.6879433600209633,
+  "n_snapshots": 20,
+  "n_val_cases": 273
+}
