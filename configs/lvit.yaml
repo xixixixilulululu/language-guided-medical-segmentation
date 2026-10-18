@@ -1,0 +1,56 @@
+# LViT-T (Phase 1). Read by src/phase1/train_lvit.py.
+# Source: LViT official repository (external/LViT, commit ba90775): nets/LViT.py (model "LViT", Config.py
+# model_name = 'LViT'), train_model.py, Train_one_epoch.py, utils.py, Load_Dataset.py, Config.py.
+method: lvit
+model:
+  implementation: external/LViT/nets/LViT.py   # class LViT(config_vit, n_channels, n_classes)
+  config_vit: Config.get_CTranS_config          # base_channel 64, as in the official Config.py
+  n_channels: 3          # Config.n_channels; grayscale duplicated to 3 channels (cv2.imread default)
+  n_classes: 1           # Config.n_labels -> sigmoid output
+pretrained: none         # Config.pretrain = False (LViT_pretrain is the MoNuSeg-pretrained variant, not used)
+input_size: 224
+
+# Text: bert_embedding (BERT-base uncased, 25 tokens, last layer, word pieces averaged), first 10 word
+# vectors (10 x 768); short texts padded with ' EOF XXX' (utils.read_text). Re-implemented in PyTorch with
+# the same weights and precomputed: src/phase1/lvit_text.py (decision D1, 2026-10-18).
+text_cache: ~/datasets/phase1/lvit_bert_cache.pt
+
+# Learning rate: LViT paper (Li et al., IEEE TMI 2023), Sec. IV-C: "The initial learning rate is set to
+# 3e-4 for the QaTa-COV19 dataset and 1e-3 for the MosMedData+ dataset." Config.py only names Covid19 3e-4
+# (and MoNuSeg 1e-3); it has no MosMed setting. Rule: each parameter from its most specific official
+# source (decision D4, 2026-10-18).
+optimizer:
+  type: Adam             # train_model.py: torch.optim.Adam(params, lr), no weight decay
+  lr:
+    QaTa-COV19: 3.0e-4
+    MosMedData+: 1.0e-3
+  weight_decay: 0.0
+
+# Batch size 2: Config.py "batch_size = 2  # For LViT-T, 2 is better than 4" (specific to LViT-T).
+# The paper's general default is 24 ("The default batch size is 24 for the QaTa-COV19 dataset and the
+# MosMedData+ dataset"); which of the two produced the paper's LViT-T scores cannot be confirmed.
+# Phase 0 U-Net used 24 because the LViT-T comment does not apply to U-Net. (Decision D4, 2026-10-18.)
+batch_size: 2
+
+scheduler:
+  type: CosineAnnealingWarmRestarts   # LViT utils.py, Config.cosineLR = True
+  T_0: 10
+  T_mult: 1
+  eta_min: 1.0e-4
+  step: per_epoch                     # once per epoch, after validation (Train_one_epoch.py)
+
+loss:
+  type: WeightedDiceBCE  # LViT utils.py: 0.5 * Dice + 0.5 * class-balanced BCE on the sigmoid output
+  dice_weight: 0.5
+  bce_weight: 0.5
+
+augmentation: lvit_random_generator   # Load_Dataset.RandomGenerator (same as Phase 0 U-Net); val/test: none
+
+max_epochs: 2000                 # Config.epochs
+early_stopping_patience: 50      # Config.early_stopping_patience (paper: 50 epochs)
+first_epoch_for_best: 6          # train_model.py saves a best model only when epoch + 1 > 5
+selection_metric: val_dice       # mean per-case validation Dice of the common evaluator (prob > 0.5)
+
+num_workers: 8                   # train_model.py
+deterministic: true              # train_model.py: cudnn.deterministic = True, benchmark = False
+val_batch_size: 32               # inference only; does not change any value

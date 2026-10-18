@@ -1,0 +1,40 @@
+# RecLMIS (Phase 1). Read by src/phase1/train_reclmis.py.
+# Source: RecLMIS official repository (external/RecLMIS, commit d3265c8): nets/RecLMIS.py, train_model.py,
+# Train_one_epoch.py, Load_Dataset.py, utils.py, Config_covid19.py (QaTa) and Config_MosMedPlus.py (MosMed).
+# The driver imports the official config module of the dataset directly and checks every value below
+# against it. (train_model.py would load Config_covid19 for "-c Config_MosMedPlus": only
+# "Config_Kvasir_Clinic" maps to the MosMed file; the driver avoids this bug.)
+method: reclmis
+config_module:
+  QaTa-COV19: Config_covid19
+  MosMedData+: Config_MosMedPlus
+model:
+  implementation: external/RecLMIS/nets/RecLMIS.py   # RecLMIS(config, config.get_ViT_config(), 3, 1)
+  clip_backbone: ViT-B/32       # OpenAI CLIP ViT-B/32, frozen; only the text tower is used
+  clip_weights: ~/pretrained/clip/ViT-B-32.pt         # linked as external/RecLMIS/nets/ViT-B-32.pt
+input_size: 224
+text:
+  padding: lvit_eof_xxx         # utils.read_text: ' EOF XXX' * (9 - words) for texts with < 9 words
+  tokenizer: clip.tokenize      # OpenAI CLIP package, git d05afc4; context_length = token_len, truncate
+  token_len: 18
+# fairseq (needed by nets/transformer/mutihead_attention.py for utils.softmax only) cannot be built here;
+# the driver provides fairseq.utils.softmax = F.softmax(x, dim, dtype=float32), fairseq's own definition.
+# The official bare `except` around the reconstruction would otherwise switch the reconstruction and CCL
+# losses off silently; the driver stops if any of them is missing or not finite.
+
+# Values per dataset (official config modules)
+batch_size:     {QaTa-COV19: 32, MosMedData+: 20}
+lr:             {QaTa-COV19: 3.0e-4, MosMedData+: 3.0e-4}     # Adam, no weight decay (optimizer = "Adam")
+scheduler:      {QaTa-COV19: cosineLR, MosMedData+: exp}      # cosineLR: warm restarts T_0 10, min 1e-4;
+                                                              # exp: LambdaLR max(0.99^epoch, 0.1); per epoch
+max_epochs:     {QaTa-COV19: 2000, MosMedData+: 400}
+early_stopping_patience: {QaTa-COV19: 100, MosMedData+: 30}
+loss_weight:    {loss_criterion: 5, loss_ccl: 0.2, loss_text_rec: 1, loss_img_rec: 1}  # both datasets
+# criterion = utils.WeightedDiceBCE(0.5, 0.5); total = sum(weight * loss)
+
+augmentation: reclmis           # train: BioMedicalGaussianBlur(p 0.5), PhotoMetricDistortion, RandomGenerator
+first_epoch_for_best: 1         # train_model.py: `if epoch + 1 > 0`
+selection_metric: val_dice      # mean per-case validation Dice of the common evaluator (prob > 0.5)
+num_workers: 8
+deterministic: true             # train_model.py: cudnn.deterministic = True, benchmark = False
+val_batch_size: 32              # inference only

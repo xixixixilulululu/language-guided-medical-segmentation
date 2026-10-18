@@ -5,7 +5,8 @@ job was submitted, no package was installed (only `pip install --dry-run` and `p
 wheel into a scratch folder, to read its source), and no Phase 0 file was changed.
 The full Phase 1 requirements are in `reports/PHASE1_PLAN.md`.
 
-Section 9 lists the decisions that are needed before any work starts.
+Section 9 lists the decisions that were needed before any work started. They were taken on 2026-10-18
+and are recorded in section 10, with what has been done since.
 
 ---
 
@@ -43,7 +44,9 @@ lists in `~/datasets/raw/lvit_split_lists/`.
 - **Keys:** the xlsx key is the mask filename. For QaTa this is `mask_<image>.png`; for MosMed the
   mask filename equals the image filename.
 - **Texts are templated** (e.g. "Bilateral pulmonary infection, two infected areas, all left lung
-  and middle lower right lung."). Only 806 distinct texts cover 12,087 images.
+  and middle lower right lung."). 495 distinct texts cover the 11,987 images (806 when distinct texts are counted per split, as in the table).
+  (Corrected 2026-10-18: an earlier version of this report said "806 distinct texts cover 12,087 images";
+  12,087 was an addition error.)
 
 **How each method reads the text:**
 
@@ -107,7 +110,7 @@ out of its "Would install" list.
      conversions of Google's original uncased BERT-base checkpoint.
   2. Re-implement steps 1-5 exactly (same tokenizer rules, max length 25, same word-piece averaging,
      first 10 vectors).
-  3. Compute the vectors **once** for the 806 distinct texts and store them as a cache keyed by text.
+  3. Compute the vectors **once** for the distinct texts (495) and store them as a cache keyed by text.
      LViT's data loader reads from the cache instead of calling MXNet.
 
   The model input is then the same 10 × 768 matrix as in the official code. The only expected
@@ -116,7 +119,7 @@ out of its "Would install" list.
   output). Precomputing also removes a large CPU cost per batch, but does not change training.
 - **Optional verification (needs your approval).** In a throw-away virtual environment separate from
   `lgms` (no torch: mxnet 1.9.1, numpy 1.26, gluonnlp 0.10.0, bert-embedding `--no-deps`), run the
-  official `BertEmbedding()` on the 806 texts and compare with our cache (max absolute difference,
+  official `BertEmbedding()` on the distinct texts and compare with our cache (max absolute difference,
   cosine similarity). If MXNet does not run there, the replacement is reported as "verified by
   construction only". Downloads: the GluonNLP BERT zip, 494 MB, is reachable (HTTP 200).
 
@@ -357,7 +360,7 @@ Each step ends with a commit and push. Steps marked **(you)** need you.
    - Build the symlinked `common224` views for each loader under `~/datasets/phase1/` (no new pixels,
      no new split).
    - Generate the DD-CMD CSV files from our xlsx and check them row by row.
-   - Precompute the LViT-T text cache and run its tests (shape 10 × 768 for all 806 texts, padding
+   - Precompute the LViT-T text cache and run its tests (shape 10 × 768 for all distinct texts, padding
      rule).
    - Write `reports/PHASE1_DATA_SUMMARY.md`.
 3. **Drivers.** `src/phase1/train_{lvit,reclmis,ddcmd}.py`. Each imports the official model, dataset
@@ -400,3 +403,33 @@ Each step ends with a commit and push. Steps marked **(you)** need you.
 | D6 | DD-CMD data-loader workers | official 0, or 8 with seeded workers (same augmentation distribution, different random stream, much faster) | 8 |
 | D7 | Packages to install (all dry-run clean, torch unchanged) | `transformers 4.57.6` (+ tokenizers 0.22.2, hub 0.36.2), `pytorch_lightning 1.9.0` + `torchmetrics 0.10.3` (fallback 2.6.6 + port), `monai 1.6.1`, `clip` (git `d05afc4`) + `ftfy`, `regex`, `thop` | approve the list |
 | D8 | Weights (outside git: HF cache, `~/pretrained/`) | CLIP ViT-B-32.pt (354 MB), ConvNeXt-Tiny, BiomedBERT (440 MB), bert-base-uncased (440 MB) | approve the downloads |
+
+## 10. Decisions taken (2026-10-18) and status
+
+| # | Decision | Status |
+|---|---|---|
+| D1 | (b): PyTorch re-implementation with the same BERT-base uncased weights, precomputed; try to verify against official MXNet in a throw-away environment, without spending long on it | **Verification not possible.** In a separate venv without torch, `mxnet 1.9.1` (aarch64 wheel) installs but does not import: it needs the ARM Performance Libraries (`libarmpl_lp64_mp.so`), which the cluster does not have. `gluonnlp 0.10.0` cannot be built because there is no `gcc`. The throw-away venv was deleted. (a) is kept and **the report states that the text features could not be checked against the official MXNet output.** The cache (`src/phase1/lvit_text.py`) holds 495 distinct padded texts, each 10 × 768, and covers all 11,987 samples. None of the texts has fewer than 9 words, so the `EOF XXX` padding never applies. |
+| D2 | (b): overlay venv `~/envs/lgms_p1` | Done. torch is still `2.14.0+cu130`; `lgms` is unchanged (`huggingface_hub` 2.1.1). Details in `external/VERSIONS.md`. |
+| D3 | (a): DD-CMD checkpoint selection **and** early stopping on the mean per-case validation Dice (patience 50) | Implemented (`configs/ddcmd.yaml`, monitor `val_case_dice`). The official `val_MIoU` is still logged. Reported as a deviation from the official setting. |
+| D4 | LViT-T learning rate 3e-4 (QaTa) / **1e-3 (MosMed)**, batch size 2 | LViT paper Sec. IV-C, checked on 2026-10-18: "The initial learning rate is set to 3e-4 for the QaTa-COV19 dataset and 1e-3 for the MosMedData+ dataset" and "The default batch size is 24 for the QaTa-COV19 dataset and the MosMedData+ dataset". Batch size 2 follows `Config.py` ("For LViT-T, 2 is better than 4"). This is our judgement; both sources are recorded in `configs/lvit.yaml` and will be in `PHASE1_MODEL_SETUP.md`. |
+| D5 | Segmented training with resume; each segment submitted by hand. After each method's first real resume, check that epoch numbers, learning rate and loss are continuous (as for Phase 0 nnU-Net) | Implemented. Also tested in the quick check (6 epochs uninterrupted vs 3 + 3). |
+| D6 | DD-CMD: 8 seeded data-loader workers | Implemented (MONAI `worker_init_fn`; base seed from a seeded generator). Reported as a change of the augmentation's random order, not of the method. |
+| D7 | Install the listed packages; the quick check must show that pytorch_lightning 1.9 and transformers 4.57 train normally under torch 2.14. If not: stop and report, no other solution | Installed (dry-run first). The training check is part of the quick check. |
+| D8 | Download the weights, outside git | Done (`external/VERSIONS.md`). |
+
+Further findings during the implementation:
+- **RecLMIS reconstruction needs a GPU.** `_mask_feat` hard-codes `.cuda()` (`nets/RecLMIS.py:176`), so
+  on a CPU the reconstruction raises an error and the official bare `except` switches it off. The CPU
+  smoke test on the login node showed exactly this (`aux_active: false`), which confirms that the guard
+  works. On the GPU the quick check verifies that `aux` stays on and that all three auxiliary losses are
+  present and finite in every step. The training driver stops otherwise.
+- **The official RecLMIS reconstructor replaces a NaN reconstruction loss with 0.** The driver counts such
+  steps (`rec_loss_zero_steps` in `training_summary.json`).
+- **Code layout.** The data loaders follow the Phase 0 pattern: the `common224` arrays are read in
+  memory, and model, loss, scheduler and augmentation are imported from the official repositories. The
+  symlinked folder views of section 8 step 2 are therefore not needed, and neither is the DD-CMD CSV
+  conversion. For DD-CMD, arrays are fed in (H, W) orientation; see `configs/ddcmd.yaml`.
+- **Quick checks never touch the test set.** They are scored on validation only (`--eval-splits val`).
+- **Submission.** Phase 1 jobs are submitted with `slurm/submit_next_p1.sh` (new; plan
+  `slurm/phase1_plan.tsv`). The Phase 0 tool is unchanged. The 18 main runs are added to the plan only
+  after the quick-check results and the measured timetable have been confirmed.

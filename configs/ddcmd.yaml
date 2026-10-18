@@ -1,0 +1,35 @@
+# DD-CMD (Phase 1). Read by src/phase1/train_ddcmd.py.
+# Source: DD-CMD official repository (external/DD-CMD, commit 27387c4): config/train.yaml, train.py,
+# net/creratemodel.py (LightningModule, used unchanged), net/model.py, utils/dataset.py.
+method: ddcmd
+model:
+  vision_type: facebook/convnext-tiny-224                                   # HF, fine-tuned
+  bert_type: microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext  # HF, frozen
+input_size: [224, 224]
+input_text_len: 24               # tokenizer max_length, padding to max_length, truncation
+
+# Training (config/train.yaml, train.py, creratemodel.py); identical for both datasets
+lr: 5.0e-5                       # AdamW (default weight decay), CosineAnnealingLR(T_max 200, eta_min 1e-6) per epoch
+loss: DiceCELoss(sigmoid=True)   # MONAI, default 1:1 weights
+train_batch_size: 8
+valid_batch_size: 8
+min_epochs: 1
+max_epochs: 160
+patience: 50                     # Lightning EarlyStopping(patience=50, mode=max)
+precision: 32                    # Trainer default
+
+# Deviations (decisions of 2026-10-18):
+# D3: checkpoint selection AND early stopping monitor the mean per-case validation Dice of the common
+#     evaluator (prob > 0.5) instead of the official val_MIoU (a pixel-pooled IoU over the epoch).
+monitor: val_case_dice
+# D6: 8 data-loader workers instead of the hard-coded 0, seeded (MONAI worker_init_fn per worker, base seed
+#     from a seeded torch.Generator). This changes the random order of the augmentation, not the method.
+num_workers: 8
+# Seed: 1001/1002/1003 instead of the hard-coded set_seed(42); not deterministic (as official).
+deterministic: false
+# Input: the common 224x224 images and masks (as all Phase 0/1 methods), so the official Resized transforms
+# are the identity. Arrays are fed in (H, W) orientation; the official PILReader yields (W, H) (transposed),
+# which only mirrors the image, and every augmentation (zoom, rotation +-0.3 rad, flips on both axes,
+# rot90) is symmetric under transposition, so the training distribution is unchanged.
+# Logging: CSVLogger only (tensorboard is not installed; logging does not affect training).
+val_batch_size_eval: 32          # final inference only
