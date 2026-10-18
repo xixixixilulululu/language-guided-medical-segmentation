@@ -40,6 +40,8 @@ TransUNet vs nnU-Net:
   two-sided Wilcoxon signed-rank test on the same paired differences (scipy defaults), with its own Holm
   correction within each dataset.
 - Significance is never tested on the three seed means alone.
+- **Significance level:** two-sided 5% (α = 0.05) after Holm correction. The fixed plan did not name a
+  level; this one was confirmed by the project lead on 2026-10-18, after the analysis had been run.
 
 **Case figures.** Cases are chosen by rule, never by hand:
 1. Each test case's Dice is averaged over the 3 seeds and then over the 3 methods.
@@ -313,8 +315,8 @@ Supplementary sensitivity analysis (specified in advance, **not used for the mai
 | MosMedData+ | U-Net | nnU-Net | 0.079 | 0.079 |
 | MosMedData+ | TransUNet | nnU-Net | 5.92e-10 | 1.18e-09 |
 
-Reading of the primary analysis (paired t-test, Holm-corrected). The fixed plan does not name a
-significance level; the conventional two-sided 5% level is used here.
+Reading of the primary analysis (paired t-test, Holm-corrected), at the two-sided 5% level confirmed
+by the project lead (see Methods).
 - **QaTa-COV19.** Only U-Net vs. nnU-Net differs at the 5% level after Holm correction: ΔDice −0.54
   points, 95% CI [−0.97, −0.11], Holm p = 0.043. U-Net vs. TransUNet (−0.28, Holm p = 0.285) and
   TransUNet vs. nnU-Net (−0.26, Holm p = 0.285) do not; both CIs include 0. All three differences are
@@ -405,14 +407,17 @@ Case selection rule: each test case's Dice is averaged over the 3 seeds and the 
 
 ## 5. Conclusions
 
-> **DRAFT** — to be reviewed by the project lead. Based only on the numbers in sections 1–3; main
-> conclusions use the primary analysis (paired t-test, Holm correction), the Wilcoxon test only as a
-> supplement.
+Final, reviewed by the project lead on 2026-10-18 (who also recomputed all results independently from
+the committed `per_case.csv` files). Based only on the numbers in sections 1–3; the main conclusions use
+the primary analysis (paired t-test, Holm correction, two-sided 5% level), the Wilcoxon test only as a
+supplement.
 
 1. **QaTa-COV19.** The three image-only baselines reach mean test Dice of 79.18–79.72. Of the three
    pairwise differences, only nnU-Net vs. U-Net is significant after Holm correction (+0.54 Dice points,
    95% CI [+0.11, +0.97], Holm p = 0.043). The two comparisons with TransUNet are not significant.
-   Every difference is below 1 Dice point.
+   Every difference is below 1 Dice point. For TransUNet vs. nnU-Net the supplementary Wilcoxon test is
+   significant (Holm p = 3.07e-05) while the primary analysis is not (Holm p = 0.285), so the result for
+   this pair also depends on the choice of test.
 2. **MosMedData+.** U-Net has the highest mean Dice (74.01), followed by nnU-Net (72.06) and TransUNet
    (69.43). All three pairwise differences are significant after Holm correction. For U-Net vs. nnU-Net
    the supplementary Wilcoxon test is not significant (Holm p = 0.079). All MosMedData+ p-values may be
@@ -421,7 +426,7 @@ Case selection rule: each test case's Dice is averaged over the 3 seeds and the 
    ≤ 0.86 points, every seed gives the same order), and of the same size as the differences between methods on
    QaTa-COV19 (per-seed SD ≤ 0.41 points, the order changes between seeds).
 4. **LViT Table II.** Five of the six method × dataset results are within 2 Dice points of the paper.
-   U-Net on MosMedData+ is 9.41 points above the paper in all three seeds. Its cause is not known (section 3).
+   U-Net on MosMedData+ is above the paper in all three seeds (by 8.61–10.31 points, mean +9.41). Its cause is not known (section 3).
 
 ## 6. Changes to the analysis after it was fixed
 
@@ -432,7 +437,8 @@ Documentation only, changed before the run (no analysis method changed): the Met
 check, the final job list, the U-Net 12 h outcome and the corrected job-214 figures (1–6 pixels instead
 of "1–21 boundary pixels"; size of the GPU re-inference differences). After the run, the hand-written
 text replaced the *[placeholder]* entries, and a manual note on job 214 was added under the QaTa-COV19
-case figure.
+case figure. On 2026-10-18, after review, the project lead confirmed the two-sided 5% significance level
+(added to Methods; the plan had not named one) and the conclusions were finalised; no number changed.
 
 ## 7. Files for independent checking
 

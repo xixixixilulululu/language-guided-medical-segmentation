@@ -36,6 +36,8 @@ TransUNet vs nnU-Net:
   two-sided Wilcoxon signed-rank test on the same paired differences (scipy defaults), with its own Holm
   correction within each dataset.
 - Significance is never tested on the three seed means alone.
+- **Significance level:** two-sided 5% (α = 0.05) after Holm correction. The fixed plan did not name a
+  level; this one was confirmed by the project lead on 2026-10-18, after the analysis had been run.
 
 **Case figures.** Cases are chosen by rule, never by hand:
 1. Each test case's Dice is averaged over the 3 seeds and then over the 3 methods.
