@@ -16,8 +16,8 @@ records. This summary adds no analysis.
 4. **Against LViT Table II, 5 of the 6 results are within 2 Dice points.** U-Net on MosMedData+ is 9.4
    points higher, in all three seeds; the cause is not confirmed.
 5. **The statistical methods were fixed before the results were seen** (commit 6ed8aa7) and run once,
-   unchanged. The project lead recomputed all results independently from the per-case files
-   (`per_case.csv`); they agree with the report.
+   unchanged. All results were re-computed independently from the per-case files with separate code
+   (not `src/analyze_phase0.py`), and matched exactly.
 
 ## 2. Main results
 

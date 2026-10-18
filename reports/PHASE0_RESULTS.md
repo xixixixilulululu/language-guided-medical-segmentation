@@ -407,8 +407,8 @@ Case selection rule: each test case's Dice is averaged over the 3 seeds and the 
 
 ## 5. Conclusions
 
-Final, reviewed by the project lead on 2026-10-18 (who also recomputed all results independently from
-the committed `per_case.csv` files). Based only on the numbers in sections 1–3; the main conclusions use
+Final, reviewed by the project lead on 2026-10-18. All results were re-computed independently from the
+committed `per_case.csv` files with separate code (not `src/analyze_phase0.py`), and matched exactly. Based only on the numbers in sections 1–3; the main conclusions use
 the primary analysis (paired t-test, Holm correction, two-sided 5% level), the Wilcoxon test only as a
 supplement.
 
