@@ -14,9 +14,10 @@ records. This summary adds no analysis.
 3. **MosMedData+: U-Net 74.01 > nnU-Net 72.06 > TransUNet 69.43**, and each of the three seeds gives this
    same order.
 4. **Against LViT Table II, 5 of the 6 results are within 2 Dice points.** U-Net on MosMedData+ is 9.4
-   points higher, in all three seeds; the cause is not confirmed.
-5. **The statistical methods were fixed before the results were seen** (commit 6ed8aa7) and run once,
-   unchanged. All results were re-computed independently from the per-case files with separate code
+   points higher on average, and higher in every seed (8.61–10.31 points); the cause is not confirmed.
+5. **The statistical methods were fixed before the results of the 18 runs were summarised** (commit
+   6ed8aa7) and run once, unchanged; the test scores seen earlier and the significance level, confirmed
+   after the run, are recorded in PHASE0_RESULTS.md. All results were re-computed independently from the per-case files with separate code
    (not `src/analyze_phase0.py`), and matched exactly.
 
 ## 2. Main results
@@ -106,7 +107,8 @@ LViT values are single numbers from the paper; ours are means over 3 seeds. Dice
   nnU-Net are within 2 points.
 - U-Net on MosMedData+ is above the paper in every seed (73.92 / 74.91 / 73.21; 8.61–10.31 points above
   64.60).
-- Our scoring reproduces the LViT evaluation code exactly, and we use the same MosMedData+ data and split.
+- Our scoring reproduces the LViT evaluation code exactly, and we use the same MosMedData+ source (the
+  Kaggle mirror linked by LViT) and the same split.
 - The paper does not describe how its comparison models were trained, and the released LViT code has no
   MosMedData+ path.
 - In the paper, U-Net is not the only comparison model that is low on MosMedData+ (Swin-Unet 63.29,
@@ -115,14 +117,16 @@ LViT values are single numbers from the paper; ours are means over 3 seeds. Dice
 **Not confirmed:** the cause of the U-Net MosMedData+ gap. The paper's setting for this model is not
 published, so it cannot be compared with ours.
 
-**Consequence for Phase 1:** the language-guided models will be compared with the baselines trained here
-(same data, split, evaluator and seeds), not with the values copied from LViT Table II.
+**Planned (to be confirmed with the supervisor):** in Phase 1 the language-guided models are compared
+with the baselines trained here (same data, split, evaluator and seeds), not with the values copied from
+LViT Table II.
 
 ## 6. Issues found and how they were handled
 
-- **LViT code and paper disagree on the training settings.** `Config.py` sets batch size 2 (its comment
-  refers to LViT-T); the paper gives batch size 24 and learning rates 3e-4 (QaTa) / 1e-3 (MosMed). U-Net
-  uses the paper's values. The released code has no MosMedData+ path.
+- **LViT code and paper disagree on the batch size.** `Config.py` sets batch size 2 (its comment refers to
+  LViT-T); the paper gives 24. For the learning rate, `Config.py` gives 3e-4 for Covid19 (QaTa-COV19), as
+  the paper does, and no value for MosMedData+; the paper gives 1e-3. The released code has no
+  MosMedData+ path. U-Net uses the paper's values.
 - **MosMedData+ is split by slice, not by CT volume** (LViT split, used as given). Some volumes have
   slices in both Train and Test (e.g. `Jun_coronacases_case8`: 57 / 24 / 135 slices in Train / Val / Test).
   All three methods use the same split.
@@ -143,5 +147,8 @@ published, so it cannot be compared with ours.
   volume in Train and Test).
 - **Segmented nnU-Net runs are not bit-reproducible:** the data-augmentation workers restart their random
   stream at each resume, so a segmented run is not identical to an uninterrupted run with the same seed.
+- **The one significant QaTa-COV19 comparison is borderline:** nnU-Net vs. U-Net has Holm p = 0.043, just
+  below the 5% level, which was confirmed only after the analysis had been run. At a stricter level this
+  pair would not be significant.
 - **U-Net uses the LViT paper's general settings** (batch 24, the paper's learning rates). The paper gives
   no separate settings for its U-Net comparison model; applying the general ones is our judgment.

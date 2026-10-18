@@ -51,6 +51,10 @@ Each figure shows the **seed-1001 predictions**, and every panel's Dice / HD95 l
 In MosMedData+, neighbouring slices of the same CT volume are correlated. The MosMedData+ confidence
 intervals may therefore be too narrow and the p-values too small.
 
+**Limitation (added after the run).** The only significant QaTa-COV19 comparison, nnU-Net vs. U-Net
+(Holm p = 0.043), lies just below the 5% boundary, and the 5% level was confirmed only after the analysis
+had been run. At a stricter level this pair would not be significant.
+
 ### Test-set scores seen before the analysis was fixed
 
 All test-set scores that were seen before the analysis plan was fixed are listed below. Times are
@@ -83,13 +87,28 @@ How these scores were used:
   - the analysis methods above were fixed afterwards, but without reference to any test score. The
     choices that the plan left open were decided by the project lead from the options listed in advance.
 
+**Test-set scores seen after the plan was fixed but before the analysis was run** (added on 2026-10-18).
+While checking job status, the assistant displayed the end of two Slurm logs, which print the run's test
+summary. Two main-run test scores were seen this way:
+
+| Run | Job | Test Dice (%) | Written | Seen | Why |
+|---|---|---:|---|---|---|
+| U-Net QaTa-COV19 seed 1003 | 308 | 79.00 (log: 0.79; mIoU 69.60, HD95 31.29, ASSD 10.53) | 2026-10-16 03:11 | 2026-10-16 05:37 | status check of the run (end of `runs/slurm_logs/unet-QaTa-1003-308.out`) |
+| nnU-Net MosMedData+ seed 1003 | 314 | 72.95 (log: 0.7295; mIoU 60.58, HD95 21.24, ASSD 7.87) | 2026-10-17 18:54 | 2026-10-18 10:12 | check that the last run was complete (end of `runs/slurm_logs/nnunet-MosMedData+-1003-314.out`) |
+
+- Both were seen after the analysis plan was fixed (commit 6ed8aa7) and after all 18 runs had been
+  submitted with their final settings. After they were seen, no training setting, checkpoint-selection
+  rule or analysis method was changed.
+- Before the analysis run, the job-214 pixel counts (see below) were computed from the per-case test Dice
+  of nnU-Net QaTa-COV19 seed 1001 in `per_case.csv`. Only pixel counts were printed, no score.
+
 ### Stored probabilities (`test_probs.npz`, `val_probs.npz`)
 
 These archives store the lesion probabilities as **float16**. They are a backup only and take part in no
 scoring. Every per-case metric (`per_case.csv`) and every predicted mask was computed inside the run
 from the float32 probabilities. Masks re-derived from the float16 archive can differ in boundary pixels
 whose probability lies within one float16 step of the 0.5 threshold. To keep the code identical for all
-18 runs, the format is not changed during Phase 0; it will become float32 in Phase 1.
+18 runs, the format is not changed during Phase 0; planned (to be confirmed with the supervisor): float32 in Phase 1.
 
 The investigation of the MosMed gap (`src/analysis/lvit_metric_check.py`, PHASE0_MODEL_SETUP.md §7)
 re-scored U-Net seed-1001 predictions from these float16 archives. It is an analysis outside the

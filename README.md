@@ -1,7 +1,7 @@
 # language-guided-medical-segmentation
 
-Research project on language-guided medical image segmentation. The work is organised in phases; the
-current phase is **Phase 0 — image-only segmentation benchmark** (U-Net, TransUNet, nnU-Net 2D on
+Research project on language-guided medical image segmentation. The work is organised in phases.
+Phase 0 — the **image-only segmentation benchmark** — is **complete** (U-Net, TransUNet, nnU-Net 2D on
 QaTa-COV19 and MosMedData+, LViT split, seeds 1001/1002/1003). Plan: [`reports/PHASE0_PLAN.md`](reports/PHASE0_PLAN.md).
 
 ## Status
@@ -11,8 +11,8 @@ QaTa-COV19 and MosMedData+, LViT split, seeds 1001/1002/1003). Plan: [`reports/P
 | 0.1 Project and data | done | [`reports/PHASE0_DATA_SUMMARY.md`](reports/PHASE0_DATA_SUMMARY.md), `results/phase0_data_check.json`, `reports/figures/data_examples.png` |
 | 0.2 Common 224×224 data preparation | done | [`reports/PHASE0_MODEL_SETUP.md`](reports/PHASE0_MODEL_SETUP.md) §1, `results/phase0_common224_summary.json` |
 | 0.3 Model setup (U-Net, TransUNet, nnU-Net) | done, quick checks passed | [`reports/PHASE0_MODEL_SETUP.md`](reports/PHASE0_MODEL_SETUP.md), `configs/*.yaml`, `results/phase0_quick_check.json`, `results/phase0_metric_check.txt` |
-| 0.4 18 main runs | 6/18 complete; the rest is submitted by hand, one job at a time (cluster fair-use policy) | [`reports/PHASE0_SUBMISSION_PLAN.md`](reports/PHASE0_SUBMISSION_PLAN.md), `slurm/submit_next.sh`, `runs/` (not committed) |
-| 0.5–0.7 Evaluation, summary, pairwise comparison | analysis plan fixed in code, tested on synthetic / validation data; to be run once after the 18 runs | `src/analyze_phase0.py`, `src/test_analyze_phase0.py`, `reports/templates/PHASE0_RESULTS_methods.md` |
+| 0.4 18 main runs | done, 18/18 complete (submitted by hand, one job at a time, under the cluster fair-use policy) | [`reports/PHASE0_SUBMISSION_PLAN.md`](reports/PHASE0_SUBMISSION_PLAN.md), `slurm/submit_next.sh`, `runs/` (not committed) |
+| 0.5–0.7 Evaluation, summary, pairwise comparison | done; fixed analysis (commit 6ed8aa7) run once, conclusions final | **[`reports/PHASE0_SUMMARY.md`](reports/PHASE0_SUMMARY.md)** (short summary), **[`reports/PHASE0_RESULTS.md`](reports/PHASE0_RESULTS.md)** (full results), `src/analyze_phase0.py`, `results/phase0_*.csv` |
 
 ## Layout
 

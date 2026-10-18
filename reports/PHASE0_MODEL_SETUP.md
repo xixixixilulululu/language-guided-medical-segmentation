@@ -278,6 +278,9 @@ the job ID and the best validation Dice.
 
 ## 7. U-Net on MosMedData+ vs. the LViT paper
 
+*This section is the record made when only seed 1001 was available. The final results over the three
+seeds are in [PHASE0_RESULTS.md](PHASE0_RESULTS.md), section 3.*
+
 The first two main runs (U-Net, seed 1001) were compared with the LViT paper as the agreed pipeline check.
 On QaTa-COV19 they match the paper. On MosMedData+ our U-Net is 9.3 Dice points **above** the value the
 paper reports. This section records what was checked. No setting of any run was changed, and all runs
