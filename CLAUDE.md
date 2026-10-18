@@ -69,7 +69,9 @@
   into the repository.
 - E-mail channel (since 2026-10-14): only for messages that need an action (priority >= 4, titles
   "👉 RUN ..." and "🆘 ASK CLAUDE ..."; never "✅ No action needed"). Sent after and separately from the
-  phone push, so it can never block the push or a job. Primary route: SMTP with the user's QQ Mail account
+  phone push, so it can never block the push or a job. Exception (since 2026-10-18, user request): when
+  Claude stops (task done or waiting for confirmation), the Stop hook also e-mails the status line with
+  the title "✅ Claude is waiting for you". Primary route: SMTP with the user's QQ Mail account
   (`src/send_email.py`, smtp.qq.com:465). The cluster's own Slurm mail cannot be used (`/bin/mail` and
   `sendmail` do not exist); ntfy e-mail forwarding needs an account token (anonymous e-mail is refused).
   Configuration: `~/.config/lgms/push.env` (`NOTIFY_EMAIL`, `SMTP_USER`, `SMTP_PASS`; optional
