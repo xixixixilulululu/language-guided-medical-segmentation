@@ -391,8 +391,10 @@ Reference values only, used to check the pipeline; they play no role in any sele
    UCTransNet 65.90 and AttUNet 66.34 are also in this range (§7, fact 5).
 
 **Not confirmed.** The cause of the U-Net MosMedData+ gap is unknown. The setting the paper used for
-its U-Net on this dataset is not published, so whether it differs from ours cannot be checked. No
-explanation is adopted here.
+its U-Net on this dataset is not published, so whether it differs from ours cannot be checked.
+Our three seeds (73.21–74.91, SD 0.86) indicate that seed-to-seed variation alone cannot account for a
+value of 64.60 (8.61 points below our lowest seed). The paper's U-Net was more likely obtained under a
+different or weaker training setting, which is not published; this cannot be verified.
 
 ## 4. Figures
 
