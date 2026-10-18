@@ -1,6 +1,8 @@
 # Project rules (apply to every session)
 
 ## Language
+- Conversation with the user: Claude always replies in **Chinese** (Simplified). This applies to chat
+  replies only; every file in the repository stays in English (rules below). (User request, 2026-10-18.)
 - Every file pushed to GitHub (code, comments, notebooks, report `.md` files) is written in **English**.
   Before every push, check the staged files for Chinese characters, e.g.
   `git diff --cached --name-only | xargs grep -nP '[\x{4e00}-\x{9fff}]'` must print nothing.

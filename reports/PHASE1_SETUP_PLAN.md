@@ -44,9 +44,13 @@ lists in `~/datasets/raw/lvit_split_lists/`.
 - **Keys:** the xlsx key is the mask filename. For QaTa this is `mask_<image>.png`; for MosMed the
   mask filename equals the image filename.
 - **Texts are templated** (e.g. "Bilateral pulmonary infection, two infected areas, all left lung
-  and middle lower right lung."). 495 distinct texts cover the 11,987 images (806 when distinct texts are counted per split, as in the table).
-  (Corrected 2026-10-18: an earlier version of this report said "806 distinct texts cover 12,087 images";
-  12,087 was an addition error.)
+  and middle lower right lung."). The 11,987 images use **495 distinct texts** in total: 395 in QaTa-COV19
+  and 115 in MosMedData+, of which 15 occur in both datasets (395 + 115 − 15 = 495).
+  The table's "Distinct texts" column counts each split separately; its sum, 806, counts a text once for
+  every split it appears in, so it is not the number of distinct texts.
+  (Corrected 2026-10-18: an earlier version of this report said "Only 806 distinct texts cover 12,087
+  images". Both numbers were wrong: 806 is the per-split sum, not the number of distinct texts, and the
+  number of images is 11,987, not 12,087, which was an addition error.)
 
 **How each method reads the text:**
 
