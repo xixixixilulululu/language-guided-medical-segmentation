@@ -1,0 +1,493 @@
+{
+  "lvit": {
+    "resume": {
+      "epochs_uninterrupted": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "epochs_segmented": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "lr_identical": true,
+      "max_abs_diff_train_loss": 0.0,
+      "max_abs_diff_val_dice": 0.0,
+      "segments": [
+        {
+          "job": "316",
+          "time": "2026-10-18 17:29:23",
+          "start_epoch": 1
+        },
+        {
+          "job": "316",
+          "time": "2026-10-18 17:29:36",
+          "last_epoch": 3,
+          "ended": "segment"
+        },
+        {
+          "job": "316",
+          "time": "2026-10-18 17:29:41",
+          "start_epoch": 4
+        },
+        {
+          "job": "316",
+          "time": "2026-10-18 17:29:57",
+          "last_epoch": 6,
+          "ended": "max_epochs"
+        }
+      ]
+    },
+    "QaTa-COV19": {
+      "probe_init": {
+        "method": "lvit",
+        "dataset": "QaTa-COV19",
+        "mode": "init",
+        "n_val_cases": 32,
+        "fixed_text": "Bilateral pulmonary infection, two infected areas, all left lung and all right lung.",
+        "forward": {
+          "output_shape": [
+            4,
+            1,
+            224,
+            224
+          ],
+          "min": 0.08562690019607544,
+          "max": 0.9663344025611877,
+          "seg_loss": 0.6836082935333252,
+          "finite": true
+        },
+        "text_gradient": {
+          "abs_mean": 1.506015451013809e-05,
+          "nonzero_fraction": 1.0,
+          "finite": true,
+          "shape": [
+            4,
+            10,
+            768
+          ]
+        },
+        "text_swap_init": {
+          "mean_abs_prob_change": 2.408526142971823e-06,
+          "max_abs_prob_change": 5.8531761169433594e-05
+        },
+        "passed": true
+      },
+      "subset": {
+        "epochs": 40,
+        "train_loss_first": 0.535083,
+        "train_loss_last": 0.251462,
+        "val_dice_first": 0.00500249,
+        "val_dice_best": 0.6487583015871135,
+        "best_epoch": 37,
+        "argmax_val_dice_epoch": 37
+      },
+      "probe_trained": {
+        "method": "lvit",
+        "dataset": "QaTa-COV19",
+        "mode": "trained",
+        "n_val_cases": 32,
+        "fixed_text": "Bilateral pulmonary infection, two infected areas, all left lung and all right lung.",
+        "trained_val_dice_true_text": 0.6488406601025173,
+        "trained_val_dice_fixed_text": 0.6091768371070879,
+        "trained_mean_abs_prob_change": 0.03453609719872475,
+        "valid_masks": {
+          "prob_min": 0.0016881981864571571,
+          "prob_max": 0.9994696974754333,
+          "empty_predictions": 1
+        }
+      },
+      "timing": {
+        "seconds_per_epoch": [
+          246.1212,
+          245.3041
+        ],
+        "seconds_per_epoch_last": 245.3041
+      }
+    },
+    "MosMedData+": {
+      "probe_init": {
+        "method": "lvit",
+        "dataset": "MosMedData+",
+        "mode": "init",
+        "n_val_cases": 32,
+        "fixed_text": "Unilateral pulmonary infection, one infected areas, middle left lung.",
+        "forward": {
+          "output_shape": [
+            4,
+            1,
+            224,
+            224
+          ],
+          "min": 0.1390112191438675,
+          "max": 0.87541663646698,
+          "seg_loss": 0.8039355278015137,
+          "finite": true
+        },
+        "text_gradient": {
+          "abs_mean": 2.135142494807951e-05,
+          "nonzero_fraction": 1.0,
+          "finite": true,
+          "shape": [
+            4,
+            10,
+            768
+          ]
+        },
+        "text_swap_init": {
+          "mean_abs_prob_change": 4.695491952588782e-06,
+          "max_abs_prob_change": 5.4389238357543945e-05
+        },
+        "passed": true
+      },
+      "subset": {
+        "epochs": 40,
+        "train_loss_first": 0.462928,
+        "train_loss_last": 0.0704998,
+        "val_dice_first": 0.449379,
+        "val_dice_best": 0.7825821275447407,
+        "best_epoch": 32,
+        "argmax_val_dice_epoch": 32
+      },
+      "probe_trained": {
+        "method": "lvit",
+        "dataset": "MosMedData+",
+        "mode": "trained",
+        "n_val_cases": 32,
+        "fixed_text": "Unilateral pulmonary infection, one infected areas, middle left lung.",
+        "trained_val_dice_true_text": 0.7825832237007585,
+        "trained_val_dice_fixed_text": 0.7826388952950354,
+        "trained_mean_abs_prob_change": 2.195701381424442e-05,
+        "valid_masks": {
+          "prob_min": 0.00032212064252234995,
+          "prob_max": 1.0,
+          "empty_predictions": 0
+        }
+      },
+      "timing": {
+        "seconds_per_epoch": [
+          92.26098,
+          92.45141
+        ],
+        "seconds_per_epoch_last": 92.45141
+      }
+    }
+  },
+  "reclmis": {
+    "resume": {
+      "epochs_uninterrupted": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "epochs_segmented": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "lr_identical": true,
+      "max_abs_diff_train_loss": 0.0,
+      "max_abs_diff_val_dice": 0.0,
+      "segments": [
+        {
+          "job": "316",
+          "time": "2026-10-18 17:31:40",
+          "start_epoch": 1
+        },
+        {
+          "job": "316",
+          "time": "2026-10-18 17:32:24",
+          "last_epoch": 3,
+          "ended": "segment"
+        },
+        {
+          "job": "316",
+          "time": "2026-10-18 17:32:30",
+          "start_epoch": 4
+        },
+        {
+          "job": "316",
+          "time": "2026-10-18 17:33:15",
+          "last_epoch": 6,
+          "ended": "max_epochs"
+        }
+      ]
+    },
+    "QaTa-COV19": {
+      "probe_init": {
+        "method": "reclmis",
+        "dataset": "QaTa-COV19",
+        "mode": "init",
+        "n_val_cases": 32,
+        "fixed_text": "Bilateral pulmonary infection, two infected areas, all left lung and all right lung.",
+        "forward": {
+          "output_shape": [
+            4,
+            1,
+            224,
+            224
+          ],
+          "min": 0.034266624599695206,
+          "max": 0.9739930629730225,
+          "seg_loss": 0.6677887439727783,
+          "finite": true
+        },
+        "text_gradient": {
+          "abs_mean": 4.786118523725236e-08,
+          "nonzero_fraction": 1.0,
+          "finite": true,
+          "shape": [
+            4,
+            512,
+            18
+          ]
+        },
+        "loss_dict": {
+          "loss_ccl": 1.5749410390853882,
+          "loss_text_rec": 1.09282386302948,
+          "loss_img_rec": 1.0036582946777344,
+          "loss_criterion": 0.6677887439727783
+        },
+        "aux_active": true,
+        "aux_keys_present": true,
+        "text_swap_init": {
+          "mean_abs_prob_change": 8.377244142820928e-08,
+          "max_abs_prob_change": 9.5367431640625e-07
+        },
+        "passed": true
+      },
+      "subset": {
+        "epochs": 40,
+        "train_loss_first": 6.0957,
+        "train_loss_last": 2.79171,
+        "val_dice_first": 0.226255,
+        "val_dice_best": 0.6073549344217699,
+        "best_epoch": 38,
+        "argmax_val_dice_epoch": 38,
+        "steps": 80,
+        "rec_loss_zero_steps": 0,
+        "aux_losses_first_last": {
+          "loss_ccl": [
+            4.37459,
+            2.99302
+          ],
+          "loss_text_rec": [
+            0.952622,
+            0.534063
+          ],
+          "loss_img_rec": [
+            0.979251,
+            0.0237945
+          ]
+        }
+      },
+      "probe_trained": {
+        "method": "reclmis",
+        "dataset": "QaTa-COV19",
+        "mode": "trained",
+        "n_val_cases": 32,
+        "fixed_text": "Bilateral pulmonary infection, two infected areas, all left lung and all right lung.",
+        "trained_val_dice_true_text": 0.6073045387728412,
+        "trained_val_dice_fixed_text": 0.5929243945985628,
+        "trained_mean_abs_prob_change": 0.021199459210038185,
+        "valid_masks": {
+          "prob_min": 0.09192441403865814,
+          "prob_max": 0.9709869623184204,
+          "empty_predictions": 0
+        }
+      },
+      "timing": {
+        "seconds_per_epoch": [
+          172.7559,
+          170.9039
+        ],
+        "seconds_per_epoch_last": 170.9039
+      }
+    },
+    "MosMedData+": {
+      "probe_init": {
+        "method": "reclmis",
+        "dataset": "MosMedData+",
+        "mode": "init",
+        "n_val_cases": 32,
+        "fixed_text": "Unilateral pulmonary infection, one infected areas, middle left lung.",
+        "forward": {
+          "output_shape": [
+            4,
+            1,
+            224,
+            224
+          ],
+          "min": 0.09655297547578812,
+          "max": 0.9124828577041626,
+          "seg_loss": 0.7969383001327515,
+          "finite": true
+        },
+        "text_gradient": {
+          "abs_mean": 8.925757022382186e-09,
+          "nonzero_fraction": 1.0,
+          "finite": true,
+          "shape": [
+            4,
+            512,
+            18
+          ]
+        },
+        "loss_dict": {
+          "loss_ccl": 1.544196367263794,
+          "loss_text_rec": 1.095644474029541,
+          "loss_img_rec": 1.0001624822616577,
+          "loss_criterion": 0.7969383001327515
+        },
+        "aux_active": true,
+        "aux_keys_present": true,
+        "text_swap_init": {
+          "mean_abs_prob_change": 7.942461621723851e-08,
+          "max_abs_prob_change": 9.5367431640625e-07
+        },
+        "passed": true
+      },
+      "subset": {
+        "epochs": 40,
+        "train_loss_first": 6.63034,
+        "train_loss_last": 2.01525,
+        "val_dice_first": 0.0256562,
+        "val_dice_best": 0.7633764127544407,
+        "best_epoch": 34,
+        "argmax_val_dice_epoch": 34,
+        "steps": 160,
+        "rec_loss_zero_steps": 0,
+        "aux_losses_first_last": {
+          "loss_ccl": [
+            5.0848,
+            2.47572
+          ],
+          "loss_text_rec": [
+            0.854676,
+            0.446062
+          ],
+          "loss_img_rec": [
+            0.908033,
+            0.0185137
+          ]
+        }
+      },
+      "probe_trained": {
+        "method": "reclmis",
+        "dataset": "MosMedData+",
+        "mode": "trained",
+        "n_val_cases": 32,
+        "fixed_text": "Unilateral pulmonary infection, one infected areas, middle left lung.",
+        "trained_val_dice_true_text": 0.7634597408782753,
+        "trained_val_dice_fixed_text": 0.7634644803207572,
+        "trained_mean_abs_prob_change": 0.00024375965585932136,
+        "valid_masks": {
+          "prob_min": 0.08937021344900131,
+          "prob_max": 1.0,
+          "empty_predictions": 0
+        }
+      },
+      "timing": {
+        "seconds_per_epoch": [
+          64.25117,
+          63.21817
+        ],
+        "seconds_per_epoch_last": 63.21817
+      }
+    }
+  },
+  "ddcmd": {
+    "resume": null,
+    "QaTa-COV19": {
+      "probe_init": {
+        "method": "ddcmd",
+        "dataset": "QaTa-COV19",
+        "mode": "init",
+        "n_val_cases": 32,
+        "fixed_text": "Bilateral pulmonary infection, two infected areas, all left lung and all right lung.",
+        "forward": {
+          "output_shape": [
+            4,
+            1,
+            224,
+            224
+          ],
+          "min": 0.025157427415251732,
+          "max": 0.7869999408721924,
+          "seg_loss": 1.5280351638793945,
+          "finite": true
+        },
+        "text_gradient": {
+          "abs_mean": 9.53176186158089e-06,
+          "nonzero_fraction": 1.0,
+          "finite": true,
+          "shape": [
+            4,
+            24,
+            768
+          ]
+        },
+        "text_swap_init": {
+          "mean_abs_prob_change": 0.0006721711833961308,
+          "max_abs_prob_change": 0.0020241737365722656
+        },
+        "passed": true
+      },
+      "subset": null,
+      "probe_trained": null,
+      "timing": null
+    },
+    "MosMedData+": {
+      "probe_init": {
+        "method": "ddcmd",
+        "dataset": "MosMedData+",
+        "mode": "init",
+        "n_val_cases": 32,
+        "fixed_text": "Unilateral pulmonary infection, one infected areas, middle left lung.",
+        "forward": {
+          "output_shape": [
+            4,
+            1,
+            224,
+            224
+          ],
+          "min": 0.07499522715806961,
+          "max": 0.74632728099823,
+          "seg_loss": 1.6184868812561035,
+          "finite": true
+        },
+        "text_gradient": {
+          "abs_mean": 9.819817023526412e-06,
+          "nonzero_fraction": 1.0,
+          "finite": true,
+          "shape": [
+            4,
+            24,
+            768
+          ]
+        },
+        "text_swap_init": {
+          "mean_abs_prob_change": 0.0011198158608749509,
+          "max_abs_prob_change": 0.0019450783729553223
+        },
+        "passed": true
+      },
+      "subset": null,
+      "probe_trained": null,
+      "timing": null
+    }
+  }
+}

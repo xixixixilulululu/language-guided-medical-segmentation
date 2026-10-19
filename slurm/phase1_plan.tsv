@@ -1,2 +1,3 @@
 order	method	dataset	seed	est_hours
 1	quick_check	-	-	3
+2	quick_check_ddcmd	-	-	1.5

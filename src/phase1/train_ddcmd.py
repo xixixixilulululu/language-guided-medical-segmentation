@@ -27,6 +27,11 @@ from phase1 import common  # noqa: E402
 from phase1.common import data, metrics, runner  # noqa: E402
 
 sys.path.insert(0, os.path.join(common.REPO, "external", "DD-CMD"))
+# NumPy 2 compatibility (decision of 2026-10-19, option A): pytorch_lightning 1.9.0 (the official pin) uses
+# `torch.tensor(np.Inf)` in EarlyStopping and ModelCheckpoint, and NumPy 2.0 removed the alias `np.Inf`.
+# `np.inf` is the same value (IEEE positive infinity), so restoring the alias changes nothing in training.
+if not hasattr(np, "Inf"):
+    np.Inf = np.inf
 import pytorch_lightning as pl  # noqa: E402
 from monai.data.utils import worker_init_fn as monai_worker_init_fn  # noqa: E402
 from monai.transforms import (Compose, NormalizeIntensityd, RandFlipd, RandGaussianNoised,  # noqa: E402
@@ -239,6 +244,9 @@ def main():
         ModelCheckpoint(dirpath=ckpt_dir, filename="best", monitor=cfg["monitor"], mode="max", save_top_k=1,
                         save_last=True, save_on_train_epoch_end=True, verbose=True),
     ]
+    # D3: both early stopping and checkpoint selection must monitor the per-case validation Dice
+    monitors = {type(c).__name__: c.monitor for c in callbacks if isinstance(c, (EarlyStopping, ModelCheckpoint))}
+    assert set(monitors.values()) == {"val_case_dice"}, monitors
     trainer = pl.Trainer(logger=CSVLogger(save_dir=args.out, name="csv_logs"), min_epochs=cfg["min_epochs"],
                          max_epochs=max_epochs, accelerator="gpu", devices=1, callbacks=callbacks,
                          enable_progress_bar=False, log_every_n_steps=10, enable_model_summary=False,
@@ -255,7 +263,8 @@ def main():
     best_epoch = int(torch.load(ckpt_cb.best_model_path, map_location="cpu", weights_only=False)["epoch"]) + 1
     common.log_segment(args.out, last_epoch=last_epoch, ended=ended)
     runner.save_json({"best_epoch": best_epoch, "best_val_dice": float(ckpt_cb.best_model_score),
-                      "last_epoch": last_epoch, "ended": ended,
+                      "last_epoch": last_epoch, "ended": ended, "monitors": monitors,
+                      "best_model_path": os.path.relpath(ckpt_cb.best_model_path, args.out),
                       "max_memory_gb": torch.cuda.max_memory_allocated() / 1e9},
                      os.path.join(args.out, "training_summary.json"))
     log.info(f"{ended} after epoch {last_epoch}; best val Dice {float(ckpt_cb.best_model_score):.4f} @ {best_epoch}")

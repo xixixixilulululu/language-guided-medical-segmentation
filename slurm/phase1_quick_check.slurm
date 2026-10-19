@@ -8,6 +8,8 @@
 #      segment end in between; epochs.csv of both are compared afterwards
 #   D. timing: 2 full epochs on the full training and validation sets (no evaluation)
 # A failed step is logged and the job continues; the job fails at the end if any step failed.
+# QC_METHODS (optional, from sbatch --export) restricts the job to some methods, e.g. "ddcmd" (re-check of
+# 2026-10-19 after the NumPy 2 fix); results of the other methods are left untouched.
 # Submitted by hand only (slurm/submit_next_p1.sh).
 #SBATCH --job-name=p1_quick_check
 #SBATCH --partition=gpu
@@ -19,9 +21,11 @@
 #SBATCH --output=/mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation/runs/slurm_logs/%x-%j.out
 set -uo pipefail
 source /mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation/slurm/env_phase1.sh
-JOB_LABEL="Phase 1 quick check"
+METHODS=${QC_METHODS:-"lvit reclmis ddcmd"}
+JOB_LABEL="Phase 1 quick check ($METHODS)"
 Q=runs/phase1_quick_check
 mkdir -p $Q
+STEPS=$Q/steps_job${SLURM_JOB_ID:-none}.tsv   # one step log per job
 lgms_notify_start
 FAILED=()
 # step <name> <expected exit code> <command...>: run, log the exit code, continue on failure
@@ -29,19 +33,19 @@ step() {
   local name=$1 want=$2; shift 2
   echo "=== $(date +%T) $name"
   "$@"; local rc=$?
-  echo "$name	$rc	$want" >> $Q/steps.tsv
+  echo "$name	$rc	$want" >> $STEPS
   [ "$rc" = "$want" ] || { echo "!!! $name: exit $rc (expected $want)"; FAILED+=("$name"); }
 }
-: > $Q/steps.tsv
+: > $STEPS
 
-for M in lvit reclmis ddcmd; do
+for M in $METHODS; do
   for DS in QaTa-COV19 MosMedData+; do
     step "probe_init $M $DS" 0 python src/phase1/quick_check.py --method $M --dataset $DS --mode init \
          --out $Q/probe_init_${M}_$DS.json
   done
 done
 
-for M in lvit reclmis ddcmd; do
+for M in $METHODS; do
   for DS in QaTa-COV19 MosMedData+; do
     D=$Q/subset/${M}_$DS; rm -rf $D
     step "subset $M $DS" 0 python src/phase1/train_$M.py --dataset $DS --seed 1001 --subset-train 64 \
@@ -52,14 +56,14 @@ for M in lvit reclmis ddcmd; do
   done
 done
 
-for M in lvit reclmis ddcmd; do
+for M in $METHODS; do
   R=$Q/resume/${M}; rm -rf $R; A="--dataset MosMedData+ --seed 1001 --subset-train 32 --subset-val 16 --max-epochs 6 --no-final-eval"
   step "resume_ref $M" 0 python src/phase1/train_$M.py $A --out $R/uninterrupted
   step "resume_seg1 $M" 3 python src/phase1/train_$M.py $A --stop-after-epochs 3 --out $R/segmented
   step "resume_seg2 $M" 0 python src/phase1/train_$M.py $A --out $R/segmented
 done
 
-for M in lvit reclmis ddcmd; do
+for M in $METHODS; do
   for DS in QaTa-COV19 MosMedData+; do
     D=$Q/timing/${M}_$DS; rm -rf $D
     step "timing $M $DS" 0 python src/phase1/train_$M.py --dataset $DS --seed 1001 --max-epochs 2 \

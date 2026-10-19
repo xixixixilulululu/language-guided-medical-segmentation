@@ -7,7 +7,7 @@ passes --dependency (the cluster's admission filter chains a second job itself a
 
 Each call:
   1. Refuses if the user already has 2 jobs, or already has a job waiting in the queue.
-  2. Picks the next job:
+  2. Picks the next job (plan rows: quick_check, quick_check_<method>, or method/dataset/seed runs):
      a. the next SEGMENT of a training run whose last segment ended at the wall-clock guard
         (last line of <run>/segments.jsonl has "ended": "segment"), if no job of that run is queued/running;
      b. otherwise the first not yet submitted row of slurm/phase1_plan.tsv.
@@ -61,14 +61,20 @@ def key(r):
     return f"{r['method']}|{r['dataset']}|{r['seed']}"
 
 
+def qc_methods(r):
+    """Quick-check rows: 'quick_check' (all methods) or 'quick_check_<method>' (that method only)."""
+    m = r["method"]
+    return m[len("quick_check_"):] if m.startswith("quick_check_") else None
+
+
 def label(r, segment=None):
-    if r["method"] == "quick_check":
-        return NAMES["quick_check"]
+    if r["method"].startswith("quick_check"):
+        return NAMES["quick_check"] + (f" ({NAMES[qc_methods(r)]} only)" if qc_methods(r) else "")
     return f"{NAMES[r['method']]} {r['dataset']} seed{r['seed']}" + (f" (segment {segment})" if segment else "")
 
 
 def job_name(r):
-    return "p1_quick_check" if r["method"] == "quick_check" else f"p1-{r['method']}-{r['dataset'].split('-')[0]}-{r['seed']}"
+    return "p1_quick_check" if r["method"].startswith("quick_check") else f"p1-{r['method']}-{r['dataset'].split('-')[0]}-{r['seed']}"
 
 
 def segments(r):
@@ -85,7 +91,7 @@ def pick_next(plan, log, jobs):
     names_in_queue = {j[2] for j in jobs}
     submitted = {row["key"] for row in log}
     for r in plan:                                   # a. continuation segments first
-        if r["method"] == "quick_check" or key(r) not in submitted or job_name(r) in names_in_queue:
+        if r["method"].startswith("quick_check") or key(r) not in submitted or job_name(r) in names_in_queue:
             continue
         seg = segments(r)
         if seg and seg[-1].get("ended") == "segment":
@@ -117,8 +123,11 @@ def main():
         print("Nothing to submit: every row of slurm/phase1_plan.tsv has been submitted and no run waits for a segment.\n")
         show_status(jobs)
         return
-    if r["method"] == "quick_check":
-        cmd = ["sbatch", "--parsable", f"--job-name={job_name(r)}", os.path.join(REPO, "slurm", "phase1_quick_check.slurm")]
+    if r["method"].startswith("quick_check"):
+        cmd = ["sbatch", "--parsable", f"--job-name={job_name(r)}"]
+        if qc_methods(r):
+            cmd.append(f"--export=ALL,QC_METHODS={qc_methods(r)}")
+        cmd.append(os.path.join(REPO, "slurm", "phase1_quick_check.slurm"))
     else:
         cmd = ["sbatch", "--parsable", f"--job-name={job_name(r)}",
                f"--export=ALL,METHOD={r['method']},DATASET={r['dataset']},SEED={r['seed']}",
