@@ -8,8 +8,9 @@ passes --dependency (the cluster's admission filter chains a second job itself a
 Each call:
   1. Refuses if the user already has 2 jobs, or already has a job waiting in the queue.
   2. Picks the next job (plan rows: quick_check, quick_check_<method>, or method/dataset/seed runs):
-     a. the next SEGMENT of a training run whose last segment ended at the wall-clock guard
-        (last line of <run>/segments.jsonl has "ended": "segment"), if no job of that run is queued/running;
+     a. the next SEGMENT of a training run whose last segment ended at the wall-clock guard (last line of
+        <run>/segments.jsonl has "ended": "segment") or has no end line (killed by the 12 h limit or
+        crashed), if no job of that run is queued/running;
      b. otherwise the first not yet submitted row of slurm/phase1_plan.tsv.
   3. Submits it with sbatch and records it in runs/phase1_submit_log.tsv.
 
@@ -92,7 +93,10 @@ def label(r, segment=None):
         return NAMES[r["method"]]
     if r["method"].startswith("quick_check"):
         return NAMES["quick_check"] + (f" ({NAMES[qc_methods(r)]} only)" if qc_methods(r) else "")
-    return f"{NAMES[r['method']]} {r['dataset']} seed{r['seed']}" + (f" (segment {segment})" if segment else "")
+    note = ""
+    if segment and "ended" not in (segments(r) or [{}])[-1]:
+        note = "; the previous segment did not end normally - check its log first"
+    return f"{NAMES[r['method']]} {r['dataset']} seed{r['seed']}" + (f" (segment {segment}{note})" if segment else "")
 
 
 def job_name(r):
@@ -123,8 +127,10 @@ def pick_next(plan, log, jobs, dataset=None):
         if r["method"].startswith("quick_check") or r["method"] in SPECIAL or key(r) not in submitted or job_name(r) in names_in_queue:
             continue
         seg = segments(r)
-        if seg and seg[-1].get("ended") == "segment":
-            return r, sum(1 for s in seg if "ended" in s) + 1
+        # continue a run whose last segment ended at the wall-clock guard, or whose last segment has no end
+        # line at all (killed by the 12 h Slurm limit, or crashed: the label asks to check the log first)
+        if seg and (seg[-1].get("ended") == "segment" or "ended" not in seg[-1]):
+            return r, sum(1 for s in seg if "start_epoch" in s) + 1
     for r in plan:                                   # b. next row of the plan
         if key(r) in submitted or (dataset and r["dataset"] != dataset):
             continue
