@@ -3,5 +3,6 @@ order	method	dataset	seed	tag	est_hours
 2	quick_check_ddcmd	-	-	-	1.5
 3	lvit	QaTa-COV19	1001	-	12
 4	diag_ddcmd	-	-	-	1
-5	lvit	QaTa-COV19	1001	resubmit	12
-6	reclmis	QaTa-COV19	1001	-	12
+5	quick_check_ddcmd	-	-	r2	1.5
+6	lvit	QaTa-COV19	1001	resubmit	12
+7	reclmis	QaTa-COV19	1001	-	12
