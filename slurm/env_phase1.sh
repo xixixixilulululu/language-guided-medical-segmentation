@@ -5,6 +5,10 @@
 #    clip, thop). lgms itself is not modified (decision D2, 2026-10-18).
 source /mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation/slurm/env.sh
 source "$HOME/envs/lgms_p1/bin/activate"
+# Data lock (2026-10-19): Phase 1 jobs read a view of common224 that links train and val only. The test
+# split is linked into it only after the Phase 1 analysis code is fixed and pushed; until then a driver that
+# reaches its test evaluation stops with exit code 4 (training and the selected checkpoint are saved).
+export LGMS_COMMON_ROOT=$HOME/datasets/phase1/common224_trainval
 export HF_HUB_OFFLINE=1            # pretrained weights come from the local HF cache (downloaded beforehand)
 export TRANSFORMERS_OFFLINE=1
 export TOKENIZERS_PARALLELISM=false

@@ -1,3 +1,5 @@
+# FROZEN 2026-10-19 (RecLMIS): quick check passed (job 316), confirmed by the user. Do not edit.
+# slurm/train_phase1.slurm checks configs/phase1_frozen/reclmis.sha256 and reclmis.commit before every run.
 # RecLMIS (Phase 1). Read by src/phase1/train_reclmis.py.
 # Source: RecLMIS official repository (external/RecLMIS, commit d3265c8): nets/RecLMIS.py, train_model.py,
 # Train_one_epoch.py, Load_Dataset.py, utils.py, Config_covid19.py (QaTa) and Config_MosMedPlus.py (MosMed).

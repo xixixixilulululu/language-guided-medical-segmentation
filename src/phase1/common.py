@@ -25,6 +25,7 @@ from lgms import data, metrics, runner  # noqa: E402,F401  (re-exported for the 
 
 SEEDS = [1001, 1002, 1003]
 SEGMENT_EXIT_CODE = 3            # "segment ended by the wall-clock guard, training not finished"
+LOCKED_EXIT_CODE = 4             # "training finished, but the split to evaluate is not in the data view (data lock)"
 DEFAULT_BUDGET_HOURS = 11.5      # of the 12 h Slurm limit; leaves time for saving and the final evaluation
 
 # Raw LViT-layout folders that hold the per-split text files (written by src/prepare_lvit_datasets.py)
@@ -163,6 +164,18 @@ class Selection:
 
     def state(self):
         return {"best_dice": self.best_dice, "best_epoch": self.best_epoch}
+
+
+def require_split(dataset, split, log=None):
+    """Data lock (2026-10-19): Phase 1 jobs read a data view (LGMS_COMMON_ROOT, slurm/env_phase1.sh) that holds
+    only train and val until the analysis code is fixed. If `split` is not in the view, stop with
+    LOCKED_EXIT_CODE. Training and the validation-selected checkpoint are already saved at this point;
+    running the same job again later (with the test split linked) only performs the final evaluation."""
+    path = os.path.join(data.common_root(), dataset, f"{split}.txt")
+    if not os.path.exists(path):
+        msg = f"DATA LOCK: split '{split}' of {dataset} is not in the data view {data.common_root()}; stopping"
+        (log.info if log else print)(msg)
+        sys.exit(LOCKED_EXIT_CODE)
 
 
 def check_targets(dataset, split, ids, targets):

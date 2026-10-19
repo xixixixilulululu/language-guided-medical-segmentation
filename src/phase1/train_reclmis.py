@@ -170,6 +170,21 @@ def train_one_epoch(model, loader, criterion, optimizer, conf, device, stats):
     return {k: v / n for k, v in sums.items()}
 
 
+def final_eval(args, cfg, conf, log):
+    """Final evaluation of the validation-selected checkpoint (best_model.pt) with the common evaluator.
+    Each split must be present in the data view (data lock): otherwise stop with LOCKED_EXIT_CODE."""
+    device = torch.device("cuda")
+    model = build_model(conf).to(device)
+    model.load_state_dict(torch.load(os.path.join(args.out, "best_model.pt"), map_location=device)["state_dict"])
+    for split in args.eval_splits.split(","):
+        common.require_split(args.dataset, split, log)
+        ds = make_dataset(args.dataset, split, conf.token_len, False)
+        loader = DataLoader(ds, batch_size=cfg["val_batch_size"], shuffle=False, num_workers=cfg["num_workers"])
+        ids, probs, targets = predict(model, loader, device)
+        common.check_targets(args.dataset, split, ids, targets)
+        runner.final_evaluation(args.out, args.dataset, split, ids, probs, log)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", default=os.path.join(common.REPO, "configs", "reclmis.yaml"))
@@ -191,8 +206,12 @@ def main():
     os.makedirs(args.out, exist_ok=True)
     last_path, best_path = os.path.join(args.out, "last.pth"), os.path.join(args.out, "best_model.pt")
     resume = common.load_state(last_path) if os.path.exists(last_path) else None
-    if resume and resume.get("finished"):
-        print("training already finished; nothing to do"); return
+    if resume and resume.get("finished"):  # training done earlier: only the final evaluation is (re)run
+        log = runner.make_logger(args.out)
+        log.info("training already finished; final evaluation only")
+        if not args.no_final_eval:
+            final_eval(args, cfg, conf, log)
+        return
 
     runner.set_seed(args.seed, cfg["deterministic"])
     log = runner.make_logger(args.out)
@@ -281,20 +300,14 @@ def main():
     if ended == "segment":
         log.info(f"segment ended after epoch {epoch} (wall-clock guard); submit the next segment by hand")
         sys.exit(common.SEGMENT_EXIT_CODE)
-    if ended == "max_epochs":
+    if ended == "max_epochs":  # mark as finished: a further job only re-runs the final evaluation
         state = common.load_state(last_path)
         state["finished"] = True
         common.save_atomic(state, last_path)
     if args.no_final_eval:
         return
 
-    model.load_state_dict(torch.load(best_path, map_location=device)["state_dict"])
-    for split in args.eval_splits.split(","):
-        ds = make_dataset(args.dataset, split, conf.token_len, False)
-        loader = DataLoader(ds, batch_size=cfg["val_batch_size"], shuffle=False, num_workers=cfg["num_workers"])
-        ids, probs, targets = predict(model, loader, device)
-        common.check_targets(args.dataset, split, ids, targets)
-        runner.final_evaluation(args.out, args.dataset, split, ids, probs, log)
+    final_eval(args, cfg, conf, log)
 
 
 if __name__ == "__main__":

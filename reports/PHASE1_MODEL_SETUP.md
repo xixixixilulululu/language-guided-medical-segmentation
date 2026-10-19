@@ -2,7 +2,27 @@
 
 Status: 2026-10-19. The LViT-T and RecLMIS quick checks are complete (job 316). The DD-CMD quick check is
 being repeated after a NumPy 2 compatibility fix (section 3.3), so its numbers below are placeholders.
-The configurations are **not frozen yet**.
+**Frozen on 2026-10-19 (confirmed by the user): LViT-T and RecLMIS.** DD-CMD is frozen only after its
+quick check has been confirmed.
+
+- **Frozen record.** `configs/phase1_frozen/<method>.sha256` holds the sha256 of the config, the driver,
+  the shared code (`src/phase1/common.py`, `src/lgms/*.py`, `src/evaluate.py`; for LViT-T also
+  `src/train_unet.py`, `src/phase1/lvit_text.py` and the text-feature cache; for RecLMIS also the CLIP
+  weights). `<method>.commit` holds the pinned commit of the official repository.
+- **Check before every main run.** `slurm/train_phase1.slurm` checks the record and refuses to start if
+  any file differs, if the repository is not at that commit or has local changes, or if no record exists.
+- **Data lock (2026-10-19).** Phase 1 jobs read `~/datasets/phase1/common224_trainval`, a view of the
+  Phase 0 `common224` data that links **train and val only** (`LGMS_COMMON_ROOT` in
+  `slurm/env_phase1.sh`). The test split is linked into the view only after the Phase 1 analysis code has
+  been fixed and pushed.
+  - **What happens until then.** When training has finished, a driver evaluates the validation set and
+    then stops with exit code 4 at the test split. The validation-selected checkpoint was saved during
+    training.
+  - **Later.** Running the same job again after the test split is linked performs only the final
+    evaluation, without retraining (the run is marked finished in `last.pth`).
+  - **DD-CMD.** The same eval-only re-run will be added to `train_ddcmd.py` after quick-check job 317
+    ends; the file is not changed while that job runs. Until then a DD-CMD run would stop with a
+    file-not-found error at the test split, which still keeps the test set closed.
 
 Code: `src/phase1/train_{lvit,reclmis,ddcmd}.py`, `configs/{lvit,reclmis,ddcmd}.yaml`. Pinned repository
 commits, environment and weights: `external/VERSIONS.md`. Checks and decisions:

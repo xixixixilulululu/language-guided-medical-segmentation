@@ -1,3 +1,5 @@
+# FROZEN 2026-10-19 (LViT-T): quick check passed (job 316), confirmed by the user. Do not edit.
+# slurm/train_phase1.slurm checks configs/phase1_frozen/lvit.sha256 and lvit.commit before every run.
 # LViT-T (Phase 1). Read by src/phase1/train_lvit.py.
 # Source: LViT official repository (external/LViT, commit ba90775): nets/LViT.py (model "LViT", Config.py
 # model_name = 'LViT'), train_model.py, Train_one_epoch.py, utils.py, Load_Dataset.py, Config.py.
