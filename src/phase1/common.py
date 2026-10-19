@@ -8,6 +8,8 @@
   exits with SEGMENT_EXIT_CODE. The Slurm script then notifies the user to submit the next segment by hand.
   Nothing here ever submits a job.
 * Final evaluation: the Phase 0 common evaluator (src/lgms/runner.final_evaluation -> src/evaluate.py).
+  The test split is evaluated only if BOTH locks are open (require_split): the program lock (analysis fixed
+  on origin/main) and the data lock (test split linked into the Phase 1 data view).
 """
 import json
 import os
@@ -25,7 +27,7 @@ from lgms import data, metrics, runner  # noqa: E402,F401  (re-exported for the 
 
 SEEDS = [1001, 1002, 1003]
 SEGMENT_EXIT_CODE = 3            # "segment ended by the wall-clock guard, training not finished"
-LOCKED_EXIT_CODE = 4             # "training finished, but the split to evaluate is not in the data view (data lock)"
+LOCKED_EXIT_CODE = 4             # "training finished, but the test evaluation is locked (program or data lock)"
 DEFAULT_BUDGET_HOURS = 11.5      # of the 12 h Slurm limit; leaves time for saving and the final evaluation
 
 # Raw LViT-layout folders that hold the per-split text files (written by src/prepare_lvit_datasets.py)
@@ -166,16 +168,52 @@ class Selection:
         return {"best_dice": self.best_dice, "best_epoch": self.best_epoch}
 
 
-def require_split(dataset, split, log=None):
-    """Data lock (2026-10-19): Phase 1 jobs read a data view (LGMS_COMMON_ROOT, slurm/env_phase1.sh) that holds
-    only train and val until the analysis code is fixed. If `split` is not in the view, stop with
-    LOCKED_EXIT_CODE. Training and the validation-selected checkpoint are already saved at this point;
-    running the same job again later (with the test split linked) only performs the final evaluation."""
+TEST_EVAL_LOG = os.path.join(REPO, "results", "phase1_test_eval_log.tsv")
+TEST_EVAL_LOG_COLUMNS = ["event", "time", "job_id", "method", "dataset", "seed", "analysis_commit", "origin_main",
+                         "fetch"]
+
+
+def log_test_eval(event, run, lock_info, path=None):
+    """One line per start / end of a test evaluation (results/phase1_test_eval_log.tsv)."""
+    path = path or TEST_EVAL_LOG
+    new = not os.path.exists(path)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    row = [event, time.strftime("%Y-%m-%d %H:%M:%S"), os.environ.get("SLURM_JOB_ID", "none"), run["method"],
+           run["dataset"], str(run["seed"]), lock_info.get("commit", ""), lock_info.get("remote_head", ""),
+           lock_info.get("fetch", "")]
+    with open(path, "a") as f:
+        if new:
+            f.write("\t".join(TEST_EVAL_LOG_COLUMNS) + "\n")
+        f.write("\t".join(row) + "\n")
+
+
+def require_split(dataset, split, log=None, run=None, lock_repo=None, eval_log=None):
+    """Gate before a split is evaluated. Two independent locks protect the test split:
+    1. program lock (src/phase1/analysis_lock.py): the Phase 1 analysis is fixed on origin/main;
+    2. data lock (2026-10-19): Phase 1 jobs read a data view (LGMS_COMMON_ROOT, slurm/env_phase1.sh) that holds
+       only train and val until the analysis is fixed.
+    If either is closed, stop with LOCKED_EXIT_CODE: training and the validation-selected checkpoint are
+    already saved, and running the same job again later only performs the final evaluation.
+    For the test split, the start of the evaluation is logged (results/phase1_test_eval_log.tsv); returns the
+    lock information (for the matching "end" line)."""
+    say = log.info if log else print
+    lock_info = {}
+    if split == "test":
+        from phase1 import analysis_lock
+        ok, reasons, lock_info = analysis_lock.check(lock_repo or REPO, fetch=True, fetch_required=False)
+        if not ok:
+            say("PROGRAM LOCK CLOSED: the Phase 1 analysis is not fixed on origin/main; test evaluation skipped: "
+                + "; ".join(reasons))
+            sys.exit(LOCKED_EXIT_CODE)
     path = os.path.join(data.common_root(), dataset, f"{split}.txt")
     if not os.path.exists(path):
-        msg = f"DATA LOCK: split '{split}' of {dataset} is not in the data view {data.common_root()}; stopping"
-        (log.info if log else print)(msg)
+        say(f"DATA LOCK: split '{split}' of {dataset} is not in the data view {data.common_root()}; stopping")
         sys.exit(LOCKED_EXIT_CODE)
+    if split == "test":
+        log_test_eval("start", run, lock_info, eval_log)
+        say(f"test evaluation allowed: analysis fixed in commit {lock_info.get('commit')} "
+            f"(origin/main {lock_info.get('remote_head', '')[:12]}, fetch {lock_info.get('fetch')})")
+    return lock_info
 
 
 def check_targets(dataset, split, ids, targets):

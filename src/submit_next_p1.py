@@ -38,10 +38,18 @@ def sh(cmd):
     return subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
 
 
+ENDING = {"CG"}   # completing: the job has ended and is only being cleaned up (not running, not waiting)
+
+
 def my_jobs():
     """[(job_id, state, name)] of the current user (any partition)."""
     out = sh(["squeue", "-h", "-u", os.environ.get("USER", ""), "-o", "%i|%t|%j"])
     return [tuple(line.split("|")) for line in out.splitlines() if line.strip()]
+
+
+def active(jobs):
+    """Jobs that count for the limit: everything except ending (CG) jobs."""
+    return [j for j in jobs if j[1] not in ENDING]
 
 
 def read_tsv(path):
@@ -114,16 +122,35 @@ def pick_next(plan, log, jobs):
 def show_status(jobs):
     print("Your jobs now:" if jobs else "Your jobs now: none")
     for j in jobs:
-        print(f"  {j[0]}  {'running' if j[1] == 'R' else 'waiting (' + j[1] + ')'}  {j[2]}")
+        state = {"R": "running", "PD": "waiting (PD)", "CG": "ending (CG), not counted"}.get(j[1], j[1])
+        print(f"  {j[0]}  {state}  {j[2]}")
+
+
+def time_limit(script):
+    """The job's time limit as written in the Slurm script (#SBATCH --time=...), e.g. '12:00:00'."""
+    with open(script) as f:
+        for line in f:
+            if line.startswith("#SBATCH") and "--time=" in line:
+                return line.split("--time=", 1)[1].split()[0]
+    return "unknown"
+
+
+def refusal(jobs):
+    """Reason not to submit now, or None. Ending (CG) jobs count neither as waiting nor for the limit."""
+    n_active = len(active(jobs))
+    n_wait = sum(1 for j in jobs if j[1] == "PD")              # waiting = pending only
+    if n_active >= MAX_JOBS:
+        return f"you already have {n_active} jobs (limit {MAX_JOBS}: 1 running + 1 waiting)"
+    if n_wait >= 1:
+        return "you already have a job waiting in the queue (limit: 1 waiting)"
+    return None
 
 
 def main():
     dry = "--dry-run" in sys.argv
     plan, log, jobs = read_tsv(PLAN), read_tsv(LOG), my_jobs()
-    n_wait = sum(1 for j in jobs if j[1] != "R")
-    if len(jobs) >= MAX_JOBS or n_wait >= 1:
-        reason = (f"you already have {len(jobs)} jobs (limit {MAX_JOBS}: 1 running + 1 waiting)"
-                  if len(jobs) >= MAX_JOBS else "you already have a job waiting in the queue (limit: 1 waiting)")
+    reason = refusal(jobs)
+    if reason:
         print(f"NOT SUBMITTED: {reason}. Run this again when a job has finished or started.")
         r, segment = pick_next(plan, log, jobs)
         print(f"Next when allowed: {label(r, segment) if r else 'nothing (plan complete)'}\n")
@@ -147,7 +174,7 @@ def main():
                os.path.join(REPO, "slurm", "train_phase1.slurm")]
     lab = label(r, segment)
     if dry:
-        print("DRY RUN - would submit:", lab, "\n  ", " ".join(cmd), "\n")
+        print("DRY RUN - would submit:", lab, f"(time limit {time_limit(cmd[-1])})", "\n  ", " ".join(cmd), "\n")
         show_status(jobs)
         return
     job_id = sh(cmd).strip().split(";")[0]
@@ -155,7 +182,7 @@ def main():
     note = (f"segment {segment}" if segment else "plan row") + (f"; queued behind running job {running[0]}" if running else "")
     append_log({"time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "job_id": job_id,
                 "key": key(r) + (f"|seg{segment}" if segment else ""), "label": lab, "note": note})
-    print(f"SUBMITTED: job {job_id} - {lab} (12 h limit)"
+    print(f"SUBMITTED: job {job_id} - {lab} (time limit {time_limit(cmd[-1])}, from the Slurm script)"
           + (f"; the cluster queues it behind running job {running[0]}" if running else "") + "\n")
     show_status(my_jobs())
 

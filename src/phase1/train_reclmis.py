@@ -172,17 +172,20 @@ def train_one_epoch(model, loader, criterion, optimizer, conf, device, stats):
 
 def final_eval(args, cfg, conf, log):
     """Final evaluation of the validation-selected checkpoint (best_model.pt) with the common evaluator.
-    Each split must be present in the data view (data lock): otherwise stop with LOCKED_EXIT_CODE."""
+    The test split needs both the program lock and the data lock open: otherwise stop with LOCKED_EXIT_CODE."""
     device = torch.device("cuda")
     model = build_model(conf).to(device)
     model.load_state_dict(torch.load(os.path.join(args.out, "best_model.pt"), map_location=device)["state_dict"])
     for split in args.eval_splits.split(","):
-        common.require_split(args.dataset, split, log)
+        run = {"method": "reclmis", "dataset": args.dataset, "seed": args.seed}
+        lock = common.require_split(args.dataset, split, log, run=run)   # test: program lock + data lock
         ds = make_dataset(args.dataset, split, conf.token_len, False)
         loader = DataLoader(ds, batch_size=cfg["val_batch_size"], shuffle=False, num_workers=cfg["num_workers"])
         ids, probs, targets = predict(model, loader, device)
         common.check_targets(args.dataset, split, ids, targets)
         runner.final_evaluation(args.out, args.dataset, split, ids, probs, log)
+        if split == "test":
+            common.log_test_eval("end", run, lock)
 
 
 def main():

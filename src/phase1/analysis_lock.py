@@ -49,8 +49,12 @@ def git(repo, *args, check=True):
     return subprocess.run(["git", "-C", repo, *args], capture_output=True, text=True, check=check)
 
 
-def check(repo=REPO, remote="origin", branch="main", fetch=True):
-    """(is_open, reasons, info). `reasons` lists every failed condition (empty when open)."""
+def check(repo=REPO, remote="origin", branch="main", fetch=True, fetch_required=True):
+    """(is_open, reasons, info). `reasons` lists every failed condition (empty when open).
+
+    fetch_required=False (training jobs on compute nodes, which may have no internet access): if `git fetch`
+    fails, the local origin/main ref is used (it is updated by every push from the login node); this is
+    recorded in info["fetch"] and in the test-evaluation log."""
     reasons, info = [], {}
     rec_path = os.path.join(repo, RECORD)
     if not os.path.exists(rec_path):                                        # 1. record
@@ -66,7 +70,8 @@ def check(repo=REPO, remote="origin", branch="main", fetch=True):
             reasons.append(f"{path}: changed since it was fixed (sha256 differs)")
     if fetch:                                                               # 3. on GitHub
         r = git(repo, "fetch", "--quiet", remote, branch, check=False)
-        if r.returncode != 0:
+        info["fetch"] = "ok" if r.returncode == 0 else f"failed: {r.stderr.strip()[:120]}"
+        if r.returncode != 0 and fetch_required:
             reasons.append(f"git fetch {remote} {branch} failed: {r.stderr.strip()[:200]}")
     remote_ref = f"{remote}/{branch}"
     head = git(repo, "rev-parse", "--verify", "--quiet", remote_ref, check=False).stdout.strip()

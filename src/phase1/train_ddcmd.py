@@ -13,6 +13,7 @@ Usage (inside a Slurm job):
     python src/phase1/train_ddcmd.py --dataset QaTa-COV19 --seed 1001 --out runs/ddcmd/QaTa-COV19/seed1001
 """
 import argparse
+import json
 import os
 import sys
 import types
@@ -188,6 +189,26 @@ def predict(module, loader, device, text_override=None):
     return np.concatenate(probs), np.concatenate(targets)
 
 
+def final_eval(args, cfg, log, best_path):
+    """Final evaluation of the validation-selected checkpoint with the common evaluator.
+    The test split needs both the program lock and the data lock open: otherwise stop with LOCKED_EXIT_CODE."""
+    device = torch.device("cuda")
+    tokenizer = AutoTokenizer.from_pretrained(cfg["model"]["bert_type"], trust_remote_code=True)
+    best = DDCMDModule(module_args(cfg))
+    best.load_state_dict(torch.load(best_path, map_location="cpu", weights_only=False)["state_dict"])
+    best.to(device)
+    for split in args.eval_splits.split(","):
+        run = {"method": "ddcmd", "dataset": args.dataset, "seed": args.seed}
+        lock = common.require_split(args.dataset, split, log, run=run)   # test: program lock + data lock
+        ds = make_dataset(args.dataset, split, tokenizer, cfg, False)
+        loader = DataLoader(ds, batch_size=cfg["val_batch_size_eval"], shuffle=False, num_workers=cfg["num_workers"])
+        probs, targets = predict(best, loader, device)
+        common.check_targets(args.dataset, split, ds.ids, targets)
+        runner.final_evaluation(args.out, args.dataset, split, ds.ids, probs, log)
+        if split == "test":
+            common.log_test_eval("end", run, lock)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", default=os.path.join(common.REPO, "configs", "ddcmd.yaml"))
@@ -208,8 +229,14 @@ def main():
     os.makedirs(args.out, exist_ok=True)
     ckpt_dir = os.path.join(args.out, "checkpoints")
     last_path, done_flag = os.path.join(ckpt_dir, "last.ckpt"), os.path.join(args.out, "TRAINING_FINISHED")
-    if os.path.exists(done_flag):
-        print("training already finished; nothing to do"); return
+    if os.path.exists(done_flag):  # training done earlier: only the final evaluation is (re)run
+        log = runner.make_logger(args.out)
+        log.info("training already finished; final evaluation only")
+        if not args.no_final_eval:
+            with open(os.path.join(args.out, "training_summary.json")) as f:
+                best_path = os.path.join(args.out, json.load(f)["best_model_path"])
+            final_eval(args, cfg, log, best_path)
+        return
     resume = last_path if os.path.exists(last_path) else None
     resume_epoch = torch.load(resume, map_location="cpu", weights_only=False)["epoch"] + 1 if resume else 0
 
@@ -275,17 +302,7 @@ def main():
     if args.no_final_eval:
         return
 
-    # Final evaluation of the validation-selected checkpoint with the common evaluator
-    device = torch.device("cuda")
-    best = DDCMDModule(module_args(cfg))
-    best.load_state_dict(torch.load(ckpt_cb.best_model_path, map_location="cpu", weights_only=False)["state_dict"])
-    best.to(device)
-    for split in args.eval_splits.split(","):
-        ds = make_dataset(args.dataset, split, tokenizer, cfg, False)
-        loader = DataLoader(ds, batch_size=cfg["val_batch_size_eval"], shuffle=False, num_workers=cfg["num_workers"])
-        probs, targets = predict(best, loader, device)
-        common.check_targets(args.dataset, split, ds.ids, targets)
-        runner.final_evaluation(args.out, args.dataset, split, ds.ids, probs, log)
+    final_eval(args, cfg, log, ckpt_cb.best_model_path)
 
 
 if __name__ == "__main__":

@@ -6,27 +6,32 @@ being repeated after a NumPy 2 compatibility fix (section 3.3), so its numbers b
 quick check has been confirmed.
 
 - **Frozen record.** `configs/phase1_frozen/<method>.sha256` holds the sha256 of the config, the driver,
-  the shared code (`src/phase1/common.py`, `src/lgms/*.py`, `src/evaluate.py`; for LViT-T also
+  the shared code including the common evaluation and export (`src/phase1/common.py`,
+  `src/phase1/analysis_lock.py`, `src/lgms/data.py`, `src/lgms/metrics.py`, `src/lgms/runner.py`,
+  `src/evaluate.py`; for LViT-T also
   `src/train_unet.py`, `src/phase1/lvit_text.py` and the text-feature cache; for RecLMIS also the CLIP
   weights). `<method>.commit` holds the pinned commit of the official repository.
 - **Check before every main run.** `slurm/train_phase1.slurm` checks the record and refuses to start if
   any file differs, if the repository is not at that commit or has local changes, or if no record exists.
-- **Data lock (2026-10-19).** Phase 1 jobs read `~/datasets/phase1/common224_trainval`, a view of the
-  Phase 0 `common224` data that links **train and val only** (`LGMS_COMMON_ROOT` in
-  `slurm/env_phase1.sh`). The test split is linked into the view only after the Phase 1 analysis code has
-  been fixed and pushed.
-  - **What happens until then.** When training has finished, a driver evaluates the validation set and
-    then stops with exit code 4 at the test split. The validation-selected checkpoint was saved during
-    training.
-  - **Later.** Running the same job again after the test split is linked performs only the final
-    evaluation, without retraining (the run is marked finished in `last.pth`).
-  - **DD-CMD.** The same eval-only re-run will be added to `train_ddcmd.py` after quick-check job 317
-    ends; the file is not changed while that job runs. Until then a DD-CMD run would stop with a
-    file-not-found error at the test split, which still keeps the test set closed.
+- **Two independent locks protect the test split (2026-10-19).** Before any test evaluation, every driver
+  (`common.require_split`) checks both locks. If either is closed, it stops with exit code 4 after the
+  validation evaluation. The validation-selected checkpoint was saved during training, and running the
+  same job again later performs only the final evaluation, without retraining (all three drivers).
+  1. **Program lock** (`src/phase1/analysis_lock.py`). The Phase 1 analysis (`src/analyze_phase1.py` and
+     the files it uses) must be fixed: a frozen record exists, the files have the recorded sha256, and
+     the recorded commit is on origin/main with the same content. A training job on a compute node without
+     internet access uses the local origin/main ref, which every push updates, and records the failed
+     fetch. `analyze_phase1.py --split test` and the linking of the test split require a successful fetch.
+  2. **Data lock.** Phase 1 jobs read `~/datasets/phase1/common224_trainval`, a view of the Phase 0
+     `common224` data that links **train and val only** (`LGMS_COMMON_ROOT` in `slurm/env_phase1.sh`). The
+     test split is linked into it only through `analysis_lock.py link-test`, which requires the program
+     lock to be open and logs the action.
 
-Code: `src/phase1/train_{lvit,reclmis,ddcmd}.py`, `configs/{lvit,reclmis,ddcmd}.yaml`. Pinned repository
-commits, environment and weights: `external/VERSIONS.md`. Checks and decisions:
-`reports/PHASE1_SETUP_PLAN.md`.
+  So even if a test link were created by hand, no driver evaluates the test split while the analysis is
+  not fixed. Each test evaluation writes a "start" and an "end" line to
+  `results/phase1_test_eval_log.tsv`: job ID, method, dataset, seed, time, analysis commit, origin/main
+  and the fetch status. Tests: `src/phase1/test_analysis_lock.py` (the four cases for the lock itself and
+  for the drivers' gate; no network; the drivers' call order).
 
 ## 1. Summary table
 
