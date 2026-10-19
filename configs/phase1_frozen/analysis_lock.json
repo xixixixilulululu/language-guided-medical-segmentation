@@ -1,0 +1,10 @@
+{
+  "commit": "ba53ba5c01d645fbf1b511b6df2f1b9c74a26309",
+  "frozen": "2026-10-19 04:02",
+  "files": {
+    "src/analyze_phase1.py": "d1d7d2b345f5698df4e429d60c624fa1798a688f45dd8e14a6afb060238bb246",
+    "src/analyze_phase0.py": "026a6908e3097b5d2d4c7bbe4fd8af84d3c0683e407398175d1807e6509eac55",
+    "src/phase1/analysis_lock.py": "8774c05e5ae3a2f873bf200f393edaf49331cd97df758012105685c8b673cf24",
+    "reports/templates/PHASE1_RESULTS_methods.md": "880715b2a125e38067e7afd931642f6afbbc3331ba71db05375547697bda84c9"
+  }
+}
