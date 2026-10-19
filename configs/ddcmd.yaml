@@ -22,9 +22,11 @@ precision: 32                    # Trainer default
 # D3: checkpoint selection AND early stopping monitor the mean per-case validation Dice of the common
 #     evaluator (prob > 0.5) instead of the official val_MIoU (a pixel-pooled IoU over the epoch).
 monitor: val_case_dice
-# D6: 8 data-loader workers instead of the hard-coded 0, seeded (MONAI worker_init_fn per worker, base seed
-#     from a seeded torch.Generator). This changes the random order of the augmentation, not the method.
-num_workers: 8
+# D6 (revised 2026-10-19): 0 data-loader workers, the official value (train.py hard-codes num_workers=0).
+#     8 workers forked by Lightning hung before any worker started (quick-check job 317, diagnostic job 319);
+#     see reports/PHASE1_MODEL_SETUP.md. The MONAI transforms are seeded in the main process and their random
+#     states are stored in every checkpoint, so a resumed segment continues the same augmentation stream.
+num_workers: 0
 # Seed: 1001/1002/1003 instead of the hard-coded set_seed(42); not deterministic (as official).
 deterministic: false
 # Input: the common 224x224 images and masks (as all Phase 0/1 methods), so the official Resized transforms

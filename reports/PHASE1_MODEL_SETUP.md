@@ -125,6 +125,32 @@ drivers.
 - **Data.** Arrays are fed in (H, W) orientation. The official PIL reader returns (W, H), i.e. a
   transposed image. Every augmentation is symmetric under transposition, so the training distribution is
   unchanged (`configs/ddcmd.yaml`).
+- **Data-loader workers: the official 0 (decision D6 revised on 2026-10-19).**
+  - **What happened.** With the originally planned 8 workers, quick-check job 317 hung after Lightning's
+    sanity check, before the end of the first training epoch, and wrote no output for 30 minutes (it was
+    cancelled).
+  - **Diagnostic job 319.** QaTa-COV19, 64 training / 32 validation cases, 2 epochs, validation only;
+    the training code was unchanged. Each data-loading variant had a 10-minute limit, with stack dumps of
+    the main process and of every worker every 60 s.
+
+    | Variant | Data loading | Result |
+    |---|---|---|
+    | A | 0 workers (official) | trained normally (2 epochs, about 1 s per epoch of 8 batches) |
+    | B | 8 workers, sharing strategy `file_system` (as the official `train.py`) | hung (stopped after 10 min) |
+    | C | 8 workers (as job 317) | hung (stopped after 10 min) |
+    | D | 8 workers, `spawn` instead of `fork` | trained normally, but restarting the workers made it slow (2 epochs of 64 cases took about 2 min) |
+
+    In B and C, the main process waited for the first training batch, and none of the 8 forked workers
+    reached its initialisation function. They hung immediately after `fork`, before any of our code ran.
+    A and D ended with exit code 1 only because of the driver bug below, after training had finished.
+  - **Decision.** The official 0 workers. The MONAI augmentation then draws from random states in the
+    main process. These are seeded with the run's seed, and their states (10 numpy RandomStates) are
+    stored in every checkpoint and restored on resume (checked: the restored stream is identical).
+- **Driver bug found by job 319 (fixed).** After training, the driver took the ModelCheckpoint as
+  `callbacks[-1]`. Lightning 1.9 appends its own `GradientAccumulationScheduler` to the list passed to the
+  Trainer, so `callbacks[-1]` was the wrong object. The driver now keeps a direct reference. The bug
+  affected only the bookkeeping after training: checkpoint selection itself was correct, and in A and D
+  the best checkpoint was chosen on `val_case_dice`.
 
 ## 4. Deviations from the official settings
 
@@ -134,7 +160,7 @@ drivers.
 | all | Checkpoint selection on the mean per-case validation Dice of the common evaluator | Phase 1 plan; the same rule as Phase 0 |
 | LViT-T, RecLMIS | Same criterion as the official one, except for the batch weighting (official: mean of batch means over a shuffled loader) | – |
 | DD-CMD | **D3:** checkpoint selection **and** early stopping (patience 50) on the per-case validation Dice instead of the official `val_MIoU` (a pixel-pooled IoU over the epoch). The official `val_MIoU` is still logged. | one rule for all six methods |
-| DD-CMD | **D6:** 8 seeded data-loader workers instead of 0. This changes the random order of the augmentation, not the method. | run time |
+| DD-CMD | ~~D6: 8 seeded data-loader workers~~: **revised on 2026-10-19 to the official 0 workers** (8 forked workers hung; section 3.3). No deviation remains. | – |
 | all | Training can be split into segments of at most 12 h (resume from the last epoch) | cluster 12 h limit (D5) |
 
 ## 5. Quick-check results

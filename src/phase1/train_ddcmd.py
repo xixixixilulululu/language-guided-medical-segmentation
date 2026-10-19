@@ -122,11 +122,34 @@ class DDCMDModule(CreateModel):
         self.log("val_case_dice", dice, logger=True)
 
 
+def random_states(obj):
+    """Every numpy RandomState inside a (MONAI) transform object, in a fixed order (attribute walk)."""
+    found, seen = [], set()
+
+    def walk(o):
+        if id(o) in seen:
+            return
+        seen.add(id(o))
+        if isinstance(o, np.random.RandomState):
+            found.append(o)
+        elif isinstance(o, (list, tuple)):
+            for x in o:
+                walk(x)
+        elif hasattr(o, "__dict__") and not isinstance(o, (torch.Tensor, np.ndarray, type)):
+            for k in sorted(vars(o)):
+                walk(vars(o)[k])
+
+    walk(obj)
+    return found
+
+
 class SegmentControl(pl.Callback):
     """Wall-clock guard, epochs.csv and the RNG / loader-generator state in Lightning checkpoints."""
 
-    def __init__(self, run_dir, generator, stop_after_epochs=None, resume_epoch=0):
+    def __init__(self, run_dir, generator, stop_after_epochs=None, resume_epoch=0, train_transform=None):
         self.clock, self.g, self.stop_after = common.WallClock(), generator, stop_after_epochs
+        # With 0 workers the augmentation draws from these RandomStates in the main process (saved / restored)
+        self.aug_states = random_states(train_transform) if train_transform is not None else []
         self.longest, self.t0, self.segment_ended, self.start_epoch = 0.0, None, False, None
         self.elog = common.EpochLog(run_dir, ["epoch", "lr", "train_loss", "val_dice", "best_val_dice",
                                               "best_epoch", "val_MIoU_official", "epoch_seconds"],
@@ -161,11 +184,15 @@ class SegmentControl(pl.Callback):
 
     def state_dict(self):
         return {"rng": common.rng_state(), "loader_generator": self.g.get_state(), "longest": self.longest,
+                "augmentation": [r.get_state() for r in self.aug_states],
                 "best_dice": self.best_dice, "best_epoch": self.best_epoch}
 
     def load_state_dict(self, state):
         common.set_rng_state(state["rng"])
         self.g.set_state(state["loader_generator"])
+        assert len(state["augmentation"]) == len(self.aug_states), "augmentation random states do not match"
+        for r, st in zip(self.aug_states, state["augmentation"]):
+            r.set_state(st)
         self.longest, self.best_dice, self.best_epoch = state["longest"], state["best_dice"], state["best_epoch"]
 
 
@@ -262,15 +289,12 @@ def main():
 
     module = DDCMDModule(module_args(cfg))
     module.val_masks = val_ds.masks
-    control = SegmentControl(args.out, g, args.stop_after_epochs, resume_epoch)
+    control = SegmentControl(args.out, g, args.stop_after_epochs, resume_epoch, train_transform=train_ds.transform)
     # Order: EarlyStopping before the wall-clock control (an early-stopped run is never marked "segment");
     # Lightning moves ModelCheckpoint to the end, so last.ckpt is written after both.
-    callbacks = [
-        EarlyStopping(monitor=cfg["monitor"], patience=cfg["patience"], mode="max"),
-        control,
-        ModelCheckpoint(dirpath=ckpt_dir, filename="best", monitor=cfg["monitor"], mode="max", save_top_k=1,
-                        save_last=True, save_on_train_epoch_end=True, verbose=True),
-    ]
+    ckpt_cb = ModelCheckpoint(dirpath=ckpt_dir, filename="best", monitor=cfg["monitor"], mode="max", save_top_k=1,
+                              save_last=True, save_on_train_epoch_end=True, verbose=True)
+    callbacks = [EarlyStopping(monitor=cfg["monitor"], patience=cfg["patience"], mode="max"), control, ckpt_cb]
     # D3: both early stopping and checkpoint selection must monitor the per-case validation Dice
     monitors = {type(c).__name__: c.monitor for c in callbacks if isinstance(c, (EarlyStopping, ModelCheckpoint))}
     assert set(monitors.values()) == {"val_case_dice"}, monitors
@@ -286,7 +310,8 @@ def main():
 
     last_epoch = trainer.current_epoch  # number of completed epochs
     ended = "segment" if control.segment_ended else ("early_stopping" if last_epoch < max_epochs else "max_epochs")
-    ckpt_cb = callbacks[-1]
+    # (ckpt_cb is kept by reference: Lightning appends its own callbacks to the list passed to the Trainer,
+    #  so callbacks[-1] is not the ModelCheckpoint after fit -- bug found by diagnostic job 319)
     best_epoch = int(torch.load(ckpt_cb.best_model_path, map_location="cpu", weights_only=False)["epoch"]) + 1
     common.log_segment(args.out, last_epoch=last_epoch, ended=ended)
     runner.save_json({"best_epoch": best_epoch, "best_val_dice": float(ckpt_cb.best_model_score),
