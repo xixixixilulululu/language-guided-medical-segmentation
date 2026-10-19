@@ -115,7 +115,9 @@ def main():
     if len(jobs) >= MAX_JOBS or n_wait >= 1:
         reason = (f"you already have {len(jobs)} jobs (limit {MAX_JOBS}: 1 running + 1 waiting)"
                   if len(jobs) >= MAX_JOBS else "you already have a job waiting in the queue (limit: 1 waiting)")
-        print(f"NOT SUBMITTED: {reason}. Run this again when a job has finished or started.\n")
+        print(f"NOT SUBMITTED: {reason}. Run this again when a job has finished or started.")
+        r, segment = pick_next(plan, log, jobs)
+        print(f"Next when allowed: {label(r, segment) if r else 'nothing (plan complete)'}\n")
         show_status(jobs)
         sys.exit(1)
     r, segment = pick_next(plan, log, jobs)
