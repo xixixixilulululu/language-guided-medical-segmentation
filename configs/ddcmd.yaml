@@ -1,3 +1,5 @@
+# FROZEN 2026-10-19 (DD-CMD): quick check passed (job 320), confirmed by the user. Do not edit.
+# slurm/train_phase1.slurm checks configs/phase1_frozen/ddcmd.sha256 and ddcmd.commit before every run.
 # DD-CMD (Phase 1). Read by src/phase1/train_ddcmd.py.
 # Source: DD-CMD official repository (external/DD-CMD, commit 27387c4): config/train.yaml, train.py,
 # net/creratemodel.py (LightningModule, used unchanged), net/model.py, utils/dataset.py.

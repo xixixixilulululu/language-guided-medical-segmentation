@@ -1,9 +1,9 @@
 # Phase 1 model setup (Task 1.5)
 
-Status: 2026-10-19. The LViT-T and RecLMIS quick checks are complete (job 316). The DD-CMD quick check is
-being repeated after a NumPy 2 compatibility fix (section 3.3), so its numbers below are placeholders.
-**Frozen on 2026-10-19 (confirmed by the user): LViT-T and RecLMIS.** DD-CMD is frozen only after its
-quick check has been confirmed.
+Status: 2026-10-19. The quick checks of all three methods are complete: LViT-T and RecLMIS in job 316;
+DD-CMD in job 320, after the NumPy 2 fix and the change to 0 data-loader workers (section 3.3).
+**Frozen on 2026-10-19 (confirmed by the user): LViT-T and RecLMIS (after job 316), DD-CMD (after job
+320).**
 
 - **Frozen record.** `configs/phase1_frozen/<method>.sha256` holds the sha256 of the config, the driver,
   the shared code including the common evaluation and export (`src/phase1/common.py`,
@@ -175,21 +175,49 @@ full training and validation sets, second epoch. All values come from `results/p
 |---|---|---|---|---|---|---|
 | Probes on the untrained model (pairing, forward, text gradient ≠ 0, text swap changes the output) | passed | passed | passed | passed | passed | passed |
 | RecLMIS: CCL and both reconstruction losses present and finite, `aux` on | – | – | yes, every step | yes, every step | – | – |
-| Subset training: training loss, epoch 1 → 40 | 0.535 → 0.251 | 0.463 → 0.070 | 6.10 → 2.79 | 6.63 → 2.02 | _pending_ | _pending_ |
-| Subset training: validation Dice, epoch 1 → best | 0.005 → 0.649 | 0.449 → 0.783 | 0.226 → 0.607 | 0.026 → 0.763 | _pending_ | _pending_ |
-| Text swap (trained subset model): val Dice true text / fixed text | 0.6488 / 0.6092 | 0.7826 / 0.7826 | 0.6073 / 0.5929 | 0.7635 / 0.7635 | _pending_ | _pending_ |
-| Seconds per epoch (train + val, full data) | 245 | 92 | 171 | 63 | _pending_ | _pending_ |
+| Subset training: training loss, epoch 1 → 40 | 0.535 → 0.251 | 0.463 → 0.070 | 6.10 → 2.79 | 6.63 → 2.02 | 1.438 → 0.435 | 1.588 → 0.607 |
+| Subset training: validation Dice, epoch 1 → best | 0.005 → 0.649 | 0.449 → 0.783 | 0.226 → 0.607 | 0.026 → 0.763 | 0.226 → 0.760 | 0.026 → 0.790 |
+| Text swap (trained subset model): val Dice true text / fixed text | 0.6488 / 0.6092 | 0.7826 / 0.7826 | 0.6073 / 0.5929 | 0.7635 / 0.7635 | 0.7603 / 0.6677 | 0.7901 / 0.7901 |
+| Valid predicted masks (trained subset model, 32 val cases) | 1 empty | 0 empty | 0 empty | 0 empty | 0 empty | 0 empty |
+| Seconds per epoch (train + val, full data) | 245 | 92 | 171 | 63 | 211 (+ about 10 s per epoch for saving the Lightning checkpoints) | 79 (+ the same) |
 
 - **RecLMIS auxiliary losses over the 40 subset epochs:**
   - QaTa: CCL 4.37 → 2.99, text reconstruction 0.95 → 0.53, image reconstruction 0.98 → 0.02.
   - MosMed: CCL 5.08 → 2.48, text reconstruction 0.85 → 0.45, image reconstruction 0.91 → 0.02.
   - No step had a reconstruction loss replaced by 0 (QaTa 0 of 80 steps, MosMed 0 of 160).
-- **Resume test.** For LViT-T and RecLMIS, the uninterrupted and the segmented runs have identical epoch
-  numbers (1-6), learning rates, training losses and validation Dice (maximum absolute difference 0).
-  DD-CMD: _pending_.
-- **Text swap on MosMedData+.** For both LViT-T and RecLMIS, the validation Dice of the trained subset
-  model is the same to four decimals with the true texts and with every text replaced by one fixed text.
-  In these 32 validation cases, 26 have a text different from the fixed text. This is recorded as
-  observed, without interpretation. The text dependence of the frozen models is tested in Phase 2.
-- **D3 check for DD-CMD:** both callbacks must monitor `val_case_dice`, and the selected best epoch must
-  equal the epoch with the highest per-case validation Dice in `epochs.csv`. _pending_.
+- **Resume test.**
+  - LViT-T and RecLMIS: the uninterrupted and the segmented runs have identical epoch numbers (1–6),
+    learning rates, training losses and validation Dice (maximum absolute difference 0).
+  - DD-CMD: identical epoch numbers (1–6) and learning rates. The maximum absolute differences are 2e-5
+    in training loss and 1.4e-4 in validation Dice. DD-CMD trains non-deterministically, as the official
+    code does (`deterministic: false`), so small differences are expected.
+- **Text swap, all three methods (recorded as observed, without interpretation).**
+  - **Setup.** The model is trained on the subset (64 training cases, 40 epochs, seed 1001; the
+    validation-selected checkpoint). It is then evaluated on the first 32 validation cases twice: with
+    each case's own text, and with every text replaced by the most frequent training text of the dataset.
+  - **Replacement texts.** QaTa-COV19: "Bilateral pulmonary infection, two infected areas, all left lung
+    and all right lung." (28 of the 32 cases have a different text). MosMedData+: "Unilateral pulmonary
+    infection, one infected areas, middle left lung." (26 of the 32 cases have a different text).
+
+  | Dataset | Method | Val Dice, true texts | Val Dice, fixed text | Difference | Mean absolute change of the predicted probability |
+  |---|---|---:|---:|---:|---:|
+  | QaTa-COV19 | LViT-T | 0.648841 | 0.609177 | +0.039664 | 3.45e-02 |
+  | QaTa-COV19 | RecLMIS | 0.607305 | 0.592924 | +0.014380 | 2.12e-02 |
+  | QaTa-COV19 | DD-CMD | 0.760252 | 0.667682 | +0.092570 | 5.30e-02 |
+  | MosMedData+ | LViT-T | 0.782583 | 0.782639 | −0.000056 | 2.20e-05 |
+  | MosMedData+ | RecLMIS | 0.763460 | 0.763464 | −0.000005 | 2.44e-04 |
+  | MosMedData+ | DD-CMD | 0.790120 | 0.790135 | −0.000015 | 4.91e-04 |
+
+  - On QaTa-COV19 the Dice is lower with the fixed text for all three methods.
+  - On MosMedData+ it is unchanged to four decimals for all three (absolute differences ≤ 0.00006).
+  - These are single subset models (64 training cases, one seed) and not the frozen main-run models. The
+    text dependence of the main models is tested in Phase 2.
+- **D3 check for DD-CMD: passed.**
+  - Both EarlyStopping and ModelCheckpoint monitor `val_case_dice`. This is recorded in
+    `training_summary.json` and asserted by the driver.
+  - The selected best epoch equals the epoch with the highest per-case validation Dice in `epochs.csv`
+    (QaTa: epoch 36, MosMed: epoch 39).
+  - In these subset runs, the official `val_MIoU` peaked at the same epochs, so this run alone cannot show
+    the difference between the two rules. The monitor record shows which one was used.
+- **Lightning and transformers versions (D7): passed.** pytorch_lightning 1.9.0 and transformers 4.57.6
+  train normally under torch 2.14 (job 320, with the `np.Inf` alias).

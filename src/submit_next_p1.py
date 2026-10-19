@@ -13,8 +13,15 @@ Each call:
      b. otherwise the first not yet submitted row of slurm/phase1_plan.tsv.
   3. Submits it with sbatch and records it in runs/phase1_submit_log.tsv.
 
-Usage:  slurm/submit_next_p1.sh            submit the next job
-        slurm/submit_next_p1.sh --dry-run  show what would be submitted, submit nothing
+Day / night (user rule of 2026-10-19: long QaTa runs at night, short MosMed runs in the day):
+  --night   take the next QaTa-COV19 row instead of the next row in file order
+  --day     take the next MosMed+ row instead of the next row in file order
+  A continuation segment always comes first (e.g. LViT-T segment 2), whatever the option.
+A training row is skipped if a job of the same name is already queued or its run has already started
+(segments.jsonl exists), so a run is never submitted twice.
+
+Usage:  slurm/submit_next_p1.sh [--day | --night]            submit the next job
+        slurm/submit_next_p1.sh [--day | --night] --dry-run  show what would be submitted, submit nothing
 """
 import csv
 import datetime
@@ -103,8 +110,13 @@ def segments(r):
         return [json.loads(line) for line in f if line.strip()]
 
 
-def pick_next(plan, log, jobs):
-    """(row, segment number or None) of the next job, or (None, None)."""
+def run_started(r):
+    return bool(segments(r))
+
+
+def pick_next(plan, log, jobs, dataset=None):
+    """(row, segment number or None) of the next job, or (None, None). dataset: only rows of this dataset
+    (--day / --night); continuation segments are always considered first."""
     names_in_queue = {j[2] for j in jobs}
     submitted = {row["key"] for row in log}
     for r in plan:                                   # a. continuation segments first
@@ -114,8 +126,12 @@ def pick_next(plan, log, jobs):
         if seg and seg[-1].get("ended") == "segment":
             return r, sum(1 for s in seg if "ended" in s) + 1
     for r in plan:                                   # b. next row of the plan
-        if key(r) not in submitted:
-            return r, None
+        if key(r) in submitted or (dataset and r["dataset"] != dataset):
+            continue
+        training = r["method"] in ("lvit", "reclmis", "ddcmd")
+        if training and (job_name(r) in names_in_queue or run_started(r)):
+            continue                                 # never submit the same run twice
+        return r, None
     return None, None
 
 
@@ -148,15 +164,16 @@ def refusal(jobs):
 
 def main():
     dry = "--dry-run" in sys.argv
+    dataset = "QaTa-COV19" if "--night" in sys.argv else ("MosMedData+" if "--day" in sys.argv else None)
     plan, log, jobs = read_tsv(PLAN), read_tsv(LOG), my_jobs()
     reason = refusal(jobs)
     if reason:
         print(f"NOT SUBMITTED: {reason}. Run this again when a job has finished or started.")
-        r, segment = pick_next(plan, log, jobs)
+        r, segment = pick_next(plan, log, jobs, dataset)
         print(f"Next when allowed: {label(r, segment) if r else 'nothing (plan complete)'}\n")
         show_status(jobs)
         sys.exit(1)
-    r, segment = pick_next(plan, log, jobs)
+    r, segment = pick_next(plan, log, jobs, dataset)
     if r is None:
         print("Nothing to submit: every row of slurm/phase1_plan.tsv has been submitted and no run waits for a segment.\n")
         show_status(jobs)
