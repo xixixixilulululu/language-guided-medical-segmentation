@@ -27,7 +27,10 @@ REPO = os.environ.get("LGMS_SUBMIT_REPO",
                       "/mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation")
 PLAN = os.path.join(REPO, "slurm", "phase1_plan.tsv")
 LOG = os.path.join(REPO, "runs", "phase1_submit_log.tsv")
-NAMES = {"lvit": "LViT-T", "reclmis": "RecLMIS", "ddcmd": "DD-CMD", "quick_check": "Phase 1 quick check"}
+NAMES = {"lvit": "LViT-T", "reclmis": "RecLMIS", "ddcmd": "DD-CMD", "quick_check": "Phase 1 quick check",
+         "diag_ddcmd": "DD-CMD diagnostic"}
+# Rows that are not training runs: method -> Slurm script (no METHOD/DATASET/SEED export)
+SPECIAL = {"diag_ddcmd": "phase1_ddcmd_diag.slurm"}
 MAX_JOBS = 2
 
 
@@ -58,7 +61,9 @@ def append_log(row):
 
 
 def key(r):
-    return f"{r['method']}|{r['dataset']}|{r['seed']}"
+    """Plan-row key; the optional 'tag' column distinguishes a resubmission (e.g. after a cancelled job)."""
+    tag = (r.get("tag") or "").strip()
+    return f"{r['method']}|{r['dataset']}|{r['seed']}" + (f"|{tag}" if tag and tag != "-" else "")
 
 
 def qc_methods(r):
@@ -68,12 +73,16 @@ def qc_methods(r):
 
 
 def label(r, segment=None):
+    if r["method"] in SPECIAL:
+        return NAMES[r["method"]]
     if r["method"].startswith("quick_check"):
         return NAMES["quick_check"] + (f" ({NAMES[qc_methods(r)]} only)" if qc_methods(r) else "")
     return f"{NAMES[r['method']]} {r['dataset']} seed{r['seed']}" + (f" (segment {segment})" if segment else "")
 
 
 def job_name(r):
+    if r["method"] in SPECIAL:
+        return "p1_" + r["method"]
     return "p1_quick_check" if r["method"].startswith("quick_check") else f"p1-{r['method']}-{r['dataset'].split('-')[0]}-{r['seed']}"
 
 
@@ -91,7 +100,7 @@ def pick_next(plan, log, jobs):
     names_in_queue = {j[2] for j in jobs}
     submitted = {row["key"] for row in log}
     for r in plan:                                   # a. continuation segments first
-        if r["method"].startswith("quick_check") or key(r) not in submitted or job_name(r) in names_in_queue:
+        if r["method"].startswith("quick_check") or r["method"] in SPECIAL or key(r) not in submitted or job_name(r) in names_in_queue:
             continue
         seg = segments(r)
         if seg and seg[-1].get("ended") == "segment":
@@ -125,7 +134,9 @@ def main():
         print("Nothing to submit: every row of slurm/phase1_plan.tsv has been submitted and no run waits for a segment.\n")
         show_status(jobs)
         return
-    if r["method"].startswith("quick_check"):
+    if r["method"] in SPECIAL:
+        cmd = ["sbatch", "--parsable", f"--job-name={job_name(r)}", os.path.join(REPO, "slurm", SPECIAL[r["method"]])]
+    elif r["method"].startswith("quick_check"):
         cmd = ["sbatch", "--parsable", f"--job-name={job_name(r)}"]
         if qc_methods(r):
             cmd.append(f"--export=ALL,QC_METHODS={qc_methods(r)}")
