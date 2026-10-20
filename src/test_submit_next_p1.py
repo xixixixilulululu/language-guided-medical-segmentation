@@ -48,6 +48,8 @@ def pick_cases():
         ("a finished run is not continued", ["lvit|QaTa-COV19|1001"], [],
          {"lvit|QaTa-COV19|1001": [{"start_epoch": 1}, {"last_epoch": 161, "ended": "early_stopping"}]},
          "QaTa-COV19", ("reclmis", None)),
+        ("a run on hold is neither continued nor submitted", ["lvit|QaTa-COV19|1001"], [],
+         {"lvit|QaTa-COV19|1001": [{"start_epoch": 1}]}, "QaTa-COV19", ("reclmis", None), {"lvit|QaTa-COV19|1001"}),
         ("no segment while that run is queued", ["lvit|QaTa-COV19|1001"], ["p1-lvit-QaTa-1001"],
          {"lvit|QaTa-COV19|1001": seg_end}, None, ("ddcmd", None)),
         ("a run already queued under another row is not submitted twice",
@@ -64,8 +66,10 @@ def main():
         got = S.refusal(jobs) is None
         print(f"[{'ok' if got == allowed else 'FAIL'}] {[j[1] for j in jobs]} -> {'allowed' if got else 'refused'}")
         failed += got != allowed
-    for desc, keys, queued, segs, ds, (want_m, want_seg) in pick_cases():
+    for desc, keys, queued, segs, ds, (want_m, want_seg), held in [c if len(c) == 7 else c + (set(),)
+                                                                    for c in pick_cases()]:
         S.segments = lambda r, segs=segs: segs.get(f"{r['method']}|{r['dataset']}|{r['seed']}", [])
+        S.on_hold = lambda held=held: held
         r, seg = S.pick_next(PLAN, [{"key": k} for k in keys], [("9", "R", n) for n in queued], ds)
         ok = (r["method"] if r else None) == want_m and seg == want_seg
         print(f"[{'ok' if ok else 'FAIL'}] pick: {desc} -> {S.label(r, seg) if r else 'nothing'}")

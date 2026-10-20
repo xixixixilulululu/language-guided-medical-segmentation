@@ -1,0 +1,2 @@
+method	dataset	seed	reason
+reclmis	QaTa-COV19	1001	2026-10-19: non-finite CCL loss in epoch 152 (job 322); waiting for the decision how to handle it

@@ -35,6 +35,8 @@ REPO = os.environ.get("LGMS_SUBMIT_REPO",
                       "/mnt/cv_data/users/hahaxixi/projects/language-guided-medical-segmentation")
 PLAN = os.path.join(REPO, "slurm", "phase1_plan.tsv")
 LOG = os.path.join(REPO, "runs", "phase1_submit_log.tsv")
+# Runs on hold (method<TAB>dataset<TAB>seed<TAB>reason): never submitted or continued until removed from the file
+HOLD = os.path.join(REPO, "slurm", "phase1_hold.tsv")
 NAMES = {"lvit": "LViT-T", "reclmis": "RecLMIS", "ddcmd": "DD-CMD", "quick_check": "Phase 1 quick check",
          "diag_ddcmd": "DD-CMD diagnostic"}
 # Rows that are not training runs: method -> Slurm script (no METHOD/DATASET/SEED export)
@@ -114,6 +116,11 @@ def segments(r):
         return [json.loads(line) for line in f if line.strip()]
 
 
+def on_hold():
+    """{method|dataset|seed} of the runs on hold."""
+    return {f"{h['method']}|{h['dataset']}|{h['seed']}" for h in read_tsv(HOLD)}
+
+
 def run_started(r):
     return bool(segments(r))
 
@@ -122,9 +129,11 @@ def pick_next(plan, log, jobs, dataset=None):
     """(row, segment number or None) of the next job, or (None, None). dataset: only rows of this dataset
     (--day / --night); continuation segments are always considered first."""
     names_in_queue = {j[2] for j in jobs}
+    held = on_hold()
     submitted = {row["key"] for row in log}
     for r in plan:                                   # a. continuation segments first
-        if r["method"].startswith("quick_check") or r["method"] in SPECIAL or key(r) not in submitted or job_name(r) in names_in_queue:
+        if (r["method"].startswith("quick_check") or r["method"] in SPECIAL or key(r) not in submitted
+                or f"{r['method']}|{r['dataset']}|{r['seed']}" in held) or job_name(r) in names_in_queue:
             continue
         seg = segments(r)
         # continue a run whose last segment ended at the wall-clock guard, or whose last segment has no end
@@ -132,7 +141,8 @@ def pick_next(plan, log, jobs, dataset=None):
         if seg and (seg[-1].get("ended") == "segment" or "ended" not in seg[-1]):
             return r, sum(1 for s in seg if "start_epoch" in s) + 1
     for r in plan:                                   # b. next row of the plan
-        if key(r) in submitted or (dataset and r["dataset"] != dataset):
+        if key(r) in submitted or (dataset and r["dataset"] != dataset) \
+                or f"{r['method']}|{r['dataset']}|{r['seed']}" in held:
             continue
         training = r["method"] in ("lvit", "reclmis", "ddcmd")
         if training and (job_name(r) in names_in_queue or run_started(r)):
