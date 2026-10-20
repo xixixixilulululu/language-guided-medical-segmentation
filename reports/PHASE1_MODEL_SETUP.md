@@ -152,6 +152,43 @@ drivers.
   affected only the bookkeeping after training: checkpoint selection itself was correct, and in A and D
   the best checkpoint was chosen on `val_case_dice`.
 
+### 3.4 Non-finite losses: pre-specified rule (decided 2026-10-19, before any further result)
+
+**Rule (all three methods, all runs).**
+- If any loss term of a training step is NaN or infinite, training ends **before that step updates the
+  model**.
+- The run is then evaluated like any finished run: with the checkpoint that has the best validation Dice
+  so far.
+- The report records the epoch, the step within the epoch and the loss term(s). These are in
+  `training_summary.json` (`ended: non_finite_loss`, `non_finite`) and in `segments.jsonl`.
+
+**Reason.**
+- In the official code, a non-finite loss propagates into all weights. The validation Dice can then no
+  longer improve, and early stopping ends the run with the same validation-selected checkpoint.
+- The rule therefore gives the result the official code gives on the same trajectory. It only saves the
+  useless epochs after the event and does not change the training method.
+
+**Counts kept for every run.**
+- `non_finite_steps`: steps with a non-finite loss (at most 1, because training then ends).
+- RecLMIS only: `rec_loss_zero_steps`, the steps in which the official reconstructor replaced a NaN
+  reconstruction loss by 0. A loss of exactly 0.0 is counted as such a replacement.
+
+**Implementation.**
+- RecLMIS: `src/phase1/train_reclmis.py`, changed and re-frozen on 2026-10-19, with a unit test in
+  `src/phase1/test_nonfinite_reclmis.py`.
+- LViT-T and DD-CMD: the same check will be added when no job of these methods is running. Until then,
+  the same rule is applied by hand: the run is ended and its best checkpoint is evaluated.
+
+**Occurrence: RecLMIS QaTa-COV19 seed 1001 (job 322).**
+- Epochs 1–151 completed. The best validation Dice was 0.8309, at epoch 129.
+- In epoch 152, `loss_ccl` (the conditional contrastive loss) became NaN; the segmentation loss and both
+  reconstruction losses were finite.
+- The driver of that time stopped with an error before the step was applied. `last.pth` (end of epoch
+  151) and `best_model.pt` (epoch 129) are intact.
+- The run is completed under the rule: resuming from epoch 151 either meets the NaN again, which ends
+  training and evaluates the epoch-129 checkpoint, or continues normally if the NaN does not recur. The
+  outcome is recorded in its `training_summary.json` and in the results report.
+
 ## 4. Deviations from the official settings
 
 | Method | Deviation | Reason |

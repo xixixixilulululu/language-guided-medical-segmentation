@@ -7,6 +7,8 @@ channels cv2.imread returns; text padded as utils.read_text; clip.tokenize with 
 the official transforms. Training loop = train_model.py / Train_one_epoch.py.
 Compatibility (no change of the method): fairseq.utils.softmax provided here (fairseq cannot be built);
 the reconstruction / CCL losses are checked every step (the official code turns them off silently on error).
+Non-finite loss (pre-specified rule of 2026-10-19): training ends before that step updates the model, and the
+validation-selected checkpoint is evaluated; epoch, step and loss term are recorded (training_summary.json).
 
 Resumable: an existing <out>/last.pth is continued (one Slurm job = one segment, submitted by hand).
 
@@ -48,6 +50,16 @@ from tools.transform import BioMedicalGaussianBlur, PhotoMetricDistortion  # noq
 from utils import CosineAnnealingWarmRestarts, WeightedDiceBCE  # noqa: E402  (RecLMIS utils.py)
 
 AUX_LOSSES = ("loss_ccl", "loss_text_rec", "loss_img_rec")
+
+
+class NonFiniteLoss(Exception):
+    """A loss term became NaN / inf. Pre-specified rule (2026-10-19, reports/PHASE1_MODEL_SETUP.md): training
+    ends before this step updates the model, and the validation-selected checkpoint is evaluated."""
+
+    def __init__(self, step, values):
+        self.step, self.values = step, values
+        self.terms = [k for k, v in values.items() if not math.isfinite(v)]
+        super().__init__(f"non-finite loss at step {step}: {self.terms} ({values})")
 
 
 def official_config(cfg, dataset):
@@ -142,7 +154,7 @@ def train_one_epoch(model, loader, criterion, optimizer, conf, device, stats):
     """Train_one_epoch.py, training branch. Returns the mean weighted total loss and the mean of each term."""
     model.train()
     sums, n = {}, 0
-    for sample, _ in loader:
+    for step, (sample, _) in enumerate(loader, 1):
         preds, masks, loss_dict = forward_batch(model, sample, device)
         loss_dict["loss_criterion"] = criterion(preds, masks.float())
         # The method's own losses must be active in every step (see module docstring)
@@ -154,9 +166,11 @@ def train_one_epoch(model, loader, criterion, optimizer, conf, device, stats):
             loss_dict[k] = v.mean()
             out_loss = out_loss + conf.loss_weight[k] * loss_dict[k]
         values = {k: float(v.detach()) for k, v in loss_dict.items()}
-        if not all(math.isfinite(v) for v in values.values()):
-            raise RuntimeError(f"non-finite loss: {values}")
+        if not all(math.isfinite(v) for v in values.values()):   # before any update of this step
+            stats["non_finite_steps"] = stats.get("non_finite_steps", 0) + 1
+            raise NonFiniteLoss(step, values)
         # The official reconstructor replaces a NaN reconstruction loss by exactly 0: count such steps
+        # (a reconstruction loss of exactly 0.0 is taken as this replacement)
         stats["rec_loss_zero_steps"] += int(values["loss_text_rec"] == 0.0 or values["loss_img_rec"] == 0.0)
         stats["steps"] += 1
         optimizer.zero_grad()
@@ -243,14 +257,15 @@ def main():
     optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=conf.learning_rate)
     scheduler = build_scheduler(conf, optimizer)
     sel = common.Selection(conf.early_stopping_patience, cfg["first_epoch_for_best"])
-    stats = {"steps": 0, "rec_loss_zero_steps": 0}
+    stats = {"steps": 0, "rec_loss_zero_steps": 0, "non_finite_steps": 0}
+    non_finite = None
     start_epoch, longest = 1, 0.0
     if resume:
         model.load_state_dict(resume["model"])
         optimizer.load_state_dict(resume["optimizer"])
         scheduler.load_state_dict(resume["scheduler"])
         sel = common.Selection(conf.early_stopping_patience, cfg["first_epoch_for_best"], **resume["selection"])
-        stats = resume["stats"]
+        stats = {"non_finite_steps": 0, **resume["stats"]}
         g.set_state(resume["loader_generator"])
         common.set_rng_state(resume["rng"])
         start_epoch, longest = resume["epoch"] + 1, resume["longest_epoch"]
@@ -269,8 +284,15 @@ def main():
             epoch, ended = epoch - 1, "segment"
             break
         lr_now = optimizer.param_groups[0]["lr"]
-        with runner.Timer() as t_train:
-            losses = train_one_epoch(model, train_loader, criterion, optimizer, conf, device, stats)
+        try:
+            with runner.Timer() as t_train:
+                losses = train_one_epoch(model, train_loader, criterion, optimizer, conf, device, stats)
+        except NonFiniteLoss as e:   # pre-specified rule: end training, evaluate the best checkpoint
+            non_finite = {"epoch": epoch, "step": e.step, "terms": e.terms, "values": e.values}
+            log.info(f"NON-FINITE LOSS in epoch {epoch}, step {e.step}: {e.terms} {e.values}; training ends "
+                     f"(the model is not updated by this step); best checkpoint: epoch {sel.best_epoch}")
+            epoch, ended = epoch - 1, "non_finite_loss"
+            break
         with runner.Timer() as t_val:
             _, probs, _ = predict(model, val_loader, device)
             val_dice = float(metrics.dice_many(probs, val_ds.masks).mean())
@@ -296,14 +318,15 @@ def main():
             ended = "early_stopping"
             break
 
-    common.log_segment(args.out, last_epoch=epoch, ended=ended)
+    common.log_segment(args.out, last_epoch=epoch, ended=ended, **({"non_finite": non_finite} if non_finite else {}))
     runner.save_json({"best_epoch": sel.best_epoch, "best_val_dice": sel.best_dice, "last_epoch": epoch,
-                      "ended": ended, **stats, "max_memory_gb": torch.cuda.max_memory_allocated() / 1e9},
+                      "ended": ended, "non_finite": non_finite, **stats,
+                      "max_memory_gb": torch.cuda.max_memory_allocated() / 1e9},
                      os.path.join(args.out, "training_summary.json"))
     if ended == "segment":
         log.info(f"segment ended after epoch {epoch} (wall-clock guard); submit the next segment by hand")
         sys.exit(common.SEGMENT_EXIT_CODE)
-    if ended == "max_epochs":  # mark as finished: a further job only re-runs the final evaluation
+    if ended in ("max_epochs", "non_finite_loss"):  # mark as finished: a further job only re-runs the evaluation
         state = common.load_state(last_path)
         state["finished"] = True
         common.save_atomic(state, last_path)
