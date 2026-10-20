@@ -14,13 +14,20 @@ Phase 1 test result existed. This report will then be replaced by the final summ
    resume after a 12 h segment, and timing.
 2. **The test set is protected.** The statistical analysis (`src/analyze_phase1.py`; 6 methods, 15 pairs
    per dataset, Holm correction across the 15, α = 0.05) was reviewed, fixed and pushed before the first
-   Phase 1 test evaluation. Two independent locks enforce this, and every test evaluation is logged.
+   Phase 1 test evaluation:
+   - its frozen record reached GitHub at 2026-10-19 04:02:14 UTC (GitHub server time, from GitHub's event
+     log);
+   - the first Phase 1 test evaluation started at 16:20:18 UTC (12:20:18 EDT, cluster clock,
+     `results/phase1_test_eval_log.tsv`).
+
+   Two independent locks enforce this order, and every test evaluation is logged.
 3. **Progress: 1 of 18 runs is complete.** One more is finishing after a numerical problem (item 4),
    one is running and one is queued. At the measured speed, the remaining runs need about 5–7 days.
 4. **Numerical problem in RecLMIS (QaTa-COV19, seed 1001).** In epoch 152 its contrastive loss became
    NaN. We stopped the run before the NaN reached the model weights. We then fixed a rule for all runs
-   **before seeing further results**: end training and evaluate the best validation checkpoint. This
-   gives the same final model as the official code, as explained in section 4.
+   **before seeing further results**: end training and evaluate the best validation checkpoint. On the
+   same training trajectory, this gives the same checkpoint that the official code would finally select
+   (section 4).
 5. **Deviations from the official code are few and documented.** They cover the text encoder of LViT-T,
    checkpoint selection for DD-CMD, and compatibility fixes (section 3).
 
@@ -37,6 +44,15 @@ test time.
 | RecLMIS | ShawnHuang497/RecLMIS | CLIP ViT-B/32 text tower (frozen) | conditioned reconstruction of masked text / image tokens + contrastive loss |
 | DD-CMD | maklachur/DD-CMD | BiomedBERT (frozen) | gated text–image cross-attention + text-conditioned frequency (DCT) decoding |
 
+"Frozen" means that the text encoder is not trained:
+- **LViT-T:** its word vectors are computed outside the model.
+- **RecLMIS:** the official config sets `frozen_clip = True`.
+- **DD-CMD:** the official `FrozenTextEncoder` disables the gradients.
+
+This was verified on trained checkpoints: the CLIP text tower (RecLMIS run, epoch 129) and BiomedBERT
+(DD-CMD quick-check run) are bit-identical to the pretrained weights, while DD-CMD's image encoder has
+changed.
+
 Training settings are the official ones: loss, optimizer, learning rate, schedule, augmentation, epochs
 and early stopping. Where the paper and the code disagree, the more specific source was used. For
 LViT-T this means a learning rate of 3e-4 for QaTa and 1e-3 for MosMed (paper), and a batch size of 2 (a
@@ -47,9 +63,11 @@ code comment about LViT-T; the paper's general default is 24).
 | Item | What we did | Why |
 |---|---|---|
 | LViT-T text encoder | The official `bert_embedding` package (MXNet) cannot be installed on this cluster (aarch64). Its computation was re-implemented in PyTorch with the same BERT weights and precomputed. | Closest possible substitute. **It could not be checked against the original MXNet output**, because MXNet does not run here. |
-| DD-CMD checkpoint selection | Mean per-case validation Dice, for checkpoint selection and early stopping, instead of the official pixel-pooled validation mIoU. | The same rule for all six methods. |
+| Random seeds | 1001 / 1002 / 1003 for every method (official: LViT 666, RecLMIS 3407, DD-CMD 42). | Phase 1 plan. |
+| DD-CMD checkpoint selection | Mean per-case validation Dice instead of the official pixel-pooled validation mIoU. | The same rule for all six methods. |
+| DD-CMD early stopping | Also monitors the mean per-case validation Dice (official: validation mIoU); patience 50 as official. | Consistent with the checkpoint selection. |
 | DD-CMD data loading | 0 data-loader workers, the official value. We had planned 8, but with 8 the training hung before the first batch (diagnosed in a dedicated job). | No deviation remains. |
-| Bugs in the official code | Fixed in our drivers, and checked at every step: RecLMIS silently switched off its reconstruction losses when a dependency was missing, and loaded the QaTa config for MosMed; LViT's released loader paired QaTa images and masks incorrectly; text padding was lost under the current pandas. | Without these fixes, the methods would not run as published. |
+| Bugs in the official code | Fixed in our drivers, and checked at every step: RecLMIS silently switched off its reconstruction losses when a dependency was missing, and loaded the QaTa config for MosMed; LViT's released loader pairs files by the MoNuSeg naming, so QaTa images and masks do not match; text padding was lost under the current pandas. | Without these fixes, the methods would not run as published. |
 
 ## 4. The RecLMIS numerical problem and the rule fixed for it
 
@@ -63,6 +81,9 @@ code comment about LViT-T; the paper's general default is 24).
 **What the official code would do.** It does not check this loss:
 - the NaN would spread into all weights, so the validation Dice could not improve any more;
 - after the patience of 100 epochs, early stopping would end the run with the same epoch-129 checkpoint.
+
+This NaN occurred in our environment (torch 2.14, aarch64). Whether it would also occur in the authors'
+original environment (torch 1.8) cannot be determined.
 
 **Rule, fixed before any further result** (2026-10-19, `PHASE1_MODEL_SETUP.md` section 3.4).
 - For every run of every method, a NaN or infinite loss ends training before that step is applied.
@@ -99,8 +120,8 @@ depend on the text is the subject of Phase 2. No conclusion is drawn here.
 
 - Test-set numbers of single runs are not reported here. All test results are reported together once
   the three seeds of a method are complete, by the fixed analysis program.
-- Measured time per epoch: QaTa 171–247 s, MosMed 63–92 s. Estimated total: 110–175 GPU hours on the
-  one GPU node.
+- Measured time per epoch: QaTa 171–247 s, MosMed 63–92 s. Estimated total: 110–175 GPU hours; by the
+  cluster rules only one job runs at a time.
 - Jobs follow the cluster rules: at most 12 h each (longer runs are resumed in segments) and submitted
   by hand. Long QaTa runs are scheduled at night where possible.
 
