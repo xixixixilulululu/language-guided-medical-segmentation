@@ -1,1 +1,2 @@
 method	dataset	seed	reason
+reclmis	QaTa-COV19	1001	2026-10-20: segment 2 deferred to the daytime (deterministic resume likely meets the NaN again within minutes; keeps the GPU busy overnight)
