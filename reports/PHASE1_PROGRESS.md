@@ -118,8 +118,27 @@ depend on the text is the subject of Phase 2. No conclusion is drawn here.
 | RecLMIS | **finishing** (NaN rule, section 4; best validation Dice 0.831, epoch 129) / – / – | – / – / – |
 | DD-CMD | queued / – / – | **running** / – / – |
 
-- Test-set numbers of single runs are not reported here. All test results are reported together once
-  the three seeds of a method are complete, by the fixed analysis program.
+- Test-set numbers of single runs are not reported here, except for the reproduction check below. All
+  test results are reported together, by the fixed analysis program, once the three seeds of a method
+  are complete.
+
+**Reproduction check (not a method comparison).** LViT-T on QaTa-COV19, seed 1001, using the checkpoint
+selected on validation (epoch 110):
+
+| | Test Dice (%) |
+|---|---:|
+| Ours, seed 1001 (2113 test images) | 82.47 |
+| LViT paper, Table II (LViT-T, QaTa-COV19) | 83.66 |
+| Difference | −1.19 |
+
+- This is **a single seed**. The final value is the mean over three seeds.
+- **The two metric definitions are not exactly the same.**
+  - Ours: the mean per-image Dice of the common evaluator (threshold 0.5), the same for all six
+    methods.
+  - The paper: its own test script, a per-image Dice with a small smoothing term, from one training run
+    of unknown seed. Its training batch size (2 or 24) is not stated for LViT-T.
+- The value is shown only to check that the reproduction is in the expected range. It is **not used to
+  compare methods**.
 - Measured time per epoch: QaTa 171–247 s, MosMed 63–92 s. Estimated total: 110–175 GPU hours; by the
   cluster rules only one job runs at a time.
 - Jobs follow the cluster rules: at most 12 h each (longer runs are resumed in segments) and submitted
