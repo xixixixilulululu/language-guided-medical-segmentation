@@ -128,15 +128,21 @@ selected on validation (epoch 110):
 | | Test Dice (%) |
 |---|---:|
 | Ours, seed 1001 (2113 test images) | 82.47 |
-| LViT paper, Table II (LViT-T, QaTa-COV19) | 83.66 |
+| LViT paper (LViT-T, QaTa-COV19): mean of three runs, Table IV 83.66 ± 0.8 (= Table II) | 83.66 |
 | Difference | −1.19 |
 
 - This is **a single seed**. The final value is the mean over three seeds.
-- **The two metric definitions are not exactly the same.**
-  - Ours: the mean per-image Dice of the common evaluator (threshold 0.5), the same for all six
-    methods.
-  - The paper: its own test script, a per-image Dice with a small smoothing term, from one training run
-    of unknown seed. Its training batch size (2 or 24) is not stated for LViT-T.
+- **The paper's value is the mean of three runs.** Table IV of the LViT paper gives LViT-T as
+  mean ± std, with the std over three runs (QaTa-COV19 Dice 83.66 ± 0.8; also MosMedData+ mIoU
+  61.33 ± 0.5, as in Table II). The seeds are not stated. This is also recorded in Phase 0
+  (`PHASE0_MODEL_SETUP.md`, section 7). Our seed 1001 is 1.19 points below that mean.
+- **For LViT-T the metric definition is in effect the same.** In Phase 0 the LViT official test
+  algorithm (per-image Dice with a 1e-5 smoothing term, threshold 0.5, mean over the test images) was
+  applied to our saved predictions. It gave exactly the values of our common evaluator: QaTa-COV19 79.12
+  vs. 79.12, MosMedData+ 73.92 vs. 73.92 (`src/analysis/lvit_metric_check.py`,
+  `results/phase0_lvit_metric_check.json`). Among the three methods, only DD-CMD's paper uses a different
+  definition (pixel-pooled Dice); it is not involved here.
+- The paper does not state whether its LViT-T training used batch size 2 or 24.
 - The value is shown only to check that the reproduction is in the expected range. It is **not used to
   compare methods**.
 - Measured time per epoch: QaTa 171–247 s, MosMed 63–92 s. Estimated total: 110–175 GPU hours; by the
