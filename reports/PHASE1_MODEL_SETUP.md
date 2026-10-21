@@ -185,9 +185,16 @@ drivers.
   reconstruction losses were finite.
 - The driver of that time stopped with an error before the step was applied. `last.pth` (end of epoch
   151) and `best_model.pt` (epoch 129) are intact.
-- The run is completed under the rule: resuming from epoch 151 either meets the NaN again, which ends
-  training and evaluates the epoch-129 checkpoint, or continues normally if the NaN does not recur. The
-  outcome is recorded in its `training_summary.json` and in the results report.
+- **Outcome (segment 2, job 330, 2026-10-20).** Resuming from epoch 151 met the NaN again at the same
+  place: epoch 152, step 136, `loss_ccl`. Under the rule, training ended with epoch 151 as the last
+  completed epoch, and the epoch-129 checkpoint (validation Dice 0.8309) was evaluated
+  (`ended: non_finite_loss`, `non_finite_steps` 1, `rec_loss_zero_steps` 0).
+
+**RecLMIS QaTa-COV19 seed 1002 (job 335).** No non-finite loss occurred (`non_finite_steps` 0,
+`rec_loss_zero_steps` 0). The run ended by early stopping at epoch 169; the best validation Dice was
+0.8312, at epoch 68.
+
+So seed 1001 produced a NaN and seed 1002 did not. This is recorded as observed, without interpretation.
 
 ## 4. Deviations from the official settings
 

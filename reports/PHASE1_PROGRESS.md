@@ -1,6 +1,6 @@
 # Phase 1 — Progress report for the supervisor (interim)
 
-Status: 2026-10-19, 20:30 EDT. **This is an interim report.** It contains no comparison between methods yet.
+Status: 2026-10-21, 10:30 EDT (first version 2026-10-19). **This is an interim report.** It contains no comparison between methods yet.
 The final results are produced after all 18 runs by the analysis program, which was fixed before any
 Phase 1 test result existed. This report will then be replaced by the final summary. Details:
 [PHASE1_MODEL_SETUP.md](PHASE1_MODEL_SETUP.md) (setup, deviations, quick checks) and
@@ -21,8 +21,8 @@ Phase 1 test result existed. This report will then be replaced by the final summ
      `results/phase1_test_eval_log.tsv`).
 
    Two independent locks enforce this order, and every test evaluation is logged.
-3. **Progress: 1 of 18 runs is complete.** One more is finishing after a numerical problem (item 4),
-   one is running and one is queued. At the measured speed, the remaining runs need about 5–7 days.
+3. **Progress: 6 of 18 runs are complete** (5 on QaTa-COV19, 1 on MosMedData+). 12 remain: 4 on
+   QaTa-COV19 and 8 on MosMedData+. At the measured speed they need about 3–5 days.
 4. **Numerical problem in RecLMIS (QaTa-COV19, seed 1001).** In epoch 152 its contrastive loss became
    NaN. We stopped the run before the NaN reached the model weights. We then fixed a rule for all runs
    **before seeing further results**: end training and evaluate the best validation checkpoint. On the
@@ -93,8 +93,13 @@ original environment (torch 1.8) cannot be determined.
 - For every run we also count how often a loss was non-finite. This includes the cases in which the
   official RecLMIS code itself silently replaces a NaN reconstruction loss by 0.
 
-**Status.** The run will be resumed from epoch 151 under this rule. Its outcome, and any further
-occurrence in other runs, will be reported.
+**Outcome.**
+- Resuming from epoch 151 met the NaN again at the same place (epoch 152, step 136, `loss_ccl`).
+- Under the rule, the run ended and the epoch-129 checkpoint (validation Dice 0.831) was evaluated.
+- RecLMIS on QaTa-COV19 with seed 1002 had no non-finite loss and ended by early stopping (epoch 169).
+- So seed 1001 produced a NaN and seed 1002 did not. This is recorded as observed, without
+  interpretation.
+- Any further occurrence in other runs will be reported.
 
 ## 5. An observation from the quick checks (no interpretation)
 
@@ -114,9 +119,9 @@ depend on the text is the subject of Phase 2. No conclusion is drawn here.
 
 | Method | QaTa-COV19 (seeds 1001 / 1002 / 1003) | MosMedData+ (seeds 1001 / 1002 / 1003) |
 |---|---|---|
-| LViT-T | **done** (early stopping at epoch 161; best validation Dice 0.810 at epoch 110) / – / – | – / – / – |
-| RecLMIS | **finishing** (NaN rule, section 4; best validation Dice 0.831, epoch 129) / – / – | – / – / – |
-| DD-CMD | queued / – / – | **running** / – / – |
+| LViT-T | **done** (early stop, epoch 161; best val. Dice 0.810 at epoch 110) / **done** (early stop, epoch 162; 0.797 at epoch 111) / – | – / – / – |
+| RecLMIS | **done** (NaN rule at epoch 152, section 4; 0.831 at epoch 129) / **done** (early stop, epoch 169; 0.831 at epoch 68) / – | running / – / – |
+| DD-CMD | **done** (160 epochs; 0.831 at epoch 128) / – / – | **done** (early stop, epoch 103; 0.716 at epoch 53) / – / – |
 
 - Test-set numbers of single runs are not reported here, except for the reproduction check below. All
   test results are reported together, by the fixed analysis program, once the three seeds of a method
@@ -152,6 +157,6 @@ selected on validation (epoch 110):
 
 ## 7. Next steps
 
-1. Complete the remaining runs (about 5–7 days).
+1. Complete the remaining 12 runs (about 3–5 days).
 2. Run the fixed analysis once: six-method table, 15 pairwise comparisons per dataset, figures.
 3. Replace this interim report by the final Phase 1 summary, answering the eight questions of the plan.
