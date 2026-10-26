@@ -3,6 +3,9 @@
 Research project on language-guided medical image segmentation. The work is organised in phases.
 Phase 0 — the **image-only segmentation benchmark** — is **complete** (U-Net, TransUNet, nnU-Net 2D on
 QaTa-COV19 and MosMedData+, LViT split, seeds 1001/1002/1003). Plan: [`reports/PHASE0_PLAN.md`](reports/PHASE0_PLAN.md).
+Phase 1 — **reproduction of three language-guided methods** (LViT-T, RecLMIS, DD-CMD) on the same data,
+split, evaluator and seeds, and comparison with the Phase 0 baselines — is **complete**. Plan:
+[`reports/PHASE1_PLAN.md`](reports/PHASE1_PLAN.md); summary: **[`reports/PHASE1_SUMMARY.md`](reports/PHASE1_SUMMARY.md)**.
 
 ## Status
 
@@ -13,12 +16,15 @@ QaTa-COV19 and MosMedData+, LViT split, seeds 1001/1002/1003). Plan: [`reports/P
 | 0.3 Model setup (U-Net, TransUNet, nnU-Net) | done, quick checks passed | [`reports/PHASE0_MODEL_SETUP.md`](reports/PHASE0_MODEL_SETUP.md), `configs/*.yaml`, `results/phase0_quick_check.json`, `results/phase0_metric_check.txt` |
 | 0.4 18 main runs | done, 18/18 complete (submitted by hand, one job at a time, under the cluster fair-use policy) | [`reports/PHASE0_SUBMISSION_PLAN.md`](reports/PHASE0_SUBMISSION_PLAN.md), `slurm/submit_next.sh`, `runs/` (not committed) |
 | 0.5–0.7 Evaluation, summary, pairwise comparison | done; fixed analysis (commit 6ed8aa7) run once, conclusions final | **[`reports/PHASE0_SUMMARY.md`](reports/PHASE0_SUMMARY.md)** (short summary), **[`reports/PHASE0_RESULTS.md`](reports/PHASE0_RESULTS.md)** (full results), `src/analyze_phase0.py`, `results/phase0_*.csv` |
+| 1.1–1.6 Setup of LViT-T, RecLMIS, DD-CMD | done, quick checks passed, configurations frozen | [`reports/PHASE1_SETUP_PLAN.md`](reports/PHASE1_SETUP_PLAN.md), [`reports/PHASE1_MODEL_SETUP.md`](reports/PHASE1_MODEL_SETUP.md), `configs/{lvit,reclmis,ddcmd}.yaml`, `configs/phase1_frozen/`, `results/phase1_quick_check.json` |
+| 1.7 18 main runs | done, 18/18 complete (submitted by hand, one job at a time); test evaluations logged | `slurm/submit_next_p1.sh`, `results/phase1_test_eval_log.tsv`, `runs/<method>/<dataset>/seed<k>/` (per-case results committed; weights and predictions not) |
+| 1.8–1.11 Six-method results, pairwise comparison, summary | done; fixed analysis (commit ba53ba5) run once, results re-computed independently, conclusions final | **[`reports/PHASE1_SUMMARY.md`](reports/PHASE1_SUMMARY.md)** (short summary), **[`reports/PHASE1_RESULTS.md`](reports/PHASE1_RESULTS.md)** (full results), `src/analyze_phase1.py`, `results/final_six_method_*.csv`, `results/phase1_main_results.csv` |
 
 ## Layout
 
 | Folder | Contents |
 |---|---|
-| `external/` | LViT and TransUNet clones (not committed; pinned commits in [`external/VERSIONS.md`](external/VERSIONS.md)) |
+| `external/` | LViT, TransUNet, RecLMIS and DD-CMD clones (not committed; pinned commits in [`external/VERSIONS.md`](external/VERSIONS.md)) |
 | `src/` | project code: data preparation, training scripts, common evaluator (`src/lgms/`, `src/evaluate.py`), nnU-Net trainer (`src/nnunet_ext/`), notifications |
 | `slurm/` | Slurm job files (all training runs on the `gpu` partition) |
 | `configs/` | per-method configuration files |

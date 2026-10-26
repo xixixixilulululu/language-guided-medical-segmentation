@@ -1,5 +1,9 @@
 # Phase 1 — Progress report for the supervisor (interim)
 
+> **Superseded (2026-10-26) by the final summary [PHASE1_SUMMARY.md](PHASE1_SUMMARY.md)** and the full
+> results [PHASE1_RESULTS.md](PHASE1_RESULTS.md). This interim report is kept unchanged below as a record of
+> the state on 2026-10-21; its progress figures are out of date.
+
 Status: 2026-10-21, 10:30 EDT (first version 2026-10-19). **This is an interim report.** It contains no comparison between methods yet.
 The final results are produced after all 18 runs by the analysis program, which was fixed before any
 Phase 1 test result existed. This report will then be replaced by the final summary. Details:
