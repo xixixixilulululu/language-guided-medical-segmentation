@@ -74,6 +74,32 @@ def main():
         ok = (r["method"] if r else None) == want_m and seg == want_seg
         print(f"[{'ok' if ok else 'FAIL'}] pick: {desc} -> {S.label(r, seg) if r else 'nothing'}")
         failed += not ok
+    # Sensitivity check rows (lvit_b24): picked with --day, continued in segments, never submitted twice
+    plan_b24 = PLAN + [row("lvit_b24", "MosMedData+", "1001"), row("lvit_b24", "MosMedData+", "1002")]
+    done = [{"key": k} for k in ("lvit|QaTa-COV19|1001", "ddcmd|MosMedData+|1001", "reclmis|QaTa-COV19|1001|night",
+                                 "lvit|MosMedData+|1001")]
+    b24_cases = [  # (description, extra log keys, segments, expected (method, seed, segment))
+        ("first sensitivity row after the main plan", [], {}, ("lvit_b24", "1001", None)),
+        ("sensitivity segment 2 first", ["lvit_b24|MosMedData+|1001"],
+         {"lvit_b24|MosMedData+|1001": [{"start_epoch": 1}, {"last_epoch": 300, "ended": "segment"}]},
+         ("lvit_b24", "1001", 2)),
+        ("next sensitivity seed after a finished one", ["lvit_b24|MosMedData+|1001"],
+         {"lvit_b24|MosMedData+|1001": [{"start_epoch": 1}, {"last_epoch": 120, "ended": "early_stopping"}]},
+         ("lvit_b24", "1002", None)),
+        ("a started sensitivity run is not submitted twice", [],
+         {"lvit_b24|MosMedData+|1001": [{"start_epoch": 1}]}, ("lvit_b24", "1002", None)),
+    ]
+    for desc, keys, segs, want in b24_cases:
+        S.segments = lambda r, segs=segs: segs.get(f"{r['method']}|{r['dataset']}|{r['seed']}", [])
+        S.on_hold = lambda: set()
+        r, seg = S.pick_next(plan_b24, done + [{"key": k} for k in keys], [], "MosMedData+")
+        ok = r is not None and (r["method"], r["seed"], seg) == want
+        print(f"[{'ok' if ok else 'FAIL'}] pick: {desc} -> {S.label(r, seg) if r else 'nothing'}")
+        failed += not ok
+    ok = S.TRAINING["lvit_b24"] == "phase1_lvit_sensitivity_b24.slurm" and S.TRAINING["lvit"] == "train_phase1.slurm" \
+        and S.job_name(row("lvit_b24", "MosMedData+", "1001")) == "p1-lvit_b24-MosMedData+-1001"
+    print(f"[{'ok' if ok else 'FAIL'}] sensitivity rows use their own Slurm script and job name")
+    failed += not ok
     print("ALL CHECKS PASSED" if not failed else f"{failed} FAILED")
     sys.exit(1 if failed else 0)
 

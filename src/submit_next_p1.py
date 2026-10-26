@@ -38,9 +38,13 @@ LOG = os.path.join(REPO, "runs", "phase1_submit_log.tsv")
 # Runs on hold (method<TAB>dataset<TAB>seed<TAB>reason): never submitted or continued until removed from the file
 HOLD = os.path.join(REPO, "slurm", "phase1_hold.tsv")
 NAMES = {"lvit": "LViT-T", "reclmis": "RecLMIS", "ddcmd": "DD-CMD", "quick_check": "Phase 1 quick check",
-         "diag_ddcmd": "DD-CMD diagnostic"}
+         "diag_ddcmd": "DD-CMD diagnostic", "lvit_b24": "LViT-T batch 24 (sensitivity check)"}
 # Rows that are not training runs: method -> Slurm script (no METHOD/DATASET/SEED export)
 SPECIAL = {"diag_ddcmd": "phase1_ddcmd_diag.slurm"}
+# Training runs: method -> Slurm script (exports DATASET, SEED; main runs also METHOD). lvit_b24 is the post-hoc
+# sensitivity check of reports/PHASE1_SENSITIVITY_LVIT_PLAN.md (output runs/lvit_b24/, outside the analysis).
+TRAINING = {"lvit": "train_phase1.slurm", "reclmis": "train_phase1.slurm", "ddcmd": "train_phase1.slurm",
+            "lvit_b24": "phase1_lvit_sensitivity_b24.slurm"}
 MAX_JOBS = 2
 
 
@@ -144,7 +148,7 @@ def pick_next(plan, log, jobs, dataset=None):
         if key(r) in submitted or (dataset and r["dataset"] != dataset) \
                 or f"{r['method']}|{r['dataset']}|{r['seed']}" in held:
             continue
-        training = r["method"] in ("lvit", "reclmis", "ddcmd")
+        training = r["method"] in TRAINING
         if training and (job_name(r) in names_in_queue or run_started(r)):
             continue                                 # never submit the same run twice
         return r, None
@@ -204,7 +208,7 @@ def main():
     else:
         cmd = ["sbatch", "--parsable", f"--job-name={job_name(r)}",
                f"--export=ALL,METHOD={r['method']},DATASET={r['dataset']},SEED={r['seed']}",
-               os.path.join(REPO, "slurm", "train_phase1.slurm")]
+               os.path.join(REPO, "slurm", TRAINING[r["method"]])]
     lab = label(r, segment)
     if dry:
         print("DRY RUN - would submit:", lab, f"(time limit {time_limit(cmd[-1])})", "\n  ", " ".join(cmd), "\n")

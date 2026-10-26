@@ -23,3 +23,6 @@ order	method	dataset	seed	tag	est_hours
 22	lvit	QaTa-COV19	1003	-	17
 23	reclmis	QaTa-COV19	1003	-	19
 24	ddcmd	QaTa-COV19	1003	-	10
+25	lvit_b24	MosMedData+	1001	sensitivity	4
+26	lvit_b24	MosMedData+	1002	sensitivity	4
+27	lvit_b24	MosMedData+	1003	sensitivity	4
