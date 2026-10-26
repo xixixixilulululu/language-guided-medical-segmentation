@@ -1,0 +1,23 @@
+{
+  "best_epoch": 129,
+  "best_val_dice": 0.8308785218279807,
+  "last_epoch": 151,
+  "ended": "non_finite_loss",
+  "non_finite": {
+    "epoch": 152,
+    "step": 136,
+    "terms": [
+      "loss_ccl"
+    ],
+    "values": {
+      "loss_ccl": NaN,
+      "loss_text_rec": 0.0010925988899543881,
+      "loss_img_rec": 0.001003934652544558,
+      "loss_criterion": 0.07093282043933868
+    }
+  },
+  "non_finite_steps": 1,
+  "steps": 27164,
+  "rec_loss_zero_steps": 0,
+  "max_memory_gb": 13.677108736
+}

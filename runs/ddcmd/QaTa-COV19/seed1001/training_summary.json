@@ -1,0 +1,12 @@
+{
+  "best_epoch": 128,
+  "best_val_dice": 0.8311980366706848,
+  "last_epoch": 160,
+  "ended": "max_epochs",
+  "monitors": {
+    "EarlyStopping": "val_case_dice",
+    "ModelCheckpoint": "val_case_dice"
+  },
+  "best_model_path": "checkpoints/best.ckpt",
+  "max_memory_gb": 3.370726912
+}

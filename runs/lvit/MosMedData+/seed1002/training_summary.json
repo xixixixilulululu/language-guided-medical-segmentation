@@ -1,0 +1,7 @@
+{
+  "best_epoch": 54,
+  "best_val_dice": 0.6617106944367124,
+  "last_epoch": 105,
+  "ended": "early_stopping",
+  "max_memory_gb": 4.824178688
+}

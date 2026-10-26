@@ -1,0 +1,11 @@
+{
+  "best_epoch": 31,
+  "best_val_dice": 0.70794249916221,
+  "last_epoch": 62,
+  "ended": "early_stopping",
+  "non_finite": null,
+  "steps": 6820,
+  "rec_loss_zero_steps": 0,
+  "non_finite_steps": 0,
+  "max_memory_gb": 8.707060736
+}
