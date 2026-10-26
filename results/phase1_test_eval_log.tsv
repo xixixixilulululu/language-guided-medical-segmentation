@@ -35,3 +35,5 @@ start	2026-10-24 23:41:21	362	reclmis	MosMedData+	1003	ba53ba5c01d645fbf1b511b6d
 end	2026-10-24 23:41:26	362	reclmis	MosMedData+	1003	ba53ba5c01d645fbf1b511b6df2f1b9c74a26309	4166258765d9addcf11c911446e3d1ba49d2eb60	ok
 start	2026-10-25 05:09:43	363	lvit	MosMedData+	1003	ba53ba5c01d645fbf1b511b6df2f1b9c74a26309	6ba767157e03b221d90b0d824fe7298e4be7dfb3	ok
 end	2026-10-25 05:09:47	363	lvit	MosMedData+	1003	ba53ba5c01d645fbf1b511b6df2f1b9c74a26309	6ba767157e03b221d90b0d824fe7298e4be7dfb3	ok
+start	2026-10-26 16:26:21	365	lvit	MosMedData+	1001	ba53ba5c01d645fbf1b511b6df2f1b9c74a26309	52ad71b475d664f8fe8831a1aa3560050730db43	failed: fatal: unable to access 'https://github.com/xixixixilulululu/language-guided-medical-segmentation.git/': Could not resol
+end	2026-10-26 16:27:00	365	lvit	MosMedData+	1001	ba53ba5c01d645fbf1b511b6df2f1b9c74a26309	52ad71b475d664f8fe8831a1aa3560050730db43	failed: fatal: unable to access 'https://github.com/xixixixilulululu/language-guided-medical-segmentation.git/': Could not resol
