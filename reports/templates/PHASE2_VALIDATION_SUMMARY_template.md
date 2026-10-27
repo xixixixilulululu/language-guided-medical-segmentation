@@ -29,17 +29,28 @@
 3. **QaTa-COV19: a three-attribute mismatch gives lower Dice than an empty text.** C1−C6 is {{N:q_C1-C6}}
    points. For one- and two-attribute mismatches the sign differs: C1−C4 is {{N:q_C1-C4}} and C1−C5 is
    {{N:q_C1-C5}} points.
-4. **MosMedData+ (exploratory): the effects are small.**
-   - C0−C6 is {{N:m_C0-C6}} points.
-   - C1−C6 is negative for {{N:m_c1c6_neg}} of 3 methods, i.e. there the empty text gives lower Dice than the
-     mismatched report.
-5. **Equivalent wording (C2) changes the masks but hardly the Dice.**
+4. **MosMedData+ (all exploratory, 11 units).**
+   - The mismatched text has a small effect: C0−C6 is {{N:m_C0-C6}} points.
+   - The empty text has a large effect for RecLMIS: C0−C1 {{N:m_c0c1_RecLMIS}}.
+   - For the other two methods: DD-CMD {{N:m_c0c1_DD-CMD}}, and LViT-T {{N:m_c0c1_LViT-T}} (CI
+     {{N:m_c0c1_LViT-T_ci0}}).
+   - C1−C6 is negative for {{N:m_c1c6_neg}} of 3 methods: the empty text gives lower Dice than the mismatched
+     report.
+5. **Equivalent wording (C2) changes almost every mask.**
    - The scored masks change in {{N:c2_q_changed}}% of the QaTa images.
+   - The mean Dice change C0−C2 (unit-weighted [95% t-CI]) is {{N:c2_big_ci}} for {{N:c2_big}}
+     ({{N:c2_big_sig}}).
+   - For the other five method × dataset cells it is {{N:c2_rest}} points unit-weighted
+     ({{N:c2_rest_img}} image-weighted).
    - The mean |D(C0) − D(C2)| is {{N:c2_abs_range}} points.
-6. **The Phase 3 rule of the protocol (section 5.1, validation only) gives: {{N:outcome}}.**
-   {{N:n_repeated}} of 24 method × dataset × comparison cells have a repeated signal, all on QaTa-COV19. Whether
-   Phase 3 is started is for the supervisor and the project lead to decide.
-7. **None of these comparisons shows that the models "use" the text in a clinical sense.** They measure how
+6. **Incomplete text (C3), QaTa-COV19.**
+   - Deleting the location (C0−C3c) lowers Dice for all three methods by {{N:q_C0-C3c}} points.
+   - Deleting the scope or the count lowers LViT-T by {{N:q_lvit_c3a}} / {{N:q_lvit_c3b}} points, and RecLMIS
+     and DD-CMD by {{N:q_rd_c3ab}}.
+7. **The Phase 3 rule of the protocol (section 5.1, validation only) gives: {{N:outcome}}.**
+   {{N:n_repeated}} of 24 method × dataset × comparison cells have a repeated signal: {{N:repeated_list}}.
+   Whether Phase 3 is started is for the supervisor and the project lead to decide.
+8. **None of these comparisons shows that the models "use" the text in a clinical sense.** They measure how
    the frozen models' Dice responds to the benchmark texts given to them.
 
 ## 2. Setup
@@ -158,8 +169,14 @@ harms C0 − Cx (image-weighted / unit-weighted [95% t-CI]). Descriptive, no tes
 
 - **The attribute distance is not a validated severity scale.** On QaTa the mean Dice under C5 is higher than
   under C4 for {{N:q_c5_gt_c4}} of 3 methods.
-- **QaTa C4 donors.** {{N:q_c4_location_pairs}} C4 donor pairs differ only in location (protocol 4.5); their
-  mean harm is {{N:q_c4_location_harm}} points.
+- **Which attributes differ, QaTa.**
+  - C4 is almost entirely location-only: {{N:q_c4_location_pairs}} donor pairs, harm {{N:q_c4_location_harm}}
+    points.
+  - C5 is mostly count + location: {{N:q_c5_cl_pairs}} pairs, harm {{N:q_c5_cl_harm}} points.
+  - So the higher mean Dice under C5 than under C4 goes with *which* attributes differ, not only with *how
+    many*.
+- **What `changed_attributes` records.** Only whether an attribute differs, not how far apart two locations
+  are (for example, whether they share a lung zone). This is a description, not an inference.
 
 **By changed attributes.** On S, per (target, donor) pair, seed-averaged. The mean harm averages the donors of
 a target within its group first. Descriptive:
@@ -199,7 +216,23 @@ validation results, which were known by then):
 
 ![QaTa-COV19 cases](figures/phase2_val_cases_QaTa-COV19.png)
 
+QaTa-COV19 (seed 1001, donor d1; what the figure shows):
+- **q30 (`{{N:q30_id}}`).**
+  - The original text names "{{N:q30_text}}", but the ground truth lies in the lower lung fields.
+  - In this row RecLMIS and DD-CMD reach a higher Dice under C6 than under C0: RecLMIS {{N:q30_recl_c6}} vs.
+    {{N:q30_recl_c0}}; DD-CMD {{N:q30_dd_c6}} vs. {{N:q30_dd_c0}}.
+  - The d1 donor text is "{{N:q30_donor_text}}".
+- **q90 (`{{N:q90_id}}`).**
+  - LViT-T predicts an empty mask under C1 (Dice {{N:q90_lvit_c1}}; C0 {{N:q90_lvit_c0}}).
+  - Under C6 (donor: "{{N:q90_donor_text}}") it predicts an additional region on the other side of the image
+    (Dice {{N:q90_lvit_c6}}).
+
 ![MosMedData+ cases](figures/phase2_val_cases_MosMedDataplus.png)
+
+MosMedData+:
+- {{N:m_case_vol_n}} of the selected cases come from the same CT volume (`{{N:m_case_vol}}`).
+- The harm of the five rows ranges from {{N:m_case_harm}} points, so this figure reflects only a few volumes
+  (exploratory).
 
 ## 9. Phase 3 rule (protocol section 5.1)
 
@@ -241,11 +274,12 @@ threshold.
   identical. Tolerance rule P2-2 was fixed for the later test reconciliation.
 - **C0 is reused.** The benchmark reuses the C0 pass of the text-path jobs. For DD-CMD this mixes processes;
   the measured bound is ≤ 4 pixels per case and ≤ 0.00002 mean Dice. Every pass is logged with its job id.
-- **RecLMIS truncation of C0.** In 101 of 1429 QaTa validation texts, CLIP's 18-token context cuts report
-  words (81 the final "lung", 20 parts of the right-lung location), in every condition.
-- **LViT-T uses only the first 10 word vectors.** The location clause is never fully inside them. A
-  location-only C4 change leaves the 10 window words unchanged in {{N:lvit_c4_window_same_q}} QaTa rows and
-  {{N:lvit_c4_window_same_m}} MosMed rows. Their vectors still differ, through BERT's context.
+- **RecLMIS truncation of C0.** RecLMIS uses a CLIP context of 18 tokens including start and end (16 text
+  tokens). In 101 of 1429 QaTa validation texts it cuts report words (81 the final "lung", 20 parts of the
+  right-lung location), under C0 and the conditions that keep the original location (C2, C3a, C3b).
+- **LViT-T uses only the first 10 word vectors.** The location clause is never fully inside them. In
+  {{N:lvit_c4_window_same_q}} QaTa C4 rows ({{N:lvit_c4_window_same_m}} MosMed), the ten window words are
+  unchanged; the vectors still differ through BERT's context.
 - **C1 looks like a "no infection" report for LViT-T and RecLMIS.** The official padding turns `""` into
   `EOF XXX` × 9. In MosMed training this padding occurs only with "No pulmonary infection, zero infected
   areas.".
@@ -279,8 +313,11 @@ threshold.
 ## 12. Observations relevant to Phase 3 (facts only) and the order of the next steps
 
 **Observations:**
-- **The rule's repeated signals are all on QaTa-COV19:** {{N:repeated_list}}. MosMedData+ has none
-  (exploratory, 11 units).
+- **The rule's repeated signals:** {{N:repeated_list}}. MosMedData+ has none (exploratory, 11 units).
+- **QaTa, incomplete text.**
+  - Deleting the location (C0−C3c) lowers Dice by {{N:q_C0-C3c}} points for all three methods.
+  - Deleting the scope or the count lowers LViT-T by {{N:q_lvit_c3a}} / {{N:q_lvit_c3b}} points, and RecLMIS
+    and DD-CMD by {{N:q_rd_c3ab}}.
 - **QaTa, three-attribute mismatch.** C0−C6 is {{N:q_C0-C6}} points (unit-weighted) and C1−C6 is
   {{N:q_C1-C6}} points.
 - **QaTa, one- and two-attribute mismatches versus the empty text.** C1−C4 is {{N:q_C1-C4}} and C1−C5 is

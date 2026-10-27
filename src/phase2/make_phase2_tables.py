@@ -107,6 +107,25 @@ def tables(D):
     N["q_sig"] = str(int(pw[(pw.dataset == "QaTa-COV19")]["significant_holm_0.05"].sum()))
     N["m_sig"] = str(int(pw[(pw.dataset == "MosMedData+")]["significant_holm_0.05"].sum()))
     N["m_c1c6_neg"] = str(int((mo.xs("C1-C6", level="comparison").unit_weighted_delta < 0).sum()))
+    ci = lambda r: f"{pts(r.unit_weighted_delta)} [{pts(r.ci95_low)}, {pts(r.ci95_high)}]"  # noqa: E731
+    for m in METHODS:
+        r = mo.loc[(m, "C0-C1")]
+        N[f"m_c0c1_{m}"] = ci(r)
+        N[f"m_c0c1_{m}_ci0"] = "includes 0" if r.ci95_low <= 0 <= r.ci95_high else "excludes 0"
+    c2r = pw[pw.comparison == "C0-C2"].set_index(["dataset", "method"])
+    big = c2r.unit_weighted_delta.abs().idxmax()
+    N["c2_big"] = f"{big[1]} on {big[0]}"
+    N["c2_big_ci"] = ci(c2r.loc[big])
+    N["c2_big_holm"] = pval(c2r.loc[big].p_holm)
+    N["c2_big_sig"] = "Holm p < 0.05" if c2r.loc[big]["significant_holm_0.05"] else "not significant after Holm"
+    rest = c2r.drop(index=[big]).unit_weighted_delta
+    N["c2_rest"] = f"{pts(rest.min())} to {pts(rest.max())}"
+    rest_img = c2r.drop(index=[big]).image_weighted_delta
+    N["c2_rest_img"] = f"{pts(rest_img.min())} to {pts(rest_img.max())}"
+    N["q_lvit_c3a"] = pts(q.loc[("LViT-T", "C0-C3a")].unit_weighted_delta)
+    N["q_lvit_c3b"] = pts(q.loc[("LViT-T", "C0-C3b")].unit_weighted_delta)
+    ab = q.loc[[(m, c) for m in ("RecLMIS", "DD-CMD") for c in ("C0-C3a", "C0-C3b")]].unit_weighted_delta
+    N["q_rd_c3ab"] = f"{pts(ab.min())} to {pts(ab.max())}"
     # C2
     c2 = D["c2"]
     rows = []
@@ -159,6 +178,10 @@ def tables(D):
     loc = qa[qa.changed_attributes == "location"]
     N["q_c4_location_pairs"] = f"{int(loc.n_donor_pairs.iloc[0])} of {int(qa.groupby('method').n_donor_pairs.sum().iloc[0])}"
     N["q_c4_location_harm"] = f"{pts(loc.mean_harm.min())} to {pts(loc.mean_harm.max())}"
+    q5 = D["att"][(D["att"].dataset == "QaTa-COV19") & (D["att"].condition == "C5")]
+    cl = q5[q5.changed_attributes == "count+location"]
+    N["q_c5_cl_pairs"] = f"{int(cl.n_donor_pairs.iloc[0])} of {int(q5.groupby('method').n_donor_pairs.sum().iloc[0])}"
+    N["q_c5_cl_harm"] = f"{pts(cl.mean_harm.min())} to {pts(cl.mean_harm.max())}"
     # susceptibility (Task 2.7)
     sus = D["sus"]
     m_ = sus[sus.kind == "method"]
@@ -192,14 +215,24 @@ def tables(D):
     N["n_unstable"] = str(int((cls.classification == "unstable signal").sum()))
     N["n_none"] = str(int((cls.classification == "no signal").sum()))
     rep = cls[cls.classification == "repeated signal"]
-    N["repeated_list"] = "; ".join(f"{r.dataset} {r.method} {r.comparison}" for r in rep.itertuples())
-    md_ = rep.groupby(["dataset", "method"]).size()
-    N["outcome"] = ("basis for Phase 3 (repeated signal in: " + ", ".join(f"{d} {m}" for d, m in md_.index) + ")"
-                    if len(md_) else "no-go")
+    def compact(rp):
+        """'C0-C5, C0-C6 and C1-C6 for each of the three methods, all on QaTa-COV19' when the pattern allows."""
+        if rp.empty:
+            return "none"
+        if rp.dataset.nunique() == 1:
+            per = rp.groupby("method").comparison.apply(lambda c: tuple(sorted(c)))
+            if len(per) == len(METHODS) and per.nunique() == 1:
+                cs = [c.replace("-", "−") for c in per.iloc[0]]
+                return f"{', '.join(cs[:-1])} and {cs[-1]} for each of the three methods, all on {rp.dataset.iloc[0]}"
+        return "; ".join(f"{r.dataset} {r.method} {r.comparison}" for r in rp.itertuples())
+    N["repeated_list"] = compact(rep)
+    N["outcome"] = "basis for Phase 3" if len(rep) else "no-go"
     # per-donor check
     dn = D["donor"]
     thr = {"C0-C5": 0.02, "C0-C6": 0.02, "C1-C5": 0.01, "C1-C6": 0.01}
     rows = []
+    dn = dn.assign(_d=dn.dataset.map(DATASETS.index), _m=dn.method.map(METHODS.index)).sort_values(
+        ["_d", "_m", "comparison", "seed", "variant_id"])
     for (ds, m, c), g in dn.groupby(["dataset", "method", "comparison"], sort=False):
         k = cls[(cls.dataset == ds) & (cls.method == m) & (cls.comparison == c)].classification.iloc[0]
         rows.append([ds, m, c, k, f"{pts(g.delta_img.min())} to {pts(g.delta_img.max())}",
@@ -246,6 +279,23 @@ def tables(D):
     T["cases"] = md(pd.DataFrame([[ds, f"q{int(p['quantile'] * 100)}", f"`{p['sample_id']}`", pts(p["harm"])]
                                   for ds in DATASETS for p in sel[ds]],
                                  columns=["Dataset", "Position", "Sample id", "Harm C0−C6 (points, mean of 3 methods × 3 seeds × donors)"]))
+    pc = pd.read_csv(R("phase2_val_per_case.csv.gz"), dtype={"variant_id": str})
+    man = pd.read_csv(R("phase2_donor_manifest_val.csv"), dtype=str)
+    s1 = pc[pc.seed == 1001]
+    def dice(sid, m, c, v="0"):
+        return pts(s1[(s1.sample_id == sid) & (s1.method == m) & (s1.condition == c) & (s1.variant_id == v)].dice.iloc[0], False)
+    pick = {p["quantile"]: p for p in sel["QaTa-COV19"]}
+    q30, q90 = pick[0.3]["sample_id"], pick[0.9]["sample_id"]
+    N["q30_id"], N["q90_id"] = q30, q90
+    for m, tag in (("reclmis", "recl"), ("ddcmd", "dd"), ("lvit", "lvit")):
+        for sid, k in ((q30, "q30"), (q90, "q90")):
+            N[f"{k}_{tag}_c0"], N[f"{k}_{tag}_c1"], N[f"{k}_{tag}_c6"] = (dice(sid, m, "C0"), dice(sid, m, "C1"),
+                                                                       dice(sid, m, "C6", "d1"))
+    mpicks = sel["MosMedData+"]
+    vols = pd.Series([re.sub(r"_\d+$", "", p["sample_id"]) for p in mpicks]).value_counts()
+    N["m_case_vol"], N["m_case_vol_n"] = vols.index[0], f"{int(vols.iloc[0])} of {len(mpicks)}"
+    N["m_case_harm"] = f"{pts(min(p['harm'] for p in mpicks))} to {pts(max(p['harm'] for p in mpicks))}"
+    N["case_texts"] = ""
     # checkpoints C0 (validation) per method, for section 2
     c0 = main[main.condition == "C0"]
     N["c0_q"] = ", ".join(f"{r.method} {pts(r.dice_mean, False)}" for r in c0[c0.dataset == "QaTa-COV19"].itertuples())
@@ -271,10 +321,22 @@ def example_texts():
     return ex
 
 
+def case_texts(N):
+    """Validation texts of the QaTa q30 / q90 cases and their d1 donors (shown under the case figure)."""
+    from phase2 import texts as T_
+    man = pd.read_csv(R("phase2_donor_manifest_val.csv"), dtype=str)
+    tx = T_.read_texts("QaTa-COV19", "val")
+    for k in ("q30", "q90"):
+        sid = N[f"{k}_id"]
+        d1 = man[(man.target_id == sid) & (man.condition == "C6") & (man.variant == "d1")].donor_id.iloc[0]
+        N[f"{k}_text"], N[f"{k}_donor_text"] = tx[sid], tx[d1]
+
+
 def main():
     D = load()
     T, N = tables(D)
     N.update(example_texts())
+    case_texts(N)
     text = open(TEMPLATE).read()
     for key in re.findall(r"\{\{T:(\w[\w+\-]*)\}\}", text):
         text = text.replace(f"{{{{T:{key}}}}}", T[key])

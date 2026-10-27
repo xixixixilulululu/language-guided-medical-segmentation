@@ -367,9 +367,9 @@ def fig_units(ue, path):
         _style(ax, "y")
         ax.set_ylabel("Δ Dice per unit (points)", color=INK2, fontsize=9)
         n = ue[ue.dataset == ds].groupby("comparison").unit.nunique()
-        ax.set_title(f"{ds}  ({n.get('C0-C1', 0)} units" + (", all 11 shown, exploratory)" if ds == "MosMedData+"
-                                                             else "; box: quartiles, whiskers 1.5 IQR)"),
-                     fontsize=10, color=INK)
+        units = f"C0−C1: {n.get('C0-C1', 0)} units, C0−C6: {n.get('C0-C6', 0)} units"
+        ax.set_title(f"{ds}\n({units}" + ("; all shown, exploratory)" if ds == "MosMedData+"
+                                          else "; box: quartiles, whiskers 1.5 IQR)"), fontsize=10, color=INK)
     fig.suptitle("Per-unit effects: C0−C1 (all images) and C0−C6 (C6-eligible images)", x=0.01, ha="left",
                  fontsize=11, color=INK)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
