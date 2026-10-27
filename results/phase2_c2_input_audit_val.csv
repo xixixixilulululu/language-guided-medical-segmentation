@@ -1,0 +1,7 @@
+dataset,method,c2_rows,c2_word_check_failures,c2_rows_with_one_substitution,c2_cuts_more_report_words_than_c0,c2_cuts_fewer_report_words_than_c0,lvit_window_differs_only_at_substituted_words,lvit_window_other,c0_truncated_any,c0_truncated_report_content,c0_truncated_padding_only
+QaTa-COV19,lvit,1429,0,0,0,0,1429.0,0.0,,,
+QaTa-COV19,reclmis,1429,0,0,0,0,,,272.0,272.0,0.0
+QaTa-COV19,ddcmd,1429,0,0,0,0,,,,,
+MosMedData+,lvit,273,0,0,0,0,273.0,0.0,,,
+MosMedData+,reclmis,273,0,0,0,0,,,4.0,0.0,4.0
+MosMedData+,ddcmd,273,0,0,0,0,,,,,

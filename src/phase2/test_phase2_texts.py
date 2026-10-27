@@ -4,7 +4,7 @@ on the validation split. No GPU, no test data.
   parser      typical texts, typo table, spacing and elision, D4 (all = upper middle lower), D6 flag,
               D7 ("No" text -> location "none"), ambiguous wording -> that attribute unknown (never zero)
   groups      QaTa sub-S subject / covid_* own unit (D1); MosMed volume prefix / bjorke pooled (D2)
-  C2          rewrite keeps every parsed value (re-parsing the template wording gives the same values)
+  C2          (P2-1) the original with only 'pulmonary' -> 'lung' and 'infected area(s)' -> 'infected region(s)'
   C3          each deletion removes exactly its clause; C3a and C3c unavailable for "No" texts (D10)
   C4-C6       on the validation split: distances and changed attributes are correct, donors are never the
               target or its group, at most 3 distinct donor texts, the manifest is identical when built twice
@@ -91,12 +91,21 @@ def main():
     check("group MosMed volume", T.groups("MosMedData+", "Jun_coronacases_case8_171")[1] == "Jun_coronacases_case8")
     check("group MosMed bjorke pooled", T.groups("MosMedData+", "bjorke_91")[4] == "bjorke_pooled")
 
-    # --- C2 round trip ---
-    for text, want in cases:
-        if None in want:
-            continue
-        t2 = C.c2_text(*want)
-        check(f"C2 keeps all values: {t2[:70]!r}", parse_template(t2) == want, f"got {parse_template(t2)}")
+    # --- C2 (P2-1): the original with exactly the two word substitutions ---
+    for text, _ in cases:
+        t2, n, kinds = C.c2_substitute(text)
+        ok, diff = C.c2_only_substitutions(text, t2)
+        check(f"C2 changes only the two words: {t2[:70]!r}", ok and kinds == 2, f"{diff}")
+    check("word check rejects any other change", not C.c2_only_substitutions(
+        "Bilateral pulmonary infection, two infected areas.", "Bilateral lung infection, three infected regions.")[0])
+    check("C2 keeps zones and typos", C.c2_substitute(
+        "Bilateral pulmonary infection, two infected areas, upper middle lower left lung and lowerl right lung.")[0]
+        == "Bilateral lung infection, two infected regions, upper middle lower left lung and lowerl right lung.")
+    check("C2 keeps case and number", C.c2_substitute("Pulmonary infection, one infected Area.")[0]
+          == "Lung infection, one infected Region.")
+    check("C2 unavailable without both words", C.c2_substitute("Bilateral infection, two areas.")[2] == 0)
+    check("superseded D9 template still reproducible", parse_template(C.c2_text_template_v1("Bilateral", 2,
+          "left:lower;right:all")) == ("Bilateral", 2, "left:lower;right:all"))
 
     # --- C3 deletions ---
     a = {"scope": "Bilateral", "count": 2, "location": "left:lower;right:lower"}

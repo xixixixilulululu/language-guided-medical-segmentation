@@ -224,6 +224,22 @@ def write_atomic_csv(df, path):
     os.replace(tmp, path)
 
 
+PASS_LOG_COLUMNS = ["slurm_job_id", "time", "stage", "condition", "variant_id", "n_cases", "note"]
+
+
+def log_pass(out_dir, stage, cond, variant, n, note=""):
+    """One line per finished condition pass in <out>/passes.tsv, with the Slurm job id (the C0 pass of the
+    text-path job is reused by the benchmark, so paired differences can mix passes of different jobs)."""
+    path = os.path.join(out_dir, "passes.tsv")
+    new = not os.path.exists(path)
+    with open(path, "a") as f:
+        w = csv.writer(f, delimiter="\t")
+        if new:
+            w.writerow(PASS_LOG_COLUMNS)
+        w.writerow([os.environ.get("SLURM_JOB_ID", "none"), time.strftime("%Y-%m-%d %H:%M:%S"), stage, cond,
+                    variant, n, note])
+
+
 def save_pass(out_dir, cond, variant, meta, ids, probs, metrics_df, donors, keep_probs):
     """Per-case CSV last (it marks the pass as finished for resuming)."""
     np.savez_compressed(os.path.join(out_dir, f"masks_{cond}_{variant}.npz"),
@@ -348,6 +364,7 @@ def run(args):
             m = score(ids, probs, masks_by_id)
             save_pass(out, cond, variant, meta, ids, probs, m, donors,
                       args.split == "val" and cond in PROB_CONDITIONS)
+            log_pass(out, args.stage, cond, variant, len(ids))
             if args.split == "test":
                 lock.log_test_run("end", info, "infer.py", args.dataset, args.method, seed, f"{cond}/{variant}")
             print(f"seed {seed} {cond} {variant}: {len(ids)} cases, mean Dice {m.dice.mean():.4f}, "

@@ -140,14 +140,14 @@ Unknown attributes over train + val: QaTa count 5 images, location 25 images; Mo
 ## 4. Text conditions (Task 2.2)
 
 `src/phase2/conditions.py` → `results/phase2_text_conditions.csv` (val) and
-`results/phase2_text_conditions_donor_counts.csv`. Tests: `src/phase2/test_phase2_texts.py`, 41 checks
-passed.
+`results/phase2_text_conditions_donor_counts.csv`. Tests: `src/phase2/test_phase2_texts.py`, 49 checks
+passed (after P2-1).
 
 | Condition | Rule |
 |---|---|
 | C0 | original text |
 | C1 | `""` (D8), processed by each method's normal pathway (section 4.1) |
-| C2 | fixed template from the parsed values (D9): `<Scope> lung infection, <n> area(s) of infection, in <the z part of / all of / the> <side> lung [and …].`; unavailable if any attribute is unknown |
+| C2 | **(P2-1, 2026-10-27)** the original text with exactly two word substitutions, `pulmonary` → `lung` and `infected area(s)` → `infected region(s)` (case and number kept); everything else unchanged, including zones (`upper middle lower` is not turned into `all`), typos and grammar. Unavailable if neither substitution applies; rows with only one are available and counted (validation: 0). *Superseded: the D9 template from parsed values, section 4.3.* |
 | C3a | delete the scope word: `Bilateral pulmonary infection` → `Pulmonary infection`; unavailable for "No" texts (D10) |
 | C3b | delete the whole count clause `, <n> infected area(s)` |
 | C3c | delete the whole location clause; unavailable for "No" texts (no location) |
@@ -163,7 +163,7 @@ passed.
 
 | | C0 | C1 | C2 | C3a | C3b | C3c | C4 | C5 | C6 | C4∩C5∩C6 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| QaTa-COV19 (1429) | 1429 | 1429 | 1423 | 1429 | 1427 | 1425 | 1423 | 1423 | 1423 | 1423 |
+| QaTa-COV19 (1429) | 1429 | 1429 | 1429 | 1429 | 1427 | 1425 | 1423 | 1423 | 1423 | 1423 |
 | MosMedData+ (273) | 273 | 273 | 273 | 269 | 273 | 269 | 269 | 269 | 273 | 269 |
 
 **Donors** (validation):
@@ -199,9 +199,11 @@ No model-specific fallback was needed: the empty string is a valid input for all
 
 | Rule | Original | Condition text |
 |---|---|---|
-| C2 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. |
-| C2, D6 text | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one area of infection, in the left lung and the lower part of the right lung. |
-| C2, typo | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle and lower part of the right lung. |
+| C2 (P2-1) | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two infected regions, lower left lung and all right lung. |
+| C2 (P2-1), typo kept | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two infected regions, lower left lung and midddle lower right lung. |
+| *superseded D9 template:* C2 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. |
+| *superseded D9 template:* C2, D6 text | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one area of infection, in the left lung and the lower part of the right lung. |
+| *superseded D9 template:* C2, typo | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle and lower part of the right lung. |
 | C3a | Bilateral pulmonary infection, two infected areas,all left and all right lung. | Pulmonary infection, two infected areas,all left and all right lung. (cue: both sides named) |
 | C3b | Unilateral pulmonary infection, two infected areas, lower left lung. | Unilateral pulmonary infection, lower left lung. |
 | C3c | Bilateral pulmonary infection, two infected areas, middle left lung and lower right lung. | Bilateral pulmonary infection, two infected areas. (cue: Bilateral implies both lungs) |
@@ -211,7 +213,75 @@ No model-specific fallback was needed: the empty string is a valid input for all
 | C5 (scope + location, MosMed) | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Unilateral pulmonary infection, two infected areas, upper left lung. |
 | C6 | Bilateral pulmonary infection, three infected areas, all left lung and upper middle lower right lung. | Unilateral pulmonary infection, one infected area, middle left lung. |
 
-### 4.3 C2 review: 20 train + 20 validation texts (D9 addition)
+### 4.3 C2 review: 20 train + 20 validation texts
+
+#### 4.3.1 Current C2 (P2-1, two word substitutions)
+
+- **Why the C2 rule was changed** (decision P2-1 of the project lead, 2026-10-27):
+  1. C0 and C2 now differ only in these two words, so every piece of information in the original, including
+     content the parser does not cover, is kept as written. This meets the plan's requirement that C2
+     "preserves all substantive information".
+  2. It avoids the extra differences of the D9 template: the rewrite of `upper middle lower` as `all`, the
+     correction of typos and grammar, and the longer wording.
+  3. The decision rests only on the effective-input audit (truncation and the LViT-T window, section 4.5).
+     No segmentation result of C2 had been computed when it was made. The only segmentation numbers seen so far
+     in Phase 2 are C0 and the validation subset of 64 cases under C1 and C6 (section 4.5).
+- **Sample.** Same rule as before: `python src/phase2/conditions.py --c2-review`, distinct fully parsed texts
+  per split, both datasets pooled, sorted by dataset and text, 20 per split with `numpy.random.default_rng(0)`.
+  The 40 originals are the same as in the superseded review.
+- **Who checks what.**
+  - The AI assistant (Claude) checked automatically that each C2 equals its C0 except for the two
+    substitutions: 40 of 40 pass (column "Automatic word check").
+  - The project lead checks every row for identical meaning (last column, to be filled in).
+
+| # | Split | Dataset | Original (C0) | C2 (two word substitutions) | Automatic word check (AI assistant) | Same meaning? (project lead) |
+|---:|---|---|---|---|---|---|
+| 1 | train | MosMedData+ | Bilateral pulmonary infection, eight infected areas, middle left lung and middle right lung. | Bilateral lung infection, eight infected regions, middle left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 2 | train | MosMedData+ | Bilateral pulmonary infection, five infected areas, middle left lung and middle right lung. | Bilateral lung infection, five infected regions, middle left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 3 | train | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and middle right lung. | Bilateral lung infection, four infected regions, middle left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 4 | train | MosMedData+ | Bilateral pulmonary infection, three infected areas, lower left lung and upper right lung. | Bilateral lung infection, three infected regions, lower left lung and upper right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 5 | train | MosMedData+ | Unilateral pulmonary infection, two infected areas, left lung and upper right lung. | Unilateral lung infection, two infected regions, left lung and upper right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 6 | train | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, upper left lung and upper middle lower right lung. | Bilateral lung infection, four infected regions, upper left lung and upper middle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 7 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, three infected regions, upper middle lower left lung and upper middle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 8 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middlr lower left lung and lower right lung. | Bilateral lung infection, three infected regions, upper middlr lower left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 9 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and middle right lung. | Bilateral lung infection, two infected regions, all left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 10 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two infected regions, all left lung and upper right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 11 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and middle right lung. | Bilateral lung infection, two infected regions, lower left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 12 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper middle lower right lung. | Bilateral lung infection, two infected regions, lower left lung and upper middle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 13 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Bilateral lung infection, two infected regions, middle left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 14 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and upper middle lower right lung. | Bilateral lung infection, two infected regions, middle left lung and upper middle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 15 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung andupper right lung. | Bilateral lung infection, two infected regions, upper left lung andupper right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 16 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, two infected regions, upper middle lower left lung and upper middle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 17 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,all left lung and lower right lung. | Bilateral lung infection, two infected regions,all left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 18 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, middle  left lung. | Unilateral lung infection, one infected region, middle  left lung. | pass (pulmonary → lung, area → region) | [to be checked] |
+| 19 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower right lung. | Unilateral lung infection, one infected region, upper middle lower right lung. | pass (pulmonary → lung, area → region) | [to be checked] |
+| 20 | train | QaTa-COV19 | Unilateral pulmonary infection, two infected area, lower left lung. | Unilateral lung infection, two infected region, lower left lung. | pass (pulmonary → lung, area → region) | [to be checked] |
+| 21 | val | MosMedData+ | Bilateral pulmonary infection, five infected areas, upper left lung and middle right lung. | Bilateral lung infection, five infected regions, upper left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 22 | val | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and lower right lung. | Bilateral lung infection, four infected regions, middle left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 23 | val | MosMedData+ | Bilateral pulmonary infection, nine infected areas, middle left lung and middle right lung. | Bilateral lung infection, nine infected regions, middle left lung and middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 24 | val | MosMedData+ | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one infected regions, left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 25 | val | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, middle lower left lung and lower right lung. | Bilateral lung infection, four infected regions, middle lower left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 26 | val | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, lower left lung and lower right lung. | Bilateral lung infection, three infected regions, lower left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 27 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,  upper lower right lung. | Bilateral lung infection, two infected regions,  upper lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 28 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and lower right lung. | Bilateral lung infection, two infected regions, all left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 29 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two infected regions, all left lung and upper right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 30 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two infected regions, lower left lung and all right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 31 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two infected regions, lower left lung and midddle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 32 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper lower right lung. | Bilateral lung infection, two infected regions, lower left lung and upper lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 33 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and lower right lung. | Bilateral lung infection, two infected regions, middle left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 34 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle lower left and middle lower right lung. | Bilateral lung infection, two infected regions, middle lower left and middle lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 35 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung and upper middle right lung. | Bilateral lung infection, two infected regions, upper left lung and upper middle right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 36 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and lower right lung. | Bilateral lung infection, two infected regions, upper middle left lung and lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 37 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and upper lower right lung. | Bilateral lung infection, two infected regions, upper middle left lung and upper lower right lung. | pass (pulmonary → lung, areas → regions) | [to be checked] |
+| 38 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, all left and all right lung. | Unilateral lung infection, one infected region, all left and all right lung. | pass (pulmonary → lung, area → region) | [to be checked] |
+| 39 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle left lung. | Unilateral lung infection, one infected region, upper middle left lung. | pass (pulmonary → lung, area → region) | [to be checked] |
+| 40 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower left lung. | Unilateral lung infection, one infected region, upper middle lower left lung. | pass (pulmonary → lung, area → region) | [to be checked] |
+
+#### 4.3.2 SUPERSEDED: D9 template review (kept for the record)
+
+The D9 template below was replaced by P2-1 on 2026-10-27, before any C2 segmentation was run; this table is not
+used.
+
 
 - **Sample.** `python src/phase2/conditions.py --c2-review`: distinct fully parsed texts of each split (both
   datasets pooled, sorted by dataset and text), 20 per split drawn with `numpy.random.default_rng(0)`.
@@ -338,31 +408,81 @@ Defined before the job is run.
   - C4 leaves the 10 window words unchanged in 544 of 4268 QaTa rows (12.7%) and 69 of 791 MosMed rows
     (8.7%). All of these are location-only mismatches. Their word vectors still differ, through BERT's
     context.
-- **C2 is truncated where C0 is not** (current template):
+- **C2 is truncated where C0 is not** (superseded D9 template; resolved by P2-1, see below):
   - RecLMIS: 1155 of 1423 QaTa cases and 269 of 273 MosMed cases;
   - DD-CMD: 670 of 1423 QaTa cases and 112 of 273 MosMed cases.
 
-  The cut removes the end of the location. With the current template, C2 is therefore **not information-
-  preserving at the model input** for most RecLMIS cases and about half of the DD-CMD cases. This is open
-  decision P2-1 below.
+  The cut removed the end of the location: with the D9 template, C2 was **not information-preserving at the
+  model input** for most RecLMIS cases and about half of the DD-CMD cases. This led to decision P2-1.
+- The rows for C2 in `results/phase2_effective_input_val_summary.csv` belong to the superseded D9 template. The
+  current C2 is audited in `results/phase2_c2_input_audit_val.csv` (section 4.6).
 - The "truncated" counts for C1, C3b and C3c of LViT-T and RecLMIS mostly cut only the `EOF XXX` padding,
   not report content.
 
-**Open decisions (validation stage, before any test run):**
-- **P2-1, C2 template.** Proposed: a compact rewrite with the original structure and two word substitutions
-  ("pulmonary" → "lung", "infected areas" → "infected regions"); zones from the parsed values (D4 `all`;
-  typos not carried over).
-  - Example: "Bilateral lung infection, two infected regions, lower left lung and middle lower right lung."
-  - Tokenizer-only estimate on validation: extra truncation versus C0 for RecLMIS in 5 of 1423 QaTa cases and
-    0 MosMed; for DD-CMD in 0 cases.
-  - The LViT-T window then differs from C0 only at the substituted words in 1380 of 1423 QaTa and 273 of 273
-    MosMed cases.
-  - The C2 review (20 + 20) would be repeated for the new template.
-- **P2-2, tolerance rule for the test C0 reconciliation.** Proposed:
-  - LViT-T and RecLMIS: identical scored masks are required.
-  - DD-CMD: per case at most 10 differing mask pixels and |ΔDice| ≤ 0.01, and per checkpoint
-    |Δ mean Dice| ≤ 0.0005.
-  - Anything outside these limits is investigated before results are used.
+**Decisions taken (project lead, 2026-10-27):** P2-1 (C2, section 4.3.1) and P2-2 (tolerance, section 4.7).
+The proposals that preceded them are superseded and not repeated here.
+
+### 4.6 C2 effective-input audit after P2-1 (tokenizer only, validation)
+
+`src/phase2/audit_c2_inputs.py` → `results/phase2_c2_input_audit_val.csv`. No model was run.
+
+| | QaTa-COV19 (1429 C2 rows) | MosMedData+ (273) |
+|---|---|---|
+| Word check: C2 = C0 except the two substitutions | 1429 pass, 0 fail | 273 pass, 0 fail |
+| Rows with only one substitution | 0 | 0 |
+| LViT-T: window words differ from C0 only at the substituted words | **1429 / 1429 (100%)** | **273 / 273 (100%)** |
+| C2 cuts more report words than C0: LViT-T / RecLMIS / DD-CMD | 0 / 0 / 0 | 0 / 0 / 0 |
+| C2 cuts fewer report words than C0: LViT-T / RecLMIS / DD-CMD | 0 / 0 / 0 | 0 / 0 / 0 |
+
+"Report words kept" = the report's letter-run words whose tokens all lie inside the method's window (LViT-T 23
+BERT word pieces, RecLMIS 16 CLIP tokens, DD-CMD 22 BiomedBERT word pieces). C0 and C2 have the same words in
+the same order. With P2-1, C2 keeps exactly the same report content as C0 in every method, and for LViT-T only
+the two substituted words differ inside its window.
+
+**RecLMIS C0 truncation** (answer to the project lead's question; validation):
+- QaTa: all 272 truncated C0 texts lose report content, not only `EOF XXX` padding:
+  - 171 lose only the final full stop;
+  - **101 lose words**: 81 the final "lung", 12 "right lung", 7 "lower right lung", 1 "l right lung".
+  - In training, 397 of 5716 QaTa texts lose words in the same way.
+- MosMed: the 4 truncated C0 texts lose only padding.
+
+This is an input limitation of RecLMIS (section 6).
+
+### 4.7 Tolerance rule for the test C0 reconciliation (P2-2, fixed 2026-10-27, before any test run)
+
+- **Rules.**
+  - LViT-T and RecLMIS: the scored masks must be identical.
+  - DD-CMD:
+    - at most 10 differing mask pixels per case;
+    - no case flips between an empty and a non-empty prediction;
+    - per checkpoint, |Δ mean Dice| ≤ 0.0005.
+  - No per-case |ΔDice| limit: on a small lesion, one pixel can change Dice by 0.0048 (validation, MosMed seed
+    1002). That measures lesion size, not numerical noise. The maximum per-case |ΔDice| and |ΔHD95| are
+    reported.
+- **Validation check of the rule.** It holds on all 18 validation reconciliations (section 4.5). DD-CMD: no
+  empty / non-empty flip, at most 4 pixels, |Δ mean Dice| ≤ 0.000021.
+- **Outside the limits:**
+  1. Stop, find the cause and record it here.
+  2. A pipeline error (checkpoint, preprocessing, image–text pairing, cache): fix it, then rerun all test
+     inference of that checkpoint once. Both runs are recorded in the test log.
+  3. The same kind of GPU non-determinism, only larger: keep the results and report the exceedance. No rerun.
+  4. Never rerun repeatedly until it "passes".
+- **Paired differences.** All Phase 2 paired comparisons (C0 − Cx) use the C0 computed by Phase 2 itself. The
+  archived Phase 1 evaluation is used only for this reconciliation.
+
+### 4.8 Pass bookkeeping and process noise
+
+- **C0 reuse.** The benchmark stage reuses the C0 pass of the text-path job.
+  - LViT-T and RecLMIS: C0 comes from job 368. Their passes are bit-identical across processes (section 4.5).
+  - DD-CMD: C0 comes from job 369, and its other conditions from later jobs, i.e. different processes. Its
+    paired differences can therefore contain cross-process noise. The measured bound, from the Phase 1
+    vs. Phase 2 reconciliation, is ≤ 4 pixels per case and ≤ 0.00002 mean Dice: far below the Phase 3 planning
+    thresholds (1–2 Dice points). C0 is not rerun.
+- **Pass log.** Every condition pass is recorded with its Slurm job id in
+  `runs/phase2/<split>/<method>/<dataset>/seed<k>/passes.tsv`. The 18 validation C0 passes were backfilled
+  from the job logs (368, 369).
+- **Test stage.** All conditions of one checkpoint, C0 included, run in the same job where possible. A split
+  into several jobs because of the 12 h limit is recorded.
 
 ## 5. Analysis rules fixed so far
 
@@ -399,7 +519,11 @@ Defined before the job is run.
   written; see the sensitivity check in section 5.
 - **LViT-T 10-word window.** The location clause is never fully inside the 10 kept word vectors. It is
   partly inside (27–31% of location words); the rest acts only through BERT's context.
-- **C2 for LViT-T changes the content of the 10-word window** (recorded 2026-10-27, before any inference).
+- **C2 and the LViT-T window.** This was recorded 2026-10-27 for the superseded D9 template. **Resolved by
+  P2-1:** the window now differs from C0 only at the two substituted words (section 4.6). The original note
+  is kept below.
+- *(Superseded D9 template)* **C2 for LViT-T changes the content of the 10-word window** (recorded
+  2026-10-27, before any inference).
   The C2 template is longer than the original, so the first 10 BERT words differ in content, not only in
   wording. For example, the original window `bilateral pulmonary infection , two infected areas , middle left`
   becomes `bilateral lung infection , two areas of infection , in` (the location starts after word 10).
@@ -407,7 +531,12 @@ Defined before the job is run.
   this in mind. The effective-input audit records, for every case and condition, the actual words in the
   LViT-T window as produced by the tokenizer (not inferred) and reports separately how often C2 changes the
   window content.
-- **RecLMIS truncation.** In 18.6% of QaTa train/val texts the end of the location is cut at 18 tokens.
+- **RecLMIS truncation.** CLIP's context of 18 tokens cuts the end of some QaTa reports already under C0.
+  - Validation: 272 of 1429 texts are cut. 171 lose only the final full stop; 101 lose words (81 "lung",
+    12 "right lung", 7 "lower right lung", 1 "l right lung").
+  - Training: 397 of 5716 lose words.
+  - For these cases RecLMIS never sees the end of the location, whatever the condition. MosMed: no report
+    content is cut.
 - **Effective input.** Whether each change reaches the model is measured per case in the text-path audit,
   not assumed.
 - **Grouping.**
@@ -427,12 +556,15 @@ Defined before the job is run.
   3. D8 limitation (section 6);
   4. C2 review of 20 + 20 texts (section 4.3);
   5. MosMed unit-level inference stated as exploratory (sections 3 and 5, and the final report).
+- **P2-1** (C2 = two word substitutions on the original; section 4.3.1) and **P2-2** (tolerance rule; section
+  4.7), decided by the project lead on 2026-10-27 after the text-path check and before any C2 or test
+  inference. Plus the bookkeeping records of section 4.8.
 
 ## 8. Files
 
 - **Texts.**
   - `results/phase2_text_attributes.csv` (sha256 `5db47e6f…0e1866`).
-  - `results/phase2_text_conditions.csv` (`88979de9…c490`).
+  - `results/phase2_text_conditions.csv` (`a63500c4…c14b06`, after P2-1; before: `88979de9…c490`).
   - `results/phase2_text_conditions_donor_counts.csv` (`7040ee7e…690251`).
   - These contain the dataset's annotation texts. Like the raw data, they are kept out of git
     (`.gitignore`) and are reproduced from the code above.
