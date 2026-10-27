@@ -196,9 +196,21 @@ class Adapter:
 # ---------------------------------------------------------------------------------------------
 # Scoring and storage
 # ---------------------------------------------------------------------------------------------
+def common_evaluator():
+    """src/evaluate.py, loaded by file path: external/DD-CMD has its own evaluate.py earlier on sys.path."""
+    import importlib.util
+    name = "lgms_common_evaluate"
+    if name not in sys.modules:
+        spec = importlib.util.spec_from_file_location(name, os.path.join(REPO, "src", "evaluate.py"))
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[name] = mod                                           # needed by the Pool workers (fork)
+        spec.loader.exec_module(mod)
+    return sys.modules[name]
+
+
 def score(ids, probs, masks_by_id):
     """Per-case metrics with the common evaluator's case function (src/evaluate.py)."""
-    import evaluate as ev
+    ev = common_evaluator()
     with Pool(8) as pool:
         rows = pool.map(ev._score, [(i, p, masks_by_id[i]) for i, p in zip(ids, probs)], chunksize=32)
     df = pd.DataFrame(rows)
@@ -309,6 +321,9 @@ def run(args):
             raise RuntimeError(f"{ckpt}: sha256 {got} differs from {CKPT_TABLE}")
         out = os.path.join(split_dir, args.method, args.dataset, f"seed{seed}")
         os.makedirs(out, exist_ok=True)
+        if args.stage == "textpath" and os.path.exists(os.path.join(out, "textpath", "summary.json")):
+            print(f"seed {seed}: text-path check done earlier, skipped", flush=True)
+            continue
         meta = {"dataset": args.dataset, "split": args.split, "method": args.method,
                 "config": os.path.relpath(cfg_path, REPO), "checkpoint_sha256": rec_sha, "seed": seed}
         model = ad.load(ckpt)
