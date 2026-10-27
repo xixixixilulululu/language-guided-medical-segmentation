@@ -319,11 +319,10 @@ def run(args):
     split_dir = os.path.join(OUT_ROOT, args.split)
     os.makedirs(split_dir, exist_ok=True)
     plan = passes(manifest)
-    if args.stage == "textpath":
-        audit = effective_input_audit(ad, manifest, os.path.join(
-            split_dir, f"effective_input_{args.method}_{args.dataset}.csv"))
-    else:
-        ad.prepare([t for _, _, texts, _ in plan for t in texts.values()])
+    # effective-input audit of the current manifest (both stages; the benchmark checks every pass against it)
+    audit = effective_input_audit(ad, manifest, os.path.join(
+        split_dir, f"effective_input_{args.method}_{args.dataset}.csv"))
+    ad.prepare([t for _, _, texts, _ in plan for t in texts.values()])
     c0_texts = next(texts for cond, _, texts, _ in plan if cond == "C0")
     f1 = lvit_phase1_check(ad, c0_texts.values()) if args.method == "lvit" else None
     c6_ids = sorted({s for cond, v, texts, _ in plan if cond == "C6" for s in texts},
@@ -358,13 +357,21 @@ def run(args):
                 continue
             if args.split == "test":
                 lock.log_test_run("start", info, "infer.py", args.dataset, args.method, seed, f"{cond}/{variant}")
+            # model input differs from C0 for how many cases? must equal the audit and the raw-text changes
+            n_input = sum(ad.model_input(texts[s]) != ad.model_input(c0_texts[s]) for s in texts)
+            n_raw = sum(texts[s] != c0_texts[s] for s in texts)
+            a = audit[(audit.condition == cond) & (audit.variant_id.astype(str) == variant)]
+            n_audit = int(a.model_input_changed.sum())
+            if not (n_input == n_audit == n_raw) or len(a) != len(texts):
+                raise RuntimeError(f"{cond} {variant}: model input differs from C0 in {n_input} cases, audit "
+                                   f"{n_audit} of {len(a)} rows, raw text changed in {n_raw} of {len(texts)}")
             ids, probs, targets = infer(texts)
             if not all((targets[k] == masks_by_id[s]).all() for k, s in enumerate(ids)):
                 raise RuntimeError("targets differ from the common masks (pairing error)")
             m = score(ids, probs, masks_by_id)
             save_pass(out, cond, variant, meta, ids, probs, m, donors,
                       args.split == "val" and cond in PROB_CONDITIONS)
-            log_pass(out, args.stage, cond, variant, len(ids))
+            log_pass(out, args.stage, cond, variant, len(ids), f"model_input_changed={n_input}/{len(ids)}")
             if args.split == "test":
                 lock.log_test_run("end", info, "infer.py", args.dataset, args.method, seed, f"{cond}/{variant}")
             print(f"seed {seed} {cond} {variant}: {len(ids)} cases, mean Dice {m.dice.mean():.4f}, "

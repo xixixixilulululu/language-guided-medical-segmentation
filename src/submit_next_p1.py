@@ -39,9 +39,10 @@ LOG = os.path.join(REPO, "runs", "phase1_submit_log.tsv")
 HOLD = os.path.join(REPO, "slurm", "phase1_hold.tsv")
 NAMES = {"lvit": "LViT-T", "reclmis": "RecLMIS", "ddcmd": "DD-CMD", "quick_check": "Phase 1 quick check",
          "diag_ddcmd": "DD-CMD diagnostic", "lvit_b24": "LViT-T batch 24 (sensitivity check)",
-         "p2_textpath": "Phase 2 text-path check (validation)"}
+         "p2_textpath": "Phase 2 text-path check (validation)", "p2_benchmark_val": "Phase 2 benchmark (validation)"}
 # Rows that are not training runs: method -> Slurm script (no METHOD/DATASET/SEED export)
-SPECIAL = {"diag_ddcmd": "phase1_ddcmd_diag.slurm", "p2_textpath": "phase2_textpath.slurm"}
+SPECIAL = {"diag_ddcmd": "phase1_ddcmd_diag.slurm", "p2_textpath": "phase2_textpath.slurm",
+           "p2_benchmark_val": "phase2_benchmark.slurm"}
 # Training runs: method -> Slurm script (exports DATASET, SEED; main runs also METHOD). lvit_b24 is the post-hoc
 # sensitivity check of reports/PHASE1_SENSITIVITY_LVIT_PLAN.md (output runs/lvit_b24/, outside the analysis).
 TRAINING = {"lvit": "train_phase1.slurm", "reclmis": "train_phase1.slurm", "ddcmd": "train_phase1.slurm",

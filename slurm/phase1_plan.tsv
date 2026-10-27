@@ -28,3 +28,4 @@ order	method	dataset	seed	tag	est_hours
 27	lvit_b24	MosMedData+	1003	sensitivity	4
 28	p2_textpath	-	-	-	1
 29	p2_textpath	-	-	rerun	0.5
+30	p2_benchmark_val	-	-	-	1.5

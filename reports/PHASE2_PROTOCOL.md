@@ -483,6 +483,15 @@ This is an input limitation of RecLMIS (section 6).
   from the job logs (368, 369).
 - **Test stage.** All conditions of one checkpoint, C0 included, run in the same job where possible. A split
   into several jobs because of the 12 h limit is recorded.
+- **Input check per pass** (benchmark stage).
+  - At the start of each method × dataset, the effective-input audit is redone for the current manifest:
+    `runs/phase2/<split>/effective_input_<method>_<dataset>.csv`. For C2 this replaces the D9 rows.
+  - For every condition pass, the number of cases whose model input differs from C0 must equal the audit
+    count for that pass and the number of cases whose raw text differs. Otherwise the job stops with an
+    error.
+  - The count is written to `passes.tsv` (`model_input_changed=n/N`).
+  - CPU check on validation: for RecLMIS and DD-CMD every pass meets this (`test_phase2_infer.py`). For
+    LViT-T it needs the BERT features and is checked in the job.
 
 ## 5. Analysis rules fixed so far
 
@@ -502,6 +511,47 @@ This is an input limitation of RecLMIS (section 6).
     deltas, per method.
   - On the remaining cases, donors are those already assigned; no new donors are drawn.
   - Descriptive only, no test. Reported next to the main analysis, for validation and test.
+
+### 5.1 Phase 3 go / no-go rule (validation only)
+
+**When it was fixed.** On 2026-10-27, by the project lead:
+- **after** the C1 / C6 numbers of the 64-case validation subset had been seen (section 4.5);
+- **before** any full-validation result of C1–C6.
+
+It uses validation results only and never test results. Thresholds are on the [0, 1] Dice scale.
+
+**Algorithm.** For each method × dataset:
+
+1. **Per seed and comparison.** For each seed k ∈ {1001, 1002, 1003} and each comparison
+   X ∈ {C0−C5, C0−C6, C1−C5, C1−C6}:
+   1. Take the paired eligible cases: the targets eligible for the mismatch condition (C5 or C6). C0 and C1
+      exist for every case.
+   2. For each image, average the Dice of the mismatch condition over its donors (up to 3). C0 and C1 have
+      one value per image.
+   3. Compute the image difference d_i, e.g. D(C0) − mean over donors of D(C5).
+   4. **Image-weighted difference** Δ_img(k, X) = the mean of d_i over images.
+   5. **Unit-weighted difference** Δ_unit(k, X): average d_i within each unit (patient / CT volume, section 3,
+      including the D1 / D2 units), then take the mean over units.
+2. **Thresholds.** T(X) = 0.02 for C0−C5 and C0−C6; T(X) = 0.01 for C1−C5 and C1−C6.
+3. **Classification of comparison X:**
+   - **Repeated signal:** at least 2 of the 3 seeds have Δ_img(k, X) ≥ T(X) **and** Δ_unit(k, X) > 0
+     (both in the same seed).
+   - **Unstable signal** (descriptive only): at least 2 seeds have Δ_img(k, X) ≥ T(X), but fewer than 2
+     seeds satisfy both conditions.
+   - **No signal:** otherwise.
+4. **The method × dataset** has a repeated signal if at least one of its four comparisons has one.
+5. **Descriptive checks, reported but not part of the rule:**
+   - Δ_img and Δ_unit for **each donor separately** (variants d1, d2, d3), to see whether one donor drives
+     the signal;
+   - the per-unit differences;
+   - the per-seed values.
+6. **Outcome.**
+   - If at least one method × dataset has a repeated signal: there is a basis for Phase 3. Record which
+     method × dataset and comparison.
+   - If none has one: record **no-go**, and keep the negative result.
+   - Whether Phase 3 actually starts is decided by the project lead and the supervisor. The decision is
+     recorded in `configs/phase2_frozen/phase3_decision.json` before the freeze (section 2).
+7. **MosMed.** Its unit-weighted values rest on 11 validation units and are exploratory (section 5).
 
 ## 6. Limitations recorded so far
 
@@ -559,6 +609,9 @@ This is an input limitation of RecLMIS (section 6).
 - **P2-1** (C2 = two word substitutions on the original; section 4.3.1) and **P2-2** (tolerance rule; section
   4.7), decided by the project lead on 2026-10-27 after the text-path check and before any C2 or test
   inference. Plus the bookkeeping records of section 4.8.
+- **Phase 3 go / no-go rule** (section 5.1), decided by the project lead on 2026-10-27, after the 64-case
+  subset C1 / C6 numbers and before any full-validation C1–C6 result. Plus the per-pass input check
+  (section 4.8).
 
 ## 8. Files
 

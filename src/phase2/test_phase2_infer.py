@@ -81,6 +81,13 @@ def main():
         check(f"{m}: C1 and C6 inputs differ from C0, C0 equal to itself",
               a.model_input("") != a.model_input(orig) and a.model_input(donor) != a.model_input(orig)
               and a.model_input(orig) == a.model_input(orig))
+        # the benchmark's per-pass check: cases with a changed model input = cases with a changed raw text
+        for ds in ("QaTa-COV19", "MosMedData+"):
+            plan = I.passes(C.build(ds, "val")[0])
+            c0 = next(t for c, _, t, _ in plan if c == "C0")
+            bad = [(c, v) for c, v, t, _ in plan
+                   if sum(a.model_input(t[s]) != a.model_input(c0[s]) for s in t) != sum(t[s] != c0[s] for s in t)]
+            check(f"{m} {ds}: every pass changes the model input exactly where the text changes", not bad, f"{bad}")
 
     # lock
     r = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "infer.py"),
