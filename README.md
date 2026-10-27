@@ -6,6 +6,9 @@ QaTa-COV19 and MosMedData+, LViT split, seeds 1001/1002/1003). Plan: [`reports/P
 Phase 1 — **reproduction of three language-guided methods** (LViT-T, RecLMIS, DD-CMD) on the same data,
 split, evaluator and seeds, and comparison with the Phase 0 baselines — is **complete**. Plan:
 [`reports/PHASE1_PLAN.md`](reports/PHASE1_PLAN.md); summary: **[`reports/PHASE1_SUMMARY.md`](reports/PHASE1_SUMMARY.md)**.
+Phase 2 — the **counterfactual text reliability benchmark** — has its **validation stage complete**; the
+test stage waits for the Phase 3 plan and the freeze. Plan: [`reports/PHASE2_PLAN.md`](reports/PHASE2_PLAN.md);
+validation summary: **[`reports/PHASE2_VALIDATION_SUMMARY.md`](reports/PHASE2_VALIDATION_SUMMARY.md)**.
 
 ## Status
 
@@ -19,6 +22,11 @@ split, evaluator and seeds, and comparison with the Phase 0 baselines — is **c
 | 1.1–1.6 Setup of LViT-T, RecLMIS, DD-CMD | done, quick checks passed, configurations frozen | [`reports/PHASE1_SETUP_PLAN.md`](reports/PHASE1_SETUP_PLAN.md), [`reports/PHASE1_MODEL_SETUP.md`](reports/PHASE1_MODEL_SETUP.md), `configs/{lvit,reclmis,ddcmd}.yaml`, `configs/phase1_frozen/`, `results/phase1_quick_check.json` |
 | 1.7 18 main runs | done, 18/18 complete (submitted by hand, one job at a time); test evaluations logged | `slurm/submit_next_p1.sh`, `results/phase1_test_eval_log.tsv`, `runs/<method>/<dataset>/seed<k>/` (per-case results committed; weights and predictions not) |
 | 1.8–1.11 Six-method results, pairwise comparison, summary | done; fixed analysis (commit ba53ba5) run once, results re-computed independently, conclusions final | **[`reports/PHASE1_SUMMARY.md`](reports/PHASE1_SUMMARY.md)** (short summary), **[`reports/PHASE1_RESULTS.md`](reports/PHASE1_RESULTS.md)** (full results), `src/analyze_phase1.py`, `results/final_six_method_*.csv`, `results/phase1_main_results.csv` |
+| 2.0 Setup checks and plan | done | [`reports/PHASE2_SETUP_PLAN.md`](reports/PHASE2_SETUP_PLAN.md), `results/phase2_checkpoint_sha256.tsv` |
+| 2.1–2.2 Text attributes, nine conditions, Phase 2 lock | done on train/val; protocol draft, not frozen | [`reports/PHASE2_PROTOCOL.md`](reports/PHASE2_PROTOCOL.md), `src/phase2/{texts,conditions,lock}.py` |
+| 2.3 Text-path check and validation benchmark | done (jobs 368, 369, 370; 18 checkpoints, 252 condition passes) | `src/phase2/infer.py`, `results/phase2_textpath_summary.csv`, `results/phase2_val_per_case.csv.gz` |
+| 2.4–2.7 Validation analysis and Phase 3 rule | done on validation; summary for the supervisor | **[`reports/PHASE2_VALIDATION_SUMMARY.md`](reports/PHASE2_VALIDATION_SUMMARY.md)**, `src/phase2/analyze_phase2*.py`, `results/phase2_*_val.csv` |
+| 2.8 Freeze and test evaluation | waiting for the Phase 3 plan (Phase 2 lock closed) | – |
 
 ## Layout
 
