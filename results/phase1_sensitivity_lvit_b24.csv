@@ -1,0 +1,9 @@
+setting,seed,dice_pct,miou_pct,hd95_px,assd_px,empty_predictions,best_epoch,best_val_dice_pct,last_epoch,ended,dice_pct_sd,miou_pct_sd,hd95_px_sd,assd_px_sd,empty_predictions_sd
+batch 2 (main run),1001,60.1295,48.6581,64.7461,51.1592,40.0000,37.0000,64.1853,88.0000,early_stopping,,,,,
+batch 2 (main run),1002,61.3247,49.9420,63.4188,51.7202,41.0000,54.0000,66.1711,105.0000,early_stopping,,,,,
+batch 2 (main run),1003,62.3305,51.1344,57.9558,47.9851,38.0000,157.0000,66.7134,208.0000,early_stopping,,,,,
+batch 2 (main run),mean,61.2616,49.9115,62.0402,50.2882,39.6667,,,,,1.1019,1.2385,3.5989,2.0141,1.5275
+batch 24 (sensitivity),1001,75.0276,61.8039,17.6677,4.2468,0.0000,247.0000,70.8174,298.0000,early_stopping,,,,,
+batch 24 (sensitivity),1002,72.8218,59.4252,17.1450,5.7356,2.0000,137.0000,70.1826,188.0000,early_stopping,,,,,
+batch 24 (sensitivity),1003,74.1876,61.3828,19.7479,6.6004,2.0000,190.0000,70.2495,241.0000,early_stopping,,,,,
+batch 24 (sensitivity),mean,74.0123,60.8706,18.1869,5.5276,1.3333,,,,,1.1133,1.2693,1.3769,1.1905,1.1547

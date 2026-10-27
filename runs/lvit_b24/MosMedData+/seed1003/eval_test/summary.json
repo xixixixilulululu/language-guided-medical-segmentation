@@ -1,0 +1,10 @@
+{
+  "dataset": "MosMedData+",
+  "split": "test",
+  "n_cases": 273,
+  "n_empty_predictions": 2,
+  "dice": 0.7418758852542451,
+  "miou": 0.6138278348974033,
+  "hd95": 19.747921898263307,
+  "assd": 6.600432884360137
+}
