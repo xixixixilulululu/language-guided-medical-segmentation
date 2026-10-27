@@ -296,6 +296,74 @@ Defined before the job is run.
   the repeat and reconciliation results and recorded here. A text change does not have to reduce Dice to
   pass; an unchanged prediction with a changed input is reported as insensitivity, not as a failure.
 
+### 4.5 Text-path check: results (jobs 368 and 369, 2026-10-27; validation only)
+
+- **Jobs.** Job 368 completed LViT-T and RecLMIS. DD-CMD failed in job 368 on a software error:
+  `external/DD-CMD/evaluate.py` shadowed `src/evaluate.py`. The common evaluator is now loaded by file path
+  (commit fa758f5), and DD-CMD was rerun in job 369.
+- **Files** (numbers only): `results/phase2_textpath_summary.csv` and
+  `results/phase2_effective_input_val_summary.csv`.
+
+**C0 reconciliation with the archived Phase 1 validation evaluation:**
+- **LViT-T and RecLMIS** (12 checkpoints): identical. Mean Dice, every per-case Dice and every scored mask
+  pixel are equal.
+- **DD-CMD** (6 checkpoints): almost identical.
+
+  | DD-CMD | Masks that differ from Phase 1 (cases) | Pixels per differing mask |
+  |---|---|---|
+  | QaTa-COV19 | 5, 90 and 111 of 1429 per seed | 1–4 |
+  | MosMedData+ | 0–4 of 273 | 1 |
+
+  - Per case: max |ΔDice| 0.0048 (one MosMed case), max |ΔHD95| 0.20 px.
+  - Mean Dice per checkpoint: |Δ| ≤ 0.00002.
+  - DD-CMD runs with `deterministic: false` (official). Within Phase 2, its repeated pass is bit-identical, so
+    the differences come from GPU algorithm selection between processes. Phase 0 recorded the same kind of
+    difference for nnU-Net.
+- **Repeated C0 pass** (all 18 checkpoints): probability maps bit-identical (max difference 0). The 5 × 10⁻⁷
+  Dice differences in the logs come from the 6-decimal CSV rounding of the first pass.
+- **LViT-T text path:** the C0 word vectors equal the Phase 1 cache (max difference 0) for all six
+  checkpoints.
+
+**Fixed subset of 64 cases, C1 and C6 (first donor):**
+- The model input changed in 64 of 64 cases for every checkpoint and both conditions.
+- The scored mask changed in 59–64 cases.
+- So the text reaches the predictions in all three methods. The mean Dice values on the subset are
+  development numbers and are not interpreted here.
+
+**Effective-input audit** (all validation condition rows):
+- Every raw-text change changes the actual model input, for all three methods and all conditions.
+- **LViT-T window** (words from the tokenizer):
+  - C2 changes the window content in 100% of the cases (QaTa 1423 / 1423, MosMed 273 / 273), as recorded in
+    section 6.
+  - C4 leaves the 10 window words unchanged in 544 of 4268 QaTa rows (12.7%) and 69 of 791 MosMed rows
+    (8.7%). All of these are location-only mismatches. Their word vectors still differ, through BERT's
+    context.
+- **C2 is truncated where C0 is not** (current template):
+  - RecLMIS: 1155 of 1423 QaTa cases and 269 of 273 MosMed cases;
+  - DD-CMD: 670 of 1423 QaTa cases and 112 of 273 MosMed cases.
+
+  The cut removes the end of the location. With the current template, C2 is therefore **not information-
+  preserving at the model input** for most RecLMIS cases and about half of the DD-CMD cases. This is open
+  decision P2-1 below.
+- The "truncated" counts for C1, C3b and C3c of LViT-T and RecLMIS mostly cut only the `EOF XXX` padding,
+  not report content.
+
+**Open decisions (validation stage, before any test run):**
+- **P2-1, C2 template.** Proposed: a compact rewrite with the original structure and two word substitutions
+  ("pulmonary" → "lung", "infected areas" → "infected regions"); zones from the parsed values (D4 `all`;
+  typos not carried over).
+  - Example: "Bilateral lung infection, two infected regions, lower left lung and middle lower right lung."
+  - Tokenizer-only estimate on validation: extra truncation versus C0 for RecLMIS in 5 of 1423 QaTa cases and
+    0 MosMed; for DD-CMD in 0 cases.
+  - The LViT-T window then differs from C0 only at the substituted words in 1380 of 1423 QaTa and 273 of 273
+    MosMed cases.
+  - The C2 review (20 + 20) would be repeated for the new template.
+- **P2-2, tolerance rule for the test C0 reconciliation.** Proposed:
+  - LViT-T and RecLMIS: identical scored masks are required.
+  - DD-CMD: per case at most 10 differing mask pixels and |ΔDice| ≤ 0.01, and per checkpoint
+    |Δ mean Dice| ≤ 0.0005.
+  - Anything outside these limits is investigated before results are used.
+
 ## 5. Analysis rules fixed so far
 
 - **Main analysis.** As in PHASE2_PLAN Task 2.5:
