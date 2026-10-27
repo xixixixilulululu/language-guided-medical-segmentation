@@ -104,6 +104,8 @@ def tables(D):
     for c in COMPS:
         N[f"q_{c}"] = rng(q, c)
         N[f"m_{c}"] = rng(mo, c)
+    c45 = mo[mo.index.get_level_values("comparison").isin(["C0-C4", "C0-C5"])].unit_weighted_delta
+    N["m_C0-C4C5"] = f"{pts(c45.min())} to {pts(c45.max())}"
     N["q_sig"] = str(int(pw[(pw.dataset == "QaTa-COV19")]["significant_holm_0.05"].sum()))
     N["m_sig"] = str(int(pw[(pw.dataset == "MosMedData+")]["significant_holm_0.05"].sum()))
     N["m_c1c6_neg"] = str(int((mo.xs("C1-C6", level="comparison").unit_weighted_delta < 0).sum()))

@@ -30,7 +30,8 @@
    points. For one- and two-attribute mismatches the sign differs: C1−C4 is {{N:q_C1-C4}} and C1−C5 is
    {{N:q_C1-C5}} points.
 4. **MosMedData+ (all exploratory, 11 units).**
-   - The mismatched text has a small effect: C0−C6 is {{N:m_C0-C6}} points.
+   - The mismatched text has a small effect: C0−C4 and C0−C5 are {{N:m_C0-C4C5}} points, C0−C6 is
+     {{N:m_C0-C6}} points (unit-weighted).
    - The empty text has a large effect for RecLMIS: C0−C1 {{N:m_c0c1_RecLMIS}}.
    - For the other two methods: DD-CMD {{N:m_c0c1_DD-CMD}}, and LViT-T {{N:m_c0c1_LViT-T}} (CI
      {{N:m_c0c1_LViT-T_ci0}}).
