@@ -1,0 +1,329 @@
+# Phase 2 — Protocol (DRAFT, not frozen)
+
+Status: 2026-10-27, **draft**.
+- **Covered so far:** Milestone 2.1 text work, i.e. checkpoints, text attributes, conditions and the lock.
+- **Still open:**
+  - the inference settings check, the C0 reconciliation and the tolerance rule (after the text-path job);
+  - the analysis program;
+  - the Phase 3 decision.
+- **How it is frozen:** together with the code by `src/phase2/lock.py freeze`, after the validation benchmark
+  and the Phase 3 decision. Changes after the freeze are recorded as amendments.
+- **Sources:** the supervisor's plan [PHASE2_PLAN.md](PHASE2_PLAN.md), and the decisions of 2026-10-27
+  ([PHASE2_SETUP_PLAN.md](PHASE2_SETUP_PLAN.md), section 9, D1–D15, plus the five additions recorded in
+  section 7 below).
+
+## 1. Baseline: checkpoints, settings, splits
+
+| Dataset | LViT-T | RecLMIS | DD-CMD |
+|---|---|---|---|
+| QaTa-COV19 | Phase 1 main runs `runs/lvit/QaTa-COV19/seed<k>/best_model.pt` (config `configs/lvit.yaml`, batch 2) | `runs/reclmis/QaTa-COV19/seed<k>/best_model.pt` (`configs/reclmis.yaml`) | `runs/ddcmd/QaTa-COV19/seed<k>/checkpoints/best.ckpt` (`configs/ddcmd.yaml`) |
+| MosMedData+ | **post-hoc batch-24 sensitivity runs** `runs/lvit_b24/MosMedData+/seed<k>/best_model.pt` (`configs/lvit_sensitivity_b24.yaml`) | `runs/reclmis/MosMedData+/seed<k>/best_model.pt` | `runs/ddcmd/MosMedData+/seed<k>/checkpoints/best.ckpt` |
+
+**Checkpoints.**
+- Seeds 1001, 1002, 1003; 18 checkpoints.
+- sha256 values: `results/phase2_checkpoint_sha256.tsv`.
+- All were selected on validation Dice only. The epoch stored in each file equals the best epoch of its
+  `training_summary.json` (checked 2026-10-27).
+
+**Provenance of MosMed LViT-T.**
+- The batch-24 runs come from a post-hoc sensitivity study decided after the Phase 1 results had been seen
+  ([PHASE1_SENSITIVITY_LVIT.md](PHASE1_SENSITIVITY_LVIT.md)): test Dice 75.03 / 72.82 / 74.19, mean 74.01.
+- The Phase 1 main results (batch 2, 61.26) are unchanged and are not the Phase 2 C0 baseline.
+- 24 is the training batch size; the inference settings are those of the Phase 1 drivers.
+
+**Inference settings** (from the frozen Phase 1 drivers, unchanged; to be confirmed by the C0 reconciliation):
+- `eval()` mode, float32, no TTA;
+- inference batch 32 for all three methods;
+- the common 224 × 224 images and targets;
+- threshold `probability > 0.5`;
+- evaluator `src/evaluate.py`: Dice, mIoU, HD95, ASSD; an empty prediction is scored HD95 = ASSD = 316.78 px.
+
+**Text encoders.**
+- LViT-T: BERT-base uncased, PyTorch re-implementation of `bert_embedding`, 25 tokens, first 10 word vectors.
+- RecLMIS: CLIP ViT-B/32 text tower, `clip.tokenize`, context 18, `truncate=True`.
+- DD-CMD: BiomedBERT, 24 tokens, padding to max length.
+- All three are frozen.
+
+**Split manifests** (sha256 of `~/datasets/common224/<dataset>/<split>.txt`):
+
+| Dataset | train | val | test |
+|---|---|---|---|
+| QaTa-COV19 | `10d5a105…19a8cb` | `ed9056dc…36b4cc` | `0662d5c3…ade475b` |
+| MosMedData+ | `49b2d993…6333c1` | `cd2b5c46…37ea4` | `f38fc890…fec49e` |
+
+**Code.**
+- `src/phase2/texts.py`, `src/phase2/conditions.py` and `src/phase2/lock.py`, from the commit that adds this
+  draft.
+- The freeze will record the final commit.
+
+## 2. Validation-first order and the Phase 2 lock
+
+1. Parser and text transformations: train/validation texts only (done).
+2. Text-path check and C0 reconciliation on validation, then the validation benchmark (next jobs).
+3. Phase 3 decision from validation results only.
+4. Freeze (`src/phase2/lock.py freeze`): code, this protocol and the Phase 3 decision record
+   (`configs/phase2_frozen/phase3_decision.json`). Push to GitHub.
+5. Only then: `lock.py link-test`, test conditions, test inference.
+
+**Lock** (`src/phase2/lock.py`, tests `src/phase2/test_phase2_lock.py`, 14 checks passed on 2026-10-27).
+- Every Phase 2 test-split entry point stops with exit code 5, before any test file is read, unless all of
+  the following hold:
+  - the frozen record exists;
+  - it covers the protocol and the Phase 3 decision record;
+  - every file is unchanged;
+  - its commit is on `origin/main`.
+- This covers **all** conditions, C0 included (D14).
+- Independently, the text view `~/datasets/phase2/text_view/` holds only the Train and Val text files until
+  `link-test`.
+- Phase 1 clean test results have been seen before; the lock protects against using new counterfactual test
+  outcomes to design the benchmark.
+- After the freeze the program generates test donors automatically by the frozen rules. Nobody chooses them
+  by hand.
+
+## 3. Text attributes (Task 2.1)
+
+`src/phase2/texts.py` → `results/phase2_text_attributes.csv` (train + val; 9601 rows).
+
+**Template.** `<Scope> pulmonary infection, <count> infected area(s), <location>.`
+
+**Definitions.**
+- `scope`: the stated laterality / presence word: Bilateral | Unilateral | No. Infection type and severity
+  do not occur in these texts and are not mixed in.
+- `count`: the number of infected areas, 0–9.
+- `location`: zones per side, canonical form `left:<zones>;right:<zones>`.
+  - Zones are upper / middle / lower.
+  - The full set equals `all` (D4).
+  - A side named without a zone is `unspecified`.
+  - `none` for "No pulmonary infection" texts (D7).
+- Unknown values stay empty (never 0).
+
+**Normalisation** (D5):
+- spacing and commas;
+- trailing full stop(s);
+- the elision `<z> left and <z> right lung`;
+- 26 fixed typo corrections.
+
+Anything ambiguous leaves that attribute unknown: `higher`, `two one infected area`, `all lung`, a zone list
+mixing `all` with zones.
+
+| | QaTa-COV19 train | QaTa-COV19 val | MosMedData+ train | MosMedData+ val |
+|---|---:|---:|---:|---:|
+| Images | 5716 | 1429 | 2183 | 273 |
+| Distinct texts | 273 | 128 | 101 | 45 |
+| All three attributes parsed | 5692 (99.58%) | 1423 (99.58%) | 2183 (100%) | 273 (100%) |
+
+Unknown attributes over train + val: QaTa count 5 images, location 25 images; MosMed none.
+
+**Attribute frequencies** (train + val images):
+- QaTa scope: Bilateral 5663, Unilateral 1482.
+- QaTa count (parsed): one 1436, two 5254, three 364, four 58, five 6, six 1.
+- QaTa location: 65 canonical values; most frequent `left:all;right:all` 2164, `left:lower;right:lower` 1560,
+  `right:lower` 551.
+- MosMed scope: Unilateral 1234, Bilateral 1175, No 47.
+- MosMed count: zero 47, one 908, two 460, three 368, four 258, five 148, six 100, seven 62, eight 38, nine 67.
+- MosMed location: 23 canonical values; most frequent `left:middle;right:middle` 578, `left:middle` 528,
+  `left:unspecified;right:middle` 336.
+
+**Flags** (`parse_note`; values are kept as written):
+- MosMed: 420 images "Unilateral …, left lung and <zone> right lung" (D6; 14 of them in val).
+- QaTa: 4 "Unilateral" naming two sides, and 9 "Bilateral" naming one side.
+
+**Groups** (D1, D2):
+
+| | QaTa-COV19 | MosMedData+ |
+|---|---|---|
+| Unit | patient = BIDS subject `sub-S…` of the file name | CT volume = file name without the final `_<slice>` (Phase 0 source mapping) |
+| Without id | `covid_*` (2354 train, 597 val, 0 test): own unit each, flagged "patient unverified"; donor exclusion only of the case itself | `bjorke_*` (80 train, 10 val, 10 test): one pooled unit `bjorke_pooled` |
+| Val units | 1194 = 597 patients + 597 unverified images | **11** = 10 volumes + `bjorke_pooled` |
+| Test units (from sample ids) | 474 patients (all images `sub-S…`) | **9** = 8 volumes + `bjorke_pooled` |
+
+## 4. Text conditions (Task 2.2)
+
+`src/phase2/conditions.py` → `results/phase2_text_conditions.csv` (val) and
+`results/phase2_text_conditions_donor_counts.csv`. Tests: `src/phase2/test_phase2_texts.py`, 41 checks
+passed.
+
+| Condition | Rule |
+|---|---|
+| C0 | original text |
+| C1 | `""` (D8), processed by each method's normal pathway (section 4.1) |
+| C2 | fixed template from the parsed values (D9): `<Scope> lung infection, <n> area(s) of infection, in <the z part of / all of / the> <side> lung [and …].`; unavailable if any attribute is unknown |
+| C3a | delete the scope word: `Bilateral pulmonary infection` → `Pulmonary infection`; unavailable for "No" texts (D10) |
+| C3b | delete the whole count clause `, <n> infected area(s)` |
+| C3c | delete the whole location clause; unavailable for "No" texts (no location) |
+| C4 / C5 / C6 | real report of another case, same dataset and split, differing in exactly 1 / 2 / 3 of (scope, count, location), all known for both; not from the target's patient / volume (D1, D2, D11); identical texts counted once; up to 3 distinct donor texts, the smallest sha256 of `phase2-donor-v1|dataset|split|target|condition|donor` (salt D12); one manifest for all methods and seeds |
+
+**C3 edits.** The C3 deletions edit the original text and nothing else. The residual cues are recorded in
+`residual_cue`:
+- C3a: two sides still named imply bilateral; one side implies unilateral.
+- C3b: "Bilateral" implies at least two areas.
+- C3c: the scope word implies the sides.
+
+**Eligible target images on validation:**
+
+| | C0 | C1 | C2 | C3a | C3b | C3c | C4 | C5 | C6 | C4∩C5∩C6 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| QaTa-COV19 (1429) | 1429 | 1429 | 1423 | 1429 | 1427 | 1425 | 1423 | 1423 | 1423 | 1423 |
+| MosMedData+ (273) | 273 | 273 | 273 | 269 | 273 | 269 | 269 | 269 | 273 | 269 |
+
+**Donors** (validation):
+- QaTa: 12,806 donor rows from 1373 distinct donor cases; the most-used donor case serves 148 targets. All
+  eligible targets have 3 donors for C5 and C6, and 1422 of 1423 for C4. The median number of available
+  distinct donor texts is 54 (C4), 41 (C5) and 16 (C6).
+- MosMed: 2417 donor rows from 259 donor cases; maximum reuse 85. 254 / 269 / 273 targets have 3 donors for
+  C4 / C5 / C6; the medians of available distinct texts are 5 / 11 / 23.
+- The 4 MosMed "No" texts have no C4 or C5 donor: they differ from every other report in all three
+  attributes.
+
+**Changed attributes** (donor rows):
+
+| | C4 | C5 |
+|---|---|---|
+| QaTa-COV19 | location 4194, count 71, scope 3 | count + location 3748, scope + location 488, scope + count 33 |
+| MosMedData+ | location 513, count 278 | count + location 656, scope + location 151 |
+
+**C4 in QaTa is in practice a location-only mismatch.** Scope and location are dependent (the sides named
+determine the laterality word). This is reported as a property of the benchmark, not changed.
+
+### 4.1 C1 as input (tokenizer level; encoder outputs are checked in the text-path job)
+
+| Method | `""` becomes | Tokens / mask |
+|---|---|---|
+| LViT-T | official padding: `" EOF XXX"` × 9 | 18 BERT words `eof xxx …`; the first 10 word vectors are used |
+| RecLMIS | official padding: `" EOF XXX"` × 9 | CLIP `[49406, 68, 539, 8352, …, 49407]`, 18 tokens, mask all 1 (truncated at 18) |
+| DD-CMD | no padding rule | `[CLS] [SEP]` + 22 × [PAD] (`input_ids` 2, 3, 0 …), attention mask `1 1 0 …` |
+
+No model-specific fallback was needed: the empty string is a valid input for all three.
+
+### 4.2 Manual review examples (validation; one per rule, from the generated manifest)
+
+| Rule | Original | Condition text |
+|---|---|---|
+| C2 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. |
+| C2, D6 text | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one area of infection, in the left lung and the lower part of the right lung. |
+| C2, typo | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle and lower part of the right lung. |
+| C3a | Bilateral pulmonary infection, two infected areas,all left and all right lung. | Pulmonary infection, two infected areas,all left and all right lung. (cue: both sides named) |
+| C3b | Unilateral pulmonary infection, two infected areas, lower left lung. | Unilateral pulmonary infection, lower left lung. |
+| C3c | Bilateral pulmonary infection, two infected areas, middle left lung and lower right lung. | Bilateral pulmonary infection, two infected areas. (cue: Bilateral implies both lungs) |
+| C3b, odd spacing | Bilateral pulmonary infection, three infected areas,upper lower left lung and lower right lung. | Bilateral pulmonary infection,upper lower left lung and lower right lung. |
+| C4 (location) | Bilateral pulmonary infection, three infected areas, all left lung and upper middle lower right lung. | Bilateral pulmonary infection, three infected areas, lower left lung and upper lower right lung. |
+| C4 (count, MosMed) | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Bilateral pulmonary infection, nine infected areas, middle left lung and middle right lung. |
+| C5 (scope + location, MosMed) | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Unilateral pulmonary infection, two infected areas, upper left lung. |
+| C6 | Bilateral pulmonary infection, three infected areas, all left lung and upper middle lower right lung. | Unilateral pulmonary infection, one infected area, middle left lung. |
+
+### 4.3 C2 review: 20 train + 20 validation texts (D9 addition)
+
+- **Sample.** `python src/phase2/conditions.py --c2-review`: distinct fully parsed texts of each split (both
+  datasets pooled, sorted by dataset and text), 20 per split drawn with `numpy.random.default_rng(0)`.
+- **For manual checking that the meaning is identical.** Two things to watch:
+  - by D4, `upper middle lower` is rewritten as `all of the … lung`;
+  - grammatical slips of the original (e.g. "one infected areas") are not carried over.
+
+| # | Split | Dataset | Original (C0) | Rewrite (C2) | Same meaning? |
+|---:|---|---|---|---|---|
+| 1 | train | MosMedData+ | Bilateral pulmonary infection, eight infected areas, middle left lung and middle right lung. | Bilateral lung infection, eight areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
+| 2 | train | MosMedData+ | Bilateral pulmonary infection, five infected areas, middle left lung and middle right lung. | Bilateral lung infection, five areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
+| 3 | train | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and middle right lung. | Bilateral lung infection, four areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
+| 4 | train | MosMedData+ | Bilateral pulmonary infection, three infected areas, lower left lung and upper right lung. | Bilateral lung infection, three areas of infection, in the lower part of the left lung and the upper part of the right lung. | [to be checked] |
+| 5 | train | MosMedData+ | Unilateral pulmonary infection, two infected areas, left lung and upper right lung. | Unilateral lung infection, two areas of infection, in the left lung and the upper part of the right lung. | [to be checked] |
+| 6 | train | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, upper left lung and upper middle lower right lung. | Bilateral lung infection, four areas of infection, in the upper part of the left lung and all of the right lung. | [to be checked] |
+| 7 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, three areas of infection, in all of the left lung and all of the right lung. | [to be checked] |
+| 8 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middlr lower left lung and lower right lung. | Bilateral lung infection, three areas of infection, in all of the left lung and the lower part of the right lung. | [to be checked] |
+| 9 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and middle right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the middle part of the right lung. | [to be checked] |
+| 10 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the upper part of the right lung. | [to be checked] |
+| 11 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and middle right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle part of the right lung. | [to be checked] |
+| 12 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. | [to be checked] |
+| 13 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
+| 14 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and all of the right lung. | [to be checked] |
+| 15 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung andupper right lung. | Bilateral lung infection, two areas of infection, in the upper part of the left lung and the upper part of the right lung. | [to be checked] |
+| 16 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and all of the right lung. | [to be checked] |
+| 17 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,all left lung and lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the lower part of the right lung. | [to be checked] |
+| 18 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, middle  left lung. | Unilateral lung infection, one area of infection, in the middle part of the left lung. | [to be checked] |
+| 19 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower right lung. | Unilateral lung infection, one area of infection, in all of the right lung. | [to be checked] |
+| 20 | train | QaTa-COV19 | Unilateral pulmonary infection, two infected area, lower left lung. | Unilateral lung infection, two areas of infection, in the lower part of the left lung. | [to be checked] |
+| 21 | val | MosMedData+ | Bilateral pulmonary infection, five infected areas, upper left lung and middle right lung. | Bilateral lung infection, five areas of infection, in the upper part of the left lung and the middle part of the right lung. | [to be checked] |
+| 22 | val | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and lower right lung. | Bilateral lung infection, four areas of infection, in the middle part of the left lung and the lower part of the right lung. | [to be checked] |
+| 23 | val | MosMedData+ | Bilateral pulmonary infection, nine infected areas, middle left lung and middle right lung. | Bilateral lung infection, nine areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
+| 24 | val | MosMedData+ | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one area of infection, in the left lung and the lower part of the right lung. | [to be checked] |
+| 25 | val | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, middle lower left lung and lower right lung. | Bilateral lung infection, four areas of infection, in the middle and lower part of the left lung and the lower part of the right lung. | [to be checked] |
+| 26 | val | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, lower left lung and lower right lung. | Bilateral lung infection, three areas of infection, in the lower part of the left lung and the lower part of the right lung. | [to be checked] |
+| 27 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,  upper lower right lung. | Bilateral lung infection, two areas of infection, in the upper and lower part of the right lung. | [to be checked] |
+| 28 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the lower part of the right lung. | [to be checked] |
+| 29 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the upper part of the right lung. | [to be checked] |
+| 30 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. | [to be checked] |
+| 31 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle and lower part of the right lung. | [to be checked] |
+| 32 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the upper and lower part of the right lung. | [to be checked] |
+| 33 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and lower right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and the lower part of the right lung. | [to be checked] |
+| 34 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle lower left and middle lower right lung. | Bilateral lung infection, two areas of infection, in the middle and lower part of the left lung and the middle and lower part of the right lung. | [to be checked] |
+| 35 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung and upper middle right lung. | Bilateral lung infection, two areas of infection, in the upper part of the left lung and the upper and middle part of the right lung. | [to be checked] |
+| 36 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and lower right lung. | Bilateral lung infection, two areas of infection, in the upper and middle part of the left lung and the lower part of the right lung. | [to be checked] |
+| 37 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and upper lower right lung. | Bilateral lung infection, two areas of infection, in the upper and middle part of the left lung and the upper and lower part of the right lung. | [to be checked] |
+| 38 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, all left and all right lung. | Unilateral lung infection, one area of infection, in all of the left lung and all of the right lung. | [to be checked] |
+| 39 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle left lung. | Unilateral lung infection, one area of infection, in the upper and middle part of the left lung. | [to be checked] |
+| 40 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower left lung. | Unilateral lung infection, one area of infection, in all of the left lung. | [to be checked] |
+
+## 5. Analysis rules fixed so far
+
+- **Main analysis.** As in PHASE2_PLAN Task 2.5:
+  - 11 comparisons per method × dataset, Holm across the 11, α = 0.05;
+  - the unit-weighted delta with a one-sample t-test over units;
+  - common eligible image sets for each comparison.
+- **MosMedData+ unit-level inference is exploratory** (addition 5). MosMed has 11 independent units on
+  validation and 9 on test, one of them the pooled `bjorke` unit. Its CIs and p-values are reported, but
+  every MosMed inferential result is labelled exploratory in this protocol, in the results tables and in the
+  final report, whatever the p-value. For QaTa, inference is labelled exploratory when fewer than 20 units
+  are available (D3).
+- **Pre-specified sensitivity check for D6** (addition 1, fixed 2026-10-27, before any Phase 2 inference):
+  - Exclude the MosMed images whose stated scope contradicts the sides named
+    (`parse_note` contains "inconsistent: Unilateral but both sides named"; 14 val images).
+  - Recompute the MosMed main paired differences: the 11 comparisons, image-weighted and unit-weighted
+    deltas, per method.
+  - On the remaining cases, donors are those already assigned; no new donors are drawn.
+  - Descriptive only, no test. Reported next to the main analysis, for validation and test.
+
+## 6. Limitations recorded so far
+
+- **C1 for LViT-T and RecLMIS** (D8, addition 3). The official padding turns `""` into `" EOF XXX"` × 9.
+  - In MosMed training, the `EOF XXX` padding occurs only together with "No pulmonary infection, zero
+    infected areas." (43 of 2183 training images; the only MosMed text with fewer than 9 words).
+  - In QaTa training it occurs in 11 texts (short typo variants).
+  - C1 for these two methods may therefore resemble a "no infection" report. It is reported, not changed.
+- **"No pulmonary infection" texts vs. masks** (D7, addition 2). Counted only for annotation quality; no text
+  attribute was changed.
+  - Of the 47 MosMed train/val images with this text, 46 have lesion pixels in their common 224 × 224 mask:
+    42 of 43 train and 4 of 4 val; median 11 and 9.5 lesion pixels; at most 52.
+  - For comparison, only 1 of all 2456 MosMed train/val masks is empty.
+- **D6 texts.** 420 MosMed train/val images say "Unilateral" while naming both sides. They are kept as
+  written; see the sensitivity check in section 5.
+- **LViT-T 10-word window.** The location clause is never fully inside the 10 kept word vectors. It is
+  partly inside (27–31% of location words); the rest acts only through BERT's context.
+- **RecLMIS truncation.** In 18.6% of QaTa train/val texts the end of the location is cut at 18 tokens.
+- **Effective input.** Whether each change reaches the model is measured per case in the text-path audit,
+  not assumed.
+- **Grouping.**
+  - QaTa patient identity rests on the BIDS `sub-S` naming (no separate patient list).
+  - `covid_*` images (validation only) cannot be grouped.
+  - MosMed `bjorke` slices are pooled into one unit.
+- **MosMed split.** The known train/val/test volume overlap of the benchmark split is not repaired.
+- **Exploratory MosMed inference.** MosMed unit-level inference is exploratory (section 5).
+- **What the texts are.** They are benchmark annotations, not independently verified clinical reports.
+
+## 7. Decision record
+
+- **D1–D15.** As recommended in PHASE2_SETUP_PLAN.md section 9, confirmed by the project lead on 2026-10-27.
+- **Additions of 2026-10-27:**
+  1. D6 + the pre-specified sensitivity check (section 5);
+  2. D7 mask count (section 6);
+  3. D8 limitation (section 6);
+  4. C2 review of 20 + 20 texts (section 4.3);
+  5. MosMed unit-level inference stated as exploratory (sections 3 and 5, and the final report).
+
+## 8. Files
+
+- **Texts.**
+  - `results/phase2_text_attributes.csv` (sha256 `5db47e6f…0e1866`).
+  - `results/phase2_text_conditions.csv` (`88979de9…c490`).
+  - `results/phase2_text_conditions_donor_counts.csv` (`7040ee7e…690251`).
+  - These contain the dataset's annotation texts. Like the raw data, they are kept out of git
+    (`.gitignore`) and are reproduced from the code above.
+- **Checkpoints.** `results/phase2_checkpoint_sha256.tsv`.

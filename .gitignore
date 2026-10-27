@@ -34,3 +34,7 @@ __pycache__/
 
 # Personal Claude Code overrides (the shared hooks are in .claude/settings.json)
 .claude/settings.local.json
+
+# Phase 2 text tables: they contain the dataset's annotation texts (reproduced by src/phase2/*.py)
+results/phase2_text_attributes.csv
+results/phase2_text_conditions*.csv
