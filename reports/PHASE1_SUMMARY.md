@@ -143,6 +143,11 @@ mIoU in %.
   74.01 ± 1.11 (main runs 61.26 ± 1.10; paper 74.57), and the empty predictions fell from 38–41 to 0–2 per
   seed ([PHASE1_SENSITIVITY_LVIT.md](PHASE1_SENSITIVITY_LVIT.md); descriptive, no significance test). The main
   results above are unchanged.
+  A post-hoc supplementary MosMedData+ table (decided after the results had been seen; it does not replace the
+  main results) repeats the fixed six-method analysis with these batch-24 runs in place of the main LViT-T runs
+  ([PHASE1_SENSITIVITY_LVIT.md, section 5](PHASE1_SENSITIVITY_LVIT.md#5-post-hoc-supplementary-analysis-mosmeddata-six-method-comparison-with-lvit-t-batch-24)).
+  In it, U-Net, LViT-T, RecLMIS and DD-CMD (Dice 74.01–74.85) are not significantly different from each other
+  (Holm p ≥ 0.249), and all four are significantly better than nnU-Net and TransUNet.
 
 ## 6. Main issues found during the reproduction and how they were handled
 

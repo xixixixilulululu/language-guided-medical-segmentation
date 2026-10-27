@@ -125,3 +125,59 @@ finite for all three runs, as in the main runs.
 - **Caveats.** The analysis was decided after the results were seen. The 15 tests are a new family, so its
   p-values are not those of the pre-specified analysis. The MosMedData+ slices are correlated, as noted for
   the main analysis.
+
+### 5.2 Results (post-hoc; not a replacement of the main results)
+
+Computed once with the script of 5.1 (MosMedData+, test set, 273 cases). Only the LViT-T row differs from the
+main table; the other five rows are identical to it.
+
+| Method | LViT-T runs | Dice Mean ± SD | Dice 95% CI | mIoU | HD95 | ASSD |
+|---|---|---|---|---:|---:|---:|
+| U-Net | – | 74.01 ± 0.86 | [72.02, 75.90] | 60.98 ± 0.84 | 23.02 ± 2.10 | 8.43 ± 1.46 |
+| TransUNet | – | 69.43 ± 0.53 | [66.98, 71.73] | 56.32 ± 0.51 | 24.02 ± 0.62 | 10.91 ± 0.73 |
+| nnU-Net | – | 72.06 ± 0.84 | [69.59, 74.34] | 59.61 ± 0.86 | 22.54 ± 2.96 | 8.90 ± 2.54 |
+| **LViT-T** | **batch 24** | **74.01 ± 1.11** | **[72.13, 75.76]** | 60.87 ± 1.27 | 18.19 ± 1.38 | 5.53 ± 1.19 |
+| RecLMIS | – | 74.44 ± 1.00 | [72.59, 76.18] | 61.35 ± 0.96 | 16.01 ± 1.79 | 3.79 ± 0.58 |
+| DD-CMD | – | 74.85 ± 0.53 | [72.85, 76.72] | 62.12 ± 0.59 | 16.86 ± 0.50 | 5.46 ± 0.83 |
+| *LViT-T, main runs (for reference)* | *batch 2* | *61.26 ± 1.10* | *[57.62, 64.69]* | *49.91 ± 1.24* | *62.04 ± 3.60* | *50.29 ± 2.01* |
+
+Pairwise comparisons, Dice. Paired t-test, Holm across these 15 pairs, α = 0.05. The Wilcoxon test (own Holm)
+is a supplement only. ΔDice = Dice(A) − Dice(B) in Dice points.
+
+| Method A | Method B | ΔDice | 95% CI | Raw p | Holm p | Significant | Wilcoxon Holm p |
+|---|---|---:|---|---:|---:|---|---:|
+| U-Net | TransUNet | +4.58 | [+3.33, +5.83] | 6.43e-12 | 9.00e-11 | yes | 5.40e-11 |
+| U-Net | nnU-Net | +1.95 | [+0.76, +3.14] | 0.001 | 0.010 | yes | 0.526 |
+| U-Net | **LViT-T** | +0.00 | [−0.88, +0.89] | 0.996 | 1.000 | no | 1.000 |
+| U-Net | RecLMIS | −0.43 | [−1.60, +0.74] | 0.470 | 1.000 | no | 1.000 |
+| U-Net | DD-CMD | −0.84 | [−2.04, +0.37] | 0.172 | 0.861 | no | 0.678 |
+| TransUNet | nnU-Net | −2.63 | [−3.71, −1.55] | 2.56e-06 | 2.56e-05 | yes | 7.11e-09 |
+| TransUNet | **LViT-T** | −4.58 | [−5.92, −3.23] | 1.27e-10 | 1.53e-09 | yes | 1.02e-08 |
+| TransUNet | RecLMIS | −5.01 | [−6.45, −3.56] | 5.65e-11 | 7.34e-10 | yes | 1.21e-10 |
+| TransUNet | DD-CMD | −5.42 | [−6.74, −4.10] | 2.39e-14 | 3.59e-13 | yes | 6.99e-22 |
+| nnU-Net | **LViT-T** | −1.95 | [−3.11, −0.78] | 0.001 | 0.009 | yes | 0.648 |
+| nnU-Net | RecLMIS | −2.38 | [−3.59, −1.17] | 1.32e-04 | 0.001 | yes | 0.526 |
+| nnU-Net | DD-CMD | −2.79 | [−3.85, −1.73] | 4.36e-07 | 4.79e-06 | yes | 5.65e-04 |
+| **LViT-T** | RecLMIS | −0.43 | [−1.21, +0.35] | 0.279 | 1.000 | no | 1.000 |
+| **LViT-T** | DD-CMD | −0.84 | [−1.65, −0.03] | 0.042 | 0.249 | no | 0.044 |
+| RecLMIS | DD-CMD | −0.41 | [−1.22, +0.40] | 0.318 | 1.000 | no | 0.004 |
+
+The mIoU, HD95 and ASSD differences with their t- and bootstrap CIs are in
+`results/phase1_posthoc_mosmed_lvit_b24_pairwise.csv`.
+
+### 5.3 Description (post-hoc)
+
+- **Primary test.** With the batch-24 LViT-T, 9 of the 15 pairs are significant (main analysis: 12 of 15).
+  - The four methods U-Net, LViT-T, RecLMIS and DD-CMD (Dice 74.01–74.85) do not differ significantly from
+    each other: all 6 pairs among them have Holm p ≥ 0.249.
+  - Each of these four is significantly better than nnU-Net and TransUNet, and nnU-Net is significantly
+    better than TransUNet.
+  - LViT-T vs. DD-CMD has raw p = 0.042, and its unadjusted 95% CI just excludes 0 ([−1.65, −0.03]), but the
+    pair is not significant after Holm (p = 0.249).
+- **Wilcoxon supplement.** It disagrees with the primary test on 5 pairs:
+  - U-Net vs. nnU-Net, nnU-Net vs. LViT-T and nnU-Net vs. RecLMIS are significant only by the t-test;
+  - LViT-T vs. DD-CMD and RecLMIS vs. DD-CMD are significant only by the Wilcoxon test.
+- **Boundary metrics.** The batch-24 LViT-T has a lower HD95 than U-Net (−4.84 px [−7.47, −2.20]) and a
+  higher HD95 than RecLMIS (+2.17 px), whose t-CI [−0.03, +4.38] includes 0.
+- **Status.** All of this is post hoc. It does not change the pre-specified Phase 1 comparison, in which
+  LViT-T (batch 2) is significantly below the other five methods on MosMedData+.
