@@ -324,18 +324,24 @@ No claim that the text itself causes a difference is made from comparing differe
    of the three differences among them is significant (U-Net − RecLMIS −0.43, Holm p = 0.637; U-Net − DD-CMD
    −0.84, Holm p = 0.517; RecLMIS − DD-CMD −0.41, Holm p = 0.637). Each of the three is significantly better
    than nnU-Net, TransUNet and LViT-T.
+   **Note (post-hoc sensitivity check):** that LViT-T is lowest on MosMedData+ holds only under our pre-fixed
+   setting (batch size 2, learning rate 1e-3). With batch size 24 in the sensitivity check, its mean Dice
+   (74.01) is at the level of the three best methods (74.01–74.85). The sensitivity check has no significance
+   test, so this is descriptive only ([PHASE1_SENSITIVITY_LVIT.md](PHASE1_SENSITIVITY_LVIT.md)).
 
 3. **How strong are the image-only baselines?** On QaTa-COV19 the three image-only methods lie within 0.54 Dice points of each other (79.18–79.72) with no
    significant difference among them (Holm p 0.057–0.428); all three are significantly below each
    language-guided method, by 1.99 (nnU-Net vs. LViT-T) to 5.59 (U-Net vs. RecLMIS) Dice points. On
    MosMedData+ U-Net (74.01) is level with the two best language-guided methods (see question 2), and is
    significantly above nnU-Net (+1.95) and TransUNet (+4.58); all three image-only methods are significantly
-   above LViT-T (by 8.17 to 12.75 points).
+   above LViT-T (by 8.17 to 12.75 points). This last result depends on LViT-T's pre-fixed setting (note in
+   answer 2).
 
 4. **Do language-guided methods consistently outperform image-only methods?** No. On QaTa-COV19 all 9 language-guided vs. image-only pairs are significant in favour of the
    language-guided method. On MosMedData+ only 4 of the 9 are (RecLMIS and DD-CMD vs. TransUNet and nnU-Net);
    2 are not significant (RecLMIS and DD-CMD vs. U-Net), and 3 are significant in favour of the image-only
-   method (U-Net, TransUNet and nnU-Net vs. LViT-T). These are comparisons of different architectures and
+   method (U-Net, TransUNet and nnU-Net vs. LViT-T; these 3 depend on LViT-T's pre-fixed setting, note in
+   answer 2). These are comparisons of different architectures and
    training recipes; they do not show whether the text causes any difference (Phase 2).
 
 5. **Does the recent DD-CMD model change the conclusion compared with LViT-T and RecLMIS?** No. DD-CMD is significantly better than LViT-T on both datasets (+2.93 Dice points on QaTa-COV19, +13.59
@@ -383,8 +389,13 @@ No claim that the text itself causes a difference is made from comparing differe
 - **LViT-T settings.** The batch size 2 comes from the official code (`Config.py`, a comment specific to
   LViT-T), and the MosMedData+ learning rate 1e-3 from the paper. Neither the paper nor the code explicitly
   uses this combination. On MosMedData+ our LViT-T is about 13 Dice points below the paper (61.26 vs. 74.57),
-  and every seed has 38–41 empty test predictions out of 273 (section 6). Whether this combination causes the
-  gap has not been tested. No setting was changed because of it.
+  and every seed has 38–41 empty test predictions out of 273 (section 6). No setting of the main runs was
+  changed because of it.
+  In a sensitivity check decided after the main results had been seen, with a plan written and pushed
+  beforehand, only the batch size was changed from 2 to 24. LViT-T on MosMedData+ then reached a test Dice of
+  74.01 ± 1.11 (main runs 61.26 ± 1.10; paper 74.57), and the empty predictions fell from 38–41 to 0–2 per
+  seed ([PHASE1_SENSITIVITY_LVIT.md](PHASE1_SENSITIVITY_LVIT.md); descriptive, no significance test). The main
+  results above are unchanged.
 - **Correlated MosMedData+ slices** (section "Methods"): neighbouring slices of one CT volume are correlated,
   so the MosMedData+ CIs may be too narrow and the p-values too small.
 - **Published values** (section 4) come from each paper's own setting and metric definition; they are for
@@ -402,5 +413,8 @@ Changes to this report after the run, all by hand and none of them changing a nu
 - 2026-10-26, commit 55163f0: RecLMIS published values (section 4), limitations (section 8), the Phase 0 vs.
   Phase 1 Holm note (answer 8), and the table of Wilcoxon disagreements (section 2).
 - 2026-10-26, finalisation: the conclusions were reviewed by the project lead and the results re-computed
-  independently from the per-case files, with an exact match; the DRAFT marks were removed. No number was
-  changed.
+  independently from the per-case files, with an exact match; the DRAFT marks were removed (commit 96adc53).
+  No number was changed.
+- 2026-10-27: notes pointing to the post-hoc LViT-T sensitivity check (PHASE1_SENSITIVITY_LVIT.md) added to
+  answers 2, 3 and 4 and to the LViT-T limitation in section 8. Only explanatory text was added; no number
+  and no part of the analysis program was changed.

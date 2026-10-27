@@ -19,6 +19,10 @@ It replaces the interim report `PHASE1_PROGRESS.md` (kept in the git history).
    than LViT-T (81.71), which is significantly better than the three image-only methods (79.18–79.72).
 4. **MosMedData+: DD-CMD (74.85), RecLMIS (74.44) and U-Net (74.01) are level and best.** LViT-T (61.26)
    is significantly below every other method, including all three image-only ones.
+   **Note (post-hoc sensitivity check):** that LViT-T is lowest on MosMedData+ holds only under our pre-fixed
+   setting (batch size 2, learning rate 1e-3). With batch size 24 in the sensitivity check, its mean Dice
+   (74.01) is at the level of the three best methods (74.01–74.85). The sensitivity check has no significance
+   test, so this is descriptive only ([PHASE1_SENSITIVITY_LVIT.md](PHASE1_SENSITIVITY_LVIT.md)).
 5. **Language-guided methods are therefore not consistently better than image-only ones.** These are
    comparisons of different architectures; they do not show whether the text itself causes any
    difference. That is the question of Phase 2.
@@ -84,7 +88,7 @@ pairs: 11 of 15 on QaTa-COV19, 12 of 15 on MosMedData+ (all 30 in PHASE1_RESULTS
   correction; the two results do not contradict each other.
 - **On MosMedData+** only 4 of the 9 language-guided vs. image-only pairs favour the language-guided method
   (RecLMIS and DD-CMD vs. TransUNet and nnU-Net); 2 are level (vs. U-Net) and 3 favour the image-only method
-  (all three vs. LViT-T).
+  (all three vs. LViT-T). The last 3 depend on LViT-T's pre-fixed setting (see the note in section 1, item 4).
 - **Boundary metrics** separate methods that Dice does not: on MosMedData+ U-Net's HD95 is 7.01 px
   [3.35, 10.67] above RecLMIS and 6.17 px [3.29, 9.05] above DD-CMD.
 - **The supplementary Wilcoxon test** (not used for the conclusions) disagrees with the t-test on 7 pairs,
@@ -133,8 +137,12 @@ mIoU in %.
 - **Limitation — LViT-T on MosMedData+ is about 13 points below the paper.** Every seed has 38–41 empty test
   predictions out of 273 (every other method: 0–6). Our LViT-T uses batch size 2 (from the official code, a
   comment specific to LViT-T) with the MosMedData+ learning rate 1e-3 (from the paper); neither the paper
-  nor the code explicitly uses this combination. Whether it causes the gap has not been tested, and no
-  setting was changed because of it.
+  nor the code explicitly uses this combination. No setting of the main runs was changed because of it.
+  In a sensitivity check decided after the main results had been seen, with a plan written and pushed
+  beforehand, only the batch size was changed from 2 to 24. LViT-T on MosMedData+ then reached a test Dice of
+  74.01 ± 1.11 (main runs 61.26 ± 1.10; paper 74.57), and the empty predictions fell from 38–41 to 0–2 per
+  seed ([PHASE1_SENSITIVITY_LVIT.md](PHASE1_SENSITIVITY_LVIT.md); descriptive, no significance test). The main
+  results above are unchanged.
 
 ## 6. Main issues found during the reproduction and how they were handled
 
