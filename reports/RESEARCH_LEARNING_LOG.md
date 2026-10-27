@@ -5,7 +5,7 @@ asked, mistakes that were found (including mistakes in AI-assisted advice), how 
 rule I took away from each. It covers the training stage (BUSI, Tasks 1–8) and Phases 0, 1 and 2 of this
 project.
 
-Last updated: 2026-10-27 (Phase 2 in progress).
+Last updated: 2026-10-27 (Phase 2 in progress; reflections E1–E3 added).
 
 ---
 
@@ -206,7 +206,82 @@ Problems found before any training:
 
 ---
 
-## Part E — Principles I now follow
+## Part E — Reflections
+
+### E1. A convincing AI answer can still be wrong
+
+- **What happened.** Several times an AI assistant (including the one that helped write this log) gave an
+  answer that sounded right, came with reasons, and was confirmed again when I asked "are you sure?", but was
+  wrong:
+  - Training stage: "DenseNet121 misses malignant cases because it hesitates near 0.5". The per-case
+    probabilities showed confident misses.
+  - Phase 0: a GitHub issue was presented as evidence that the paper's U-Net used different settings. It was
+    about something else.
+  - Phase 1: taking the batch size from the code and the learning rate from the paper was justified as "each
+    parameter from its most specific source". It sounded principled, and it cost LViT-T about 13 Dice points
+    on MosMedData+.
+  - Phase 1: LViT's 83.66 was called a single run. The paper's table shows a mean of three runs.
+  - Phase 2: the first C2 rewrite passed a 40-row meaning check, but in many cases two of the methods cut off
+    its last words (the location) at their token limit. The check looked at the text, not at what the model
+    actually reads.
+  - Phase 2: a quick check written by the AI printed "MISMATCH". The data were fine; the check command was
+    wrong.
+- **Why.** An AI writes fluent reasons for whatever it currently believes. Asking "are you sure?" usually
+  produces more reasons, not new evidence.
+- **What works:**
+  - ask for evidence that can be checked: the line of code, the table in the paper, the per-case numbers;
+  - check by independent means: separate code, the raw data, a validation run;
+  - ask what result would prove the claim wrong, and look for it;
+  - two AI sessions checking each other caught several errors, but they can share a blind spot. The final
+    word belongs to the data and the code.
+
+### E2. Papers show their methods in the best light
+
+A paper is written to support its claim, and its space is limited. Authors show the settings, baselines and
+metrics that support the claim; details and limits that do not fit are often left out. This is not
+necessarily intentional, but it caused real problems in this project:
+
+- **Code and paper disagree.** LViT's code and paper give different batch sizes and learning rates, and it was
+  not clear which setting produced the reported numbers.
+- **Released code does not do what the paper describes.** LViT's loader paired QaTa images with the wrong
+  masks and had no MosMedData+ path. RecLMIS silently switched off its main loss when a package was missing,
+  and its MosMedData+ option loaded the QaTa settings.
+- **Weak baselines.** In the LViT paper, U-Net scores 64.6 on MosMedData+. Our U-Net, scored with LViT's own
+  test code, reached 74.0. A weak baseline makes a new method look better. We do not know the reason, so our
+  report stays neutral.
+- **Metric choice.** DD-CMD reports a Dice pooled over all pixels, which gives different numbers from the
+  per-image Dice used by the others.
+- **What the model really reads.** LViT-T keeps only the first 10 word vectors, so most location words never
+  reach it. RecLMIS reads 16 tokens; in 101 of 1429 QaTa validation cases even the original text loses its
+  last location words. This is hard to see from the papers, which present the methods as guided by the report.
+- **The overall result.** Under one common evaluation, the language-guided methods were not consistently
+  better than the best image-only method (Phase 1).
+
+**Lesson:** read a paper as the authors' best case, not as a complete description. Read the code too, rerun
+the baselines ourselves, score every method with one evaluator, and check what each component actually does.
+
+### E3. Small datasets make conclusions fragile
+
+- **Count independent units, not images.** MosMedData+ has 273 validation images but only 11 independent
+  CT-volume units (9 on test). Slices of one volume are similar, so 273 images are worth far fewer than 273
+  independent cases.
+- **Examples from this project:**
+  - Phase 0: the disagreement with the LViT paper appeared on MosMedData+, the small dataset; on QaTa our
+    numbers matched.
+  - Phase 2: on MosMedData+, the harm of a fully wrong report for RecLMIS was 1.7 Dice points when every image
+    counts equally, and 4.0 points when every CT volume counts equally. Both are reasonable averages; one is
+    below the planning threshold of 2 points and the other above it. The decision rule had been written down
+    before the full results, so the answer could not be picked afterwards.
+  - Training stage: 15 complete failures pulled U-Net's mean Dice down while its median was similar.
+  - The text is small too: the reports are templated. QaTa's 5716 training images have only 273 distinct
+    texts, and MosMedData+'s 2183 have only 101.
+- **Lesson:** report the number of independent units, the seeds and the confidence intervals; call
+  small-sample results exploratory; do not read meaning into small differences; fix the analysis before
+  seeing the results.
+
+---
+
+## Part F — Principles I now follow
 
 1. **Check what is measured** (split, class, metric definition) before trusting a number.
 2. **Verify explanations against per-case data** before writing them down; treat AI-written text as a draft.
@@ -218,3 +293,6 @@ Problems found before any training:
 6. **Say what is certain and what is a judgment**, and state who did each check.
 7. **Ask the supervisor early** when a requirement has no source or a rule is unclear.
 8. **Compare with your own baselines**, not only with numbers copied from papers.
+9. **A convincing explanation is not evidence.** Ask for checkable evidence, not "are you sure?".
+10. **Read a paper as the authors' best case.** Check the code, the baselines and the metrics yourself.
+11. **Count independent units, not images.** With few units, conclusions are exploratory.
