@@ -38,7 +38,8 @@ DECISION = os.path.join("configs", "phase2_frozen", "phase3_decision.json")
 PROTOCOL = os.path.join("reports", "PHASE2_PROTOCOL.md")
 # Files that define Phase 2 (the record must cover all of them; inference driver and analysis are added
 # here when they are written, before the freeze)
-LOCKED_FILES = ["src/phase2/lock.py", "src/phase2/texts.py", "src/phase2/conditions.py", PROTOCOL, DECISION]
+LOCKED_FILES = ["src/phase2/lock.py", "src/phase2/texts.py", "src/phase2/conditions.py", "src/phase2/infer.py",
+                PROTOCOL, DECISION]
 REQUIRED_IN_RECORD = [DECISION, PROTOCOL]
 CLOSED_EXIT_CODE = 5
 TEXT_SOURCE = os.path.expanduser("~/datasets")                      # LViT layout: <ds>/<S>_Folder/<S>_text.xlsx

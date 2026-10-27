@@ -52,8 +52,8 @@ Status: 2026-10-27, **draft**.
 | MosMedData+ | `49b2d993…6333c1` | `cd2b5c46…37ea4` | `f38fc890…fec49e` |
 
 **Code.**
-- `src/phase2/texts.py`, `src/phase2/conditions.py` and `src/phase2/lock.py`, from the commit that adds this
-  draft.
+- `src/phase2/texts.py`, `src/phase2/conditions.py`, `src/phase2/lock.py` and `src/phase2/infer.py`
+  (CPU checks: `src/phase2/test_phase2_infer.py`, 12 passed).
 - The freeze will record the final commit.
 
 ## 2. Validation-first order and the Phase 2 lock
@@ -215,52 +215,86 @@ No model-specific fallback was needed: the empty string is a valid input for all
 
 - **Sample.** `python src/phase2/conditions.py --c2-review`: distinct fully parsed texts of each split (both
   datasets pooled, sorted by dataset and text), 20 per split drawn with `numpy.random.default_rng(0)`.
-- **For manual checking that the meaning is identical.** Two things to watch:
+- **Review result (2026-10-27): all 40 rewrites have the same meaning as the original.**
+  - The project lead checked the 40 pairs row by row.
+  - In addition, the AI assistant (Claude) parsed each rewrite back and compared its (scope, count, location)
+    with the parsed original: 40 of 40 identical.
+- **Points that were checked:**
   - by D4, `upper middle lower` is rewritten as `all of the … lung`;
   - grammatical slips of the original (e.g. "one infected areas") are not carried over.
 
 | # | Split | Dataset | Original (C0) | Rewrite (C2) | Same meaning? |
 |---:|---|---|---|---|---|
-| 1 | train | MosMedData+ | Bilateral pulmonary infection, eight infected areas, middle left lung and middle right lung. | Bilateral lung infection, eight areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
-| 2 | train | MosMedData+ | Bilateral pulmonary infection, five infected areas, middle left lung and middle right lung. | Bilateral lung infection, five areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
-| 3 | train | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and middle right lung. | Bilateral lung infection, four areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
-| 4 | train | MosMedData+ | Bilateral pulmonary infection, three infected areas, lower left lung and upper right lung. | Bilateral lung infection, three areas of infection, in the lower part of the left lung and the upper part of the right lung. | [to be checked] |
-| 5 | train | MosMedData+ | Unilateral pulmonary infection, two infected areas, left lung and upper right lung. | Unilateral lung infection, two areas of infection, in the left lung and the upper part of the right lung. | [to be checked] |
-| 6 | train | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, upper left lung and upper middle lower right lung. | Bilateral lung infection, four areas of infection, in the upper part of the left lung and all of the right lung. | [to be checked] |
-| 7 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, three areas of infection, in all of the left lung and all of the right lung. | [to be checked] |
-| 8 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middlr lower left lung and lower right lung. | Bilateral lung infection, three areas of infection, in all of the left lung and the lower part of the right lung. | [to be checked] |
-| 9 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and middle right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the middle part of the right lung. | [to be checked] |
-| 10 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the upper part of the right lung. | [to be checked] |
-| 11 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and middle right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle part of the right lung. | [to be checked] |
-| 12 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. | [to be checked] |
-| 13 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
-| 14 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and all of the right lung. | [to be checked] |
-| 15 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung andupper right lung. | Bilateral lung infection, two areas of infection, in the upper part of the left lung and the upper part of the right lung. | [to be checked] |
-| 16 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and all of the right lung. | [to be checked] |
-| 17 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,all left lung and lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the lower part of the right lung. | [to be checked] |
-| 18 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, middle  left lung. | Unilateral lung infection, one area of infection, in the middle part of the left lung. | [to be checked] |
-| 19 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower right lung. | Unilateral lung infection, one area of infection, in all of the right lung. | [to be checked] |
-| 20 | train | QaTa-COV19 | Unilateral pulmonary infection, two infected area, lower left lung. | Unilateral lung infection, two areas of infection, in the lower part of the left lung. | [to be checked] |
-| 21 | val | MosMedData+ | Bilateral pulmonary infection, five infected areas, upper left lung and middle right lung. | Bilateral lung infection, five areas of infection, in the upper part of the left lung and the middle part of the right lung. | [to be checked] |
-| 22 | val | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and lower right lung. | Bilateral lung infection, four areas of infection, in the middle part of the left lung and the lower part of the right lung. | [to be checked] |
-| 23 | val | MosMedData+ | Bilateral pulmonary infection, nine infected areas, middle left lung and middle right lung. | Bilateral lung infection, nine areas of infection, in the middle part of the left lung and the middle part of the right lung. | [to be checked] |
-| 24 | val | MosMedData+ | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one area of infection, in the left lung and the lower part of the right lung. | [to be checked] |
-| 25 | val | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, middle lower left lung and lower right lung. | Bilateral lung infection, four areas of infection, in the middle and lower part of the left lung and the lower part of the right lung. | [to be checked] |
-| 26 | val | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, lower left lung and lower right lung. | Bilateral lung infection, three areas of infection, in the lower part of the left lung and the lower part of the right lung. | [to be checked] |
-| 27 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,  upper lower right lung. | Bilateral lung infection, two areas of infection, in the upper and lower part of the right lung. | [to be checked] |
-| 28 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the lower part of the right lung. | [to be checked] |
-| 29 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the upper part of the right lung. | [to be checked] |
-| 30 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. | [to be checked] |
-| 31 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle and lower part of the right lung. | [to be checked] |
-| 32 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the upper and lower part of the right lung. | [to be checked] |
-| 33 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and lower right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and the lower part of the right lung. | [to be checked] |
-| 34 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle lower left and middle lower right lung. | Bilateral lung infection, two areas of infection, in the middle and lower part of the left lung and the middle and lower part of the right lung. | [to be checked] |
-| 35 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung and upper middle right lung. | Bilateral lung infection, two areas of infection, in the upper part of the left lung and the upper and middle part of the right lung. | [to be checked] |
-| 36 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and lower right lung. | Bilateral lung infection, two areas of infection, in the upper and middle part of the left lung and the lower part of the right lung. | [to be checked] |
-| 37 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and upper lower right lung. | Bilateral lung infection, two areas of infection, in the upper and middle part of the left lung and the upper and lower part of the right lung. | [to be checked] |
-| 38 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, all left and all right lung. | Unilateral lung infection, one area of infection, in all of the left lung and all of the right lung. | [to be checked] |
-| 39 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle left lung. | Unilateral lung infection, one area of infection, in the upper and middle part of the left lung. | [to be checked] |
-| 40 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower left lung. | Unilateral lung infection, one area of infection, in all of the left lung. | [to be checked] |
+| 1 | train | MosMedData+ | Bilateral pulmonary infection, eight infected areas, middle left lung and middle right lung. | Bilateral lung infection, eight areas of infection, in the middle part of the left lung and the middle part of the right lung. | Yes |
+| 2 | train | MosMedData+ | Bilateral pulmonary infection, five infected areas, middle left lung and middle right lung. | Bilateral lung infection, five areas of infection, in the middle part of the left lung and the middle part of the right lung. | Yes |
+| 3 | train | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and middle right lung. | Bilateral lung infection, four areas of infection, in the middle part of the left lung and the middle part of the right lung. | Yes |
+| 4 | train | MosMedData+ | Bilateral pulmonary infection, three infected areas, lower left lung and upper right lung. | Bilateral lung infection, three areas of infection, in the lower part of the left lung and the upper part of the right lung. | Yes |
+| 5 | train | MosMedData+ | Unilateral pulmonary infection, two infected areas, left lung and upper right lung. | Unilateral lung infection, two areas of infection, in the left lung and the upper part of the right lung. | Yes |
+| 6 | train | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, upper left lung and upper middle lower right lung. | Bilateral lung infection, four areas of infection, in the upper part of the left lung and all of the right lung. | Yes |
+| 7 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, three areas of infection, in all of the left lung and all of the right lung. | Yes |
+| 8 | train | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, upper middlr lower left lung and lower right lung. | Bilateral lung infection, three areas of infection, in all of the left lung and the lower part of the right lung. | Yes |
+| 9 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and middle right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the middle part of the right lung. | Yes |
+| 10 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the upper part of the right lung. | Yes |
+| 11 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and middle right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle part of the right lung. | Yes |
+| 12 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. | Yes |
+| 13 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and middle right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and the middle part of the right lung. | Yes |
+| 14 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and all of the right lung. | Yes |
+| 15 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung andupper right lung. | Bilateral lung infection, two areas of infection, in the upper part of the left lung and the upper part of the right lung. | Yes |
+| 16 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle lower left lung and upper middle lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and all of the right lung. | Yes |
+| 17 | train | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,all left lung and lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the lower part of the right lung. | Yes |
+| 18 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, middle  left lung. | Unilateral lung infection, one area of infection, in the middle part of the left lung. | Yes |
+| 19 | train | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower right lung. | Unilateral lung infection, one area of infection, in all of the right lung. | Yes |
+| 20 | train | QaTa-COV19 | Unilateral pulmonary infection, two infected area, lower left lung. | Unilateral lung infection, two areas of infection, in the lower part of the left lung. | Yes |
+| 21 | val | MosMedData+ | Bilateral pulmonary infection, five infected areas, upper left lung and middle right lung. | Bilateral lung infection, five areas of infection, in the upper part of the left lung and the middle part of the right lung. | Yes |
+| 22 | val | MosMedData+ | Bilateral pulmonary infection, four infected areas, middle left lung and lower right lung. | Bilateral lung infection, four areas of infection, in the middle part of the left lung and the lower part of the right lung. | Yes |
+| 23 | val | MosMedData+ | Bilateral pulmonary infection, nine infected areas, middle left lung and middle right lung. | Bilateral lung infection, nine areas of infection, in the middle part of the left lung and the middle part of the right lung. | Yes |
+| 24 | val | MosMedData+ | Unilateral pulmonary infection, one infected areas, left lung and lower right lung. | Unilateral lung infection, one area of infection, in the left lung and the lower part of the right lung. | Yes |
+| 25 | val | QaTa-COV19 | Bilateral pulmonary infection, four infected areas, middle lower left lung and lower right lung. | Bilateral lung infection, four areas of infection, in the middle and lower part of the left lung and the lower part of the right lung. | Yes |
+| 26 | val | QaTa-COV19 | Bilateral pulmonary infection, three infected areas, lower left lung and lower right lung. | Bilateral lung infection, three areas of infection, in the lower part of the left lung and the lower part of the right lung. | Yes |
+| 27 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas,  upper lower right lung. | Bilateral lung infection, two areas of infection, in the upper and lower part of the right lung. | Yes |
+| 28 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and lower right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the lower part of the right lung. | Yes |
+| 29 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, all left lung and upper right lung. | Bilateral lung infection, two areas of infection, in all of the left lung and the upper part of the right lung. | Yes |
+| 30 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and all right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and all of the right lung. | Yes |
+| 31 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and midddle lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the middle and lower part of the right lung. | Yes |
+| 32 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, lower left lung and upper lower right lung. | Bilateral lung infection, two areas of infection, in the lower part of the left lung and the upper and lower part of the right lung. | Yes |
+| 33 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle left lung and lower right lung. | Bilateral lung infection, two areas of infection, in the middle part of the left lung and the lower part of the right lung. | Yes |
+| 34 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, middle lower left and middle lower right lung. | Bilateral lung infection, two areas of infection, in the middle and lower part of the left lung and the middle and lower part of the right lung. | Yes |
+| 35 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper left lung and upper middle right lung. | Bilateral lung infection, two areas of infection, in the upper part of the left lung and the upper and middle part of the right lung. | Yes |
+| 36 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and lower right lung. | Bilateral lung infection, two areas of infection, in the upper and middle part of the left lung and the lower part of the right lung. | Yes |
+| 37 | val | QaTa-COV19 | Bilateral pulmonary infection, two infected areas, upper middle left lung and upper lower right lung. | Bilateral lung infection, two areas of infection, in the upper and middle part of the left lung and the upper and lower part of the right lung. | Yes |
+| 38 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, all left and all right lung. | Unilateral lung infection, one area of infection, in all of the left lung and all of the right lung. | Yes |
+| 39 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle left lung. | Unilateral lung infection, one area of infection, in the upper and middle part of the left lung. | Yes |
+| 40 | val | QaTa-COV19 | Unilateral pulmonary infection, one infected area, upper middle lower left lung. | Unilateral lung infection, one area of infection, in all of the left lung. | Yes |
+
+## 4.4 Text-path check (first job; validation only)
+
+Defined before the job is run.
+- **Driver and job.** `src/phase2/infer.py --stage textpath`, one process per method × dataset. Slurm file
+  `slurm/phase2_textpath.slurm`, all 18 checkpoints, validation only.
+- **Checks per checkpoint:**
+  1. C0 on the full validation split, through the Phase 2 path (the Phase 1 drivers' dataset classes, model
+     and `predict`, unchanged; eval mode; inference batch 32; seed set before every pass).
+  2. Reconciliation with the archived Phase 1 validation evaluation of the same checkpoint: per-case
+     |ΔDice| and |ΔHD95|, and the scored-mask pixels that differ.
+  3. A second C0 pass as the numerical-noise reference: maximum probability difference, mask pixels, |ΔDice|.
+  4. Fixed subset: 64 C6-eligible validation cases per dataset, the smallest
+     sha256(`phase2-textpath-subset-v1|dataset|id`). C1 and C6 (first donor) are run on it, recording whether
+     the raw text and the model input changed, the mean and maximum probability change, the changed mask
+     pixels, and Dice under C0 vs. the condition.
+  5. Image/mask pairing: the targets returned by the loader must equal the common masks, or the job stops.
+  6. LViT-T: the C0 word vectors of the Phase 2 path must equal the Phase 1 cache (looked up by key).
+- **Effective-input audit** for every validation condition row, the same for all seeds:
+  - raw-text change;
+  - change of the actual model input: LViT-T the 10 × 768 word vectors, RecLMIS the CLIP tokens, DD-CMD
+    the BiomedBERT ids and mask;
+  - truncation by the method's tokenizer;
+  - for LViT-T, the words actually inside its 10-word window, taken from the tokenizer as the text path forms
+    them, and whether they differ from C0. The C2 window changes are reported separately.
+
+  The audit is written to `runs/phase2/val/effective_input_<method>_<dataset>.csv`.
+- **Afterwards, before any test run.** The numerical-tolerance rule for the C0 reconciliation is fixed from
+  the repeat and reconciliation results and recorded here. A text change does not have to reduce Dice to
+  pass; an unchanged prediction with a changed input is reported as insensitivity, not as a failure.
 
 ## 5. Analysis rules fixed so far
 
@@ -297,6 +331,14 @@ No model-specific fallback was needed: the empty string is a valid input for all
   written; see the sensitivity check in section 5.
 - **LViT-T 10-word window.** The location clause is never fully inside the 10 kept word vectors. It is
   partly inside (27–31% of location words); the rest acts only through BERT's context.
+- **C2 for LViT-T changes the content of the 10-word window** (recorded 2026-10-27, before any inference).
+  The C2 template is longer than the original, so the first 10 BERT words differ in content, not only in
+  wording. For example, the original window `bilateral pulmonary infection , two infected areas , middle left`
+  becomes `bilateral lung infection , two areas of infection , in` (the location starts after word 10).
+  For LViT-T, C0−C2 therefore also measures a change of what is inside the window. It is interpreted with
+  this in mind. The effective-input audit records, for every case and condition, the actual words in the
+  LViT-T window as produced by the tokenizer (not inferred) and reports separately how often C2 changes the
+  window content.
 - **RecLMIS truncation.** In 18.6% of QaTa train/val texts the end of the location is cut at 18 tokens.
 - **Effective input.** Whether each change reaches the model is measured per case in the text-path audit,
   not assumed.
