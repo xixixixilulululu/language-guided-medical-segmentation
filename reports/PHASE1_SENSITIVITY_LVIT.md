@@ -96,3 +96,32 @@ finite for all three runs, as in the main runs.
   `training_summary.json`.
 - Not committed: weights, masks and probabilities.
 - No main-run file was written or changed.
+
+## 5. Post-hoc supplementary analysis: MosMedData+ six-method comparison with LViT-T batch 24
+
+> **POST-HOC SUPPLEMENTARY ANALYSIS.** It was decided after the Phase 1 main results and the sensitivity
+> results above had been seen. **It does not replace the Phase 1 main results:** the main six-method table
+> and the 15 pairwise comparisons in [PHASE1_RESULTS.md](PHASE1_RESULTS.md) stay as they are.
+
+### 5.1 Method (written and pushed before the computation)
+
+- **Scope.** MosMedData+ only; QaTa-COV19 is not affected.
+- **Data.** The three LViT-T batch-24 runs (`runs/lvit_b24/MosMedData+/seed<k>/eval_test/per_case.csv`)
+  replace the three main LViT-T runs. The other five methods (U-Net, TransUNet, nnU-Net, RecLMIS, DD-CMD)
+  use their main-run results unchanged.
+- **Statistics: exactly those of the fixed Phase 1 analysis.** `src/analyze_phase1.py` is not modified;
+  `src/phase1/posthoc_mosmed_lvit_b24.py` imports it and calls its own functions (`load_per_case`,
+  `main_table`, `pairwise_table`). These are:
+  - six-method table: mean ± sample SD of the 3 per-seed means; Dice 95% CI = case bootstrap of the
+    seed-averaged per-case Dice (10,000 resamples, rng 0);
+  - 15 pairwise comparisons: paired t-test on the seed-averaged per-case Dice, Holm across the 15 pairs,
+    two-sided α = 0.05; the Wilcoxon signed-rank test with its own Holm correction as a supplement;
+  - mIoU / HD95 / ASSD: paired mean differences with t-CI and case-bootstrap CI.
+- **Check of the script.** Run without the substitution (`--no-substitute`), it reproduces the MosMedData+
+  rows of the main analysis (`results/final_six_method_results.csv`, `results/final_six_method_pairwise.csv`)
+  exactly. This was checked before the computation.
+- **Outputs.** `results/phase1_posthoc_mosmed_lvit_b24_results.csv` and
+  `results/phase1_posthoc_mosmed_lvit_b24_pairwise.csv`.
+- **Caveats.** The analysis was decided after the results were seen. The 15 tests are a new family, so its
+  p-values are not those of the pre-specified analysis. The MosMedData+ slices are correlated, as noted for
+  the main analysis.
