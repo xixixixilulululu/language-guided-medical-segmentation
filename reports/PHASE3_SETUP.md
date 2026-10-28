@@ -242,9 +242,17 @@ Each item gives a proposal and the reason.
 17. **Task 3.5 validation results.** GATE_FIT and GATE_CAL are reported separately, never pooled, and both are
     labelled development data. GATE_FIT is used to fit LR and GATE_CAL to choose the thresholds, so neither is an
     independent evaluation.
-18. **Weight normalisation (item 6).** Mean weight 1 is adopted for now. The project lead will ask the
-    supervisor whether "normalize" means this or a sum of 1, and item 6 changes if so. **Task 3.4 (LR fitting)
-    waits for that reply.**
+18. **Weight normalisation (item 6)** (revised 2026-10-28, before any LR result).
+    - **Check of whether the weight scale matters.** `src/phase3/check_weight_scale.py` →
+      `results/phase3_weight_scale_check.json`, run with the cluster's scikit-learn 1.9.0.
+      - Setup: the same synthetic data fitted with weights w and 10·w: weighted `StandardScaler`, then
+        `LogisticRegression(C=1.0, solver="lbfgs", max_iter=2000)`.
+      - The scaler (mean, scale) is identical. The **coefficients differ** (largest difference 0.050): in
+        scikit-learn the weight scale acts like a change of C.
+    - **Decision.** Weights are rescaled to **mean 1**, so that C = 1.0 keeps its usual scale. This was fixed
+      before any LR result. If the supervisor means another normalisation (e.g. sum 1), the LRs are refitted
+      before the freeze.
+    - **Task 3.4 does not wait for the supervisor's reply.**
 
 **Decisions recorded.** On 2026-10-28 the project lead accepted items 1–15 and added items 16–18.
 
