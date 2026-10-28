@@ -1,6 +1,6 @@
 # Phase 3 — Setup (Task 3.1 preparation; DRAFT)
 
-Status: 2026-10-28, **draft**. Covers Task 3.1A (inventory, rerun plan) and Task 3.1B (the fixed QaTa group split)
+Status: 2026-10-28, **draft** (section 5 accepted by the project lead, items 16–18 added). Covers Task 3.1A (inventory, rerun plan) and Task 3.1B (the fixed QaTa group split)
 of [PHASE3_PLAN.md](PHASE3_PLAN.md), plus the implementation details that the plan leaves open and that must be
 fixed before any Phase 3 result is seen (section 5).
 
@@ -232,6 +232,21 @@ Each item gives a proposal and the reason.
       pass). No re-scoring.
     - NULL: the C1 mask of the same image and seed.
     - Fallback rate: the share of rows switched to IMG.
+
+16. **Reproducibility expectations for the rerun** (checks, not thresholds; added 2026-10-28):
+    - **LViT-T and RecLMIS** are deterministic. Their new C2/C3 masks must equal the Phase 2 masks (0 pixels).
+      Any difference stops the work until its cause is found and reported to the project lead.
+    - **DD-CMD** is expected to differ by about 1–4 pixels per case. The differences are recorded as they are.
+    - **IMG** vs. the Phase 0 archive: the result is reported as it is (pixels and Dice of any difference). It
+      does not block the next steps; Phase 3 uses the new scores.
+17. **Task 3.5 validation results.** GATE_FIT and GATE_CAL are reported separately, never pooled, and both are
+    labelled development data. GATE_FIT is used to fit LR and GATE_CAL to choose the thresholds, so neither is an
+    independent evaluation.
+18. **Weight normalisation (item 6).** Mean weight 1 is adopted for now. The project lead will ask the
+    supervisor whether "normalize" means this or a sum of 1, and item 6 changes if so. **Task 3.4 (LR fitting)
+    waits for that reply.**
+
+**Decisions recorded.** On 2026-10-28 the project lead accepted items 1–15 and added items 16–18.
 
 ## 6. Next steps (after confirmation)
 
