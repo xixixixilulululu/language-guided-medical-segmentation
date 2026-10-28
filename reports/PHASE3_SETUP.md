@@ -248,6 +248,50 @@ Each item gives a proposal and the reason.
 
 **Decisions recorded.** On 2026-10-28 the project lead accepted items 1–15 and added items 16–18.
 
+## 7. Results of the rerun and of Tasks 3.1C / 3.1D (validation, QaTa GATE_FIT; development data)
+
+**Rerun** (job 371, 2026-10-27 22:25–22:49 EDT, 0 failures). Checks: `src/phase3/check_rerun.py` →
+`results/phase3_rerun_checks.csv`, over every case of every new file.
+- **All complete.** In every file the mask equals probability > 0.5, and the probabilities are float32.
+- **LViT-T and RecLMIS C2 / C3a–c:** identical to the Phase 2 masks (0 pixels), as expected (item 16).
+- **DD-CMD C2 / C3a–c:**
+  - differs from Phase 2 in 39 of 17,130 QaTa rows (≤ 1 pixel) and 73 of 3252 MosMed rows (≤ 2 pixels);
+  - max per-case |ΔDice| 0.0157, on a small MosMed lesion;
+  - recorded as it is; Phase 3 uses the new scores.
+- **IMG vs. the Phase 0 archive:**
+  - U-Net: identical (0 pixels, all 6 runs).
+  - nnU-Net: 382–444 of 1429 QaTa cases differ by ≤ 12 pixels, and 13–18 of 273 MosMed cases by ≤ 2 pixels.
+    Max per-case |ΔDice| 0.0064; mean Dice per run within 0.00006 of Phase 0. This is the same GPU
+    non-determinism Phase 0 recorded for nnU-Net. Phase 3 uses the new scores.
+
+**Task 3.1C, IMG choice** (`src/phase3/select_img_oracle.py`, 10 synthetic tests passed →
+`results/phase3_fallback_selection.csv`). Clean Dice on GATE_FIT (859 images, 716 groups), group-weighted:
+
+| Architecture | Dice (group-weighted) |
+|---|---|
+| **nnU-Net** | **0.7613** |
+| U-Net | 0.7592 |
+
+- Difference (U-Net − nnU-Net): −0.0022; image-weighted: 0.7701 vs. 0.7686.
+- **nnU-Net is chosen** for all three language models and all conditions, with seeds matched (LANG seed k ↔ IMG
+  seed k).
+
+**Task 3.1D, oracle diagnostics** (`results/phase3_oracle_diagnostics.csv`).
+- **Set.** S_FIT has 853 images in 710 groups.
+- **Sources.** LANG C4–C6 come from Phase 2; IMG is nnU-Net from the rerun.
+- **Values.** Group-weighted means over the three seeds; Dice on the [0, 1] scale.
+
+| Method | Condition | Mean oracle gain | Mean actual gain (always IMG) | Rows IMG better | Rows LANG better |
+|---|---|---:|---:|---:|---:|
+| LViT-T | C4 / C5 / C6 | 0.145 / 0.098 / 0.237 | 0.116 / 0.064 / 0.221 | 75.0 / 69.7 / 86.2% | 24.4 / 29.9 / 13.6% |
+| RecLMIS | C4 / C5 / C6 | 0.116 / 0.102 / 0.199 | 0.082 / 0.067 / 0.181 | 70.9 / 68.7 / 84.7% | 28.6 / 30.9 / 15.2% |
+| DD-CMD | C4 / C5 / C6 | 0.102 / 0.083 / 0.196 | 0.068 / 0.049 / 0.178 | 70.9 / 68.2 / 83.6% | 28.7 / 31.6 / 16.3% |
+
+- **Headroom** (mean of C4–C6, mean over seeds): LViT-T 0.160, RecLMIS 0.139, DD-CMD 0.127. All are far above
+  0.005, so **no model is "insufficient headroom"**.
+- **Single rows.** The actual gain ranges from −0.85 to +0.97. The per-row quantiles are in the CSV.
+- **What this is.** Diagnostics on development data; the oracle is not deployable.
+
 ## 6. Next steps (after confirmation)
 
 1. You submit `slurm/phase3_infer_val.slurm`.

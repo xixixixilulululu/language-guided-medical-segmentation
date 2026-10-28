@@ -1,0 +1,85 @@
+kind,model,dataset,seed,condition,complete,n,mask_equals_prob,float32,cases_differing,max_pixels_differing,max_abs_dice_diff,mean_dice_new,mean_dice_reference
+IMG,unet,QaTa-COV19,1001,image only,True,1429,True,True,0,0,0,0.770956,0.770956
+IMG,unet,QaTa-COV19,1002,image only,True,1429,True,True,0,0,0,0.772358,0.772358
+IMG,unet,QaTa-COV19,1003,image only,True,1429,True,True,0,0,0,0.770659,0.770659
+IMG,unet,MosMedData+,1001,image only,True,273,True,True,0,0,0,0.705626,0.705626
+IMG,unet,MosMedData+,1002,image only,True,273,True,True,0,0,0,0.711705,0.711705
+IMG,unet,MosMedData+,1003,image only,True,273,True,True,0,0,0,0.695026,0.695026
+IMG,nnunet,QaTa-COV19,1001,image only,True,1429,True,True,444,6,0.00239,0.77422,0.774221
+IMG,nnunet,QaTa-COV19,1002,image only,True,1429,True,True,382,12,0.001603,0.772651,0.772649
+IMG,nnunet,QaTa-COV19,1003,image only,True,1429,True,True,437,6,0.001805,0.769092,0.76909
+IMG,nnunet,MosMedData+,1001,image only,True,273,True,True,13,1,0.001195,0.686468,0.686461
+IMG,nnunet,MosMedData+,1002,image only,True,273,True,True,16,1,0.006374,0.684411,0.684453
+IMG,nnunet,MosMedData+,1003,image only,True,273,True,True,18,2,0.005686,0.687888,0.687943
+LANG,lvit,QaTa-COV19,1001,C2,True,1429,True,True,0,0,0,0.811023,0.811023
+LANG,lvit,QaTa-COV19,1001,C3a,True,1429,True,True,0,0,0,0.731555,0.731555
+LANG,lvit,QaTa-COV19,1001,C3b,True,1427,True,True,0,0,0,0.706295,0.706295
+LANG,lvit,QaTa-COV19,1001,C3c,True,1425,True,True,0,0,0,0.701075,0.701075
+LANG,lvit,QaTa-COV19,1002,C2,True,1429,True,True,0,0,0,0.79728,0.79728
+LANG,lvit,QaTa-COV19,1002,C3a,True,1429,True,True,0,0,0,0.688347,0.688347
+LANG,lvit,QaTa-COV19,1002,C3b,True,1427,True,True,0,0,0,0.731839,0.731839
+LANG,lvit,QaTa-COV19,1002,C3c,True,1425,True,True,0,0,0,0.698858,0.698858
+LANG,lvit,QaTa-COV19,1003,C2,True,1429,True,True,0,0,0,0.801127,0.801127
+LANG,lvit,QaTa-COV19,1003,C3a,True,1429,True,True,0,0,0,0.663925,0.663925
+LANG,lvit,QaTa-COV19,1003,C3b,True,1427,True,True,0,0,0,0.75278,0.75278
+LANG,lvit,QaTa-COV19,1003,C3c,True,1425,True,True,0,0,0,0.690842,0.690842
+LANG,lvit,MosMedData+,1001,C2,True,273,True,True,0,0,0,0.708614,0.708614
+LANG,lvit,MosMedData+,1001,C3a,True,269,True,True,0,0,0,0.715907,0.715907
+LANG,lvit,MosMedData+,1001,C3b,True,273,True,True,0,0,0,0.711129,0.711129
+LANG,lvit,MosMedData+,1001,C3c,True,269,True,True,0,0,0,0.707334,0.707334
+LANG,lvit,MosMedData+,1002,C2,True,273,True,True,0,0,0,0.699526,0.699526
+LANG,lvit,MosMedData+,1002,C3a,True,269,True,True,0,0,0,0.684654,0.684654
+LANG,lvit,MosMedData+,1002,C3b,True,273,True,True,0,0,0,0.68999,0.68999
+LANG,lvit,MosMedData+,1002,C3c,True,269,True,True,0,0,0,0.675628,0.675628
+LANG,lvit,MosMedData+,1003,C2,True,273,True,True,0,0,0,0.702093,0.702093
+LANG,lvit,MosMedData+,1003,C3a,True,269,True,True,0,0,0,0.711435,0.711435
+LANG,lvit,MosMedData+,1003,C3b,True,273,True,True,0,0,0,0.702648,0.702648
+LANG,lvit,MosMedData+,1003,C3c,True,269,True,True,0,0,0,0.700671,0.700671
+LANG,reclmis,QaTa-COV19,1001,C2,True,1429,True,True,0,0,0,0.822281,0.822281
+LANG,reclmis,QaTa-COV19,1001,C3a,True,1429,True,True,0,0,0,0.828793,0.828793
+LANG,reclmis,QaTa-COV19,1001,C3b,True,1427,True,True,0,0,0,0.826321,0.826321
+LANG,reclmis,QaTa-COV19,1001,C3c,True,1425,True,True,0,0,0,0.715953,0.715953
+LANG,reclmis,QaTa-COV19,1002,C2,True,1429,True,True,0,0,0,0.828582,0.828582
+LANG,reclmis,QaTa-COV19,1002,C3a,True,1429,True,True,0,0,0,0.825758,0.825758
+LANG,reclmis,QaTa-COV19,1002,C3b,True,1427,True,True,0,0,0,0.801595,0.801595
+LANG,reclmis,QaTa-COV19,1002,C3c,True,1425,True,True,0,0,0,0.688556,0.688556
+LANG,reclmis,QaTa-COV19,1003,C2,True,1429,True,True,0,0,0,0.81515,0.81515
+LANG,reclmis,QaTa-COV19,1003,C3a,True,1429,True,True,0,0,0,0.823422,0.823422
+LANG,reclmis,QaTa-COV19,1003,C3b,True,1427,True,True,0,0,0,0.812361,0.812361
+LANG,reclmis,QaTa-COV19,1003,C3c,True,1425,True,True,0,0,0,0.744022,0.744022
+LANG,reclmis,MosMedData+,1001,C2,True,273,True,True,0,0,0,0.722516,0.722516
+LANG,reclmis,MosMedData+,1001,C3a,True,269,True,True,0,0,0,0.725377,0.725377
+LANG,reclmis,MosMedData+,1001,C3b,True,273,True,True,0,0,0,0.704062,0.704062
+LANG,reclmis,MosMedData+,1001,C3c,True,269,True,True,0,0,0,0.699087,0.699087
+LANG,reclmis,MosMedData+,1002,C2,True,273,True,True,0,0,0,0.712411,0.712411
+LANG,reclmis,MosMedData+,1002,C3a,True,269,True,True,0,0,0,0.712391,0.712391
+LANG,reclmis,MosMedData+,1002,C3b,True,273,True,True,0,0,0,0.689558,0.689558
+LANG,reclmis,MosMedData+,1002,C3c,True,269,True,True,0,0,0,0.697914,0.697914
+LANG,reclmis,MosMedData+,1003,C2,True,273,True,True,0,0,0,0.708607,0.708607
+LANG,reclmis,MosMedData+,1003,C3a,True,269,True,True,0,0,0,0.710328,0.710328
+LANG,reclmis,MosMedData+,1003,C3b,True,273,True,True,0,0,0,0.690624,0.690624
+LANG,reclmis,MosMedData+,1003,C3c,True,269,True,True,0,0,0,0.68568,0.68568
+LANG,ddcmd,QaTa-COV19,1001,C2,True,1429,True,True,2,1,9.3e-05,0.830965,0.830965
+LANG,ddcmd,QaTa-COV19,1001,C3a,True,1429,True,True,0,0,0,0.818318,0.818318
+LANG,ddcmd,QaTa-COV19,1001,C3b,True,1427,True,True,4,1,0.000102,0.819085,0.819085
+LANG,ddcmd,QaTa-COV19,1001,C3c,True,1425,True,True,6,1,0.00012,0.704813,0.704813
+LANG,ddcmd,QaTa-COV19,1002,C2,True,1429,True,True,1,1,2e-05,0.829256,0.829256
+LANG,ddcmd,QaTa-COV19,1002,C3a,True,1429,True,True,3,1,0.000407,0.824036,0.824036
+LANG,ddcmd,QaTa-COV19,1002,C3b,True,1427,True,True,6,1,0.000317,0.812841,0.812841
+LANG,ddcmd,QaTa-COV19,1002,C3c,True,1425,True,True,5,1,0.000272,0.496487,0.496487
+LANG,ddcmd,QaTa-COV19,1003,C2,True,1429,True,True,1,1,7.5e-05,0.828149,0.828149
+LANG,ddcmd,QaTa-COV19,1003,C3a,True,1429,True,True,1,1,0.000119,0.817011,0.817011
+LANG,ddcmd,QaTa-COV19,1003,C3b,True,1427,True,True,4,1,8.7e-05,0.819767,0.819768
+LANG,ddcmd,QaTa-COV19,1003,C3c,True,1425,True,True,6,1,0.000152,0.642762,0.642762
+LANG,ddcmd,MosMedData+,1001,C2,True,273,True,True,7,2,0.006097,0.714484,0.714453
+LANG,ddcmd,MosMedData+,1001,C3a,True,269,True,True,3,1,0.007809,0.719245,0.719265
+LANG,ddcmd,MosMedData+,1001,C3b,True,273,True,True,5,1,0.000884,0.712463,0.712468
+LANG,ddcmd,MosMedData+,1001,C3c,True,269,True,True,3,1,0.006608,0.70933,0.7093
+LANG,ddcmd,MosMedData+,1002,C2,True,273,True,True,6,1,0.002049,0.713806,0.713797
+LANG,ddcmd,MosMedData+,1002,C3a,True,269,True,True,5,1,0.009395,0.710319,0.710287
+LANG,ddcmd,MosMedData+,1002,C3b,True,273,True,True,4,1,0.00491,0.701553,0.70153
+LANG,ddcmd,MosMedData+,1002,C3c,True,269,True,True,9,1,0.015686,0.705255,0.705289
+LANG,ddcmd,MosMedData+,1003,C2,True,273,True,True,8,2,0.002831,0.710111,0.710109
+LANG,ddcmd,MosMedData+,1003,C3a,True,269,True,True,7,1,0.009721,0.71372,0.713759
+LANG,ddcmd,MosMedData+,1003,C3b,True,273,True,True,10,1,0.003532,0.70852,0.708521
+LANG,ddcmd,MosMedData+,1003,C3c,True,269,True,True,6,1,0.005618,0.707708,0.707732

@@ -1,0 +1,3 @@
+arch,n_images,n_groups,group_weighted_dice,image_weighted_dice,image_weighted_dice_seed1001,image_weighted_dice_seed1002,image_weighted_dice_seed1003,chosen,difference_unet_minus_nnunet
+U-Net,859,716,0.759151,0.768621,0.769508,0.768873,0.767482,False,-0.002186
+nnU-Net,859,716,0.761336,0.770067,0.771314,0.771990,0.766897,True,-0.002186
