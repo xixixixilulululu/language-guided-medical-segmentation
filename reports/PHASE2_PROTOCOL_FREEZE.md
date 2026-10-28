@@ -68,8 +68,10 @@ the same checkpoint (`runs/<method>/<dataset>/seed<k>/eval_test`; MosMed LViT-T:
   fewer than 20 units (D3).
 - **D6 sensitivity check** (MosMed without the scope-conflict images): descriptive, test as validation.
 - **Additional analyses** (`src/phase2/analyze_phase2_extra.py --split test`): Task 2.6 severity on
-  S = targets with C4, C5 and C6 donors, Task 2.7 susceptibility, C0 vs C2 change, figures and case selection
-  by the same rules (Dice quantiles 0.1–0.9, seed 1001, donor d1). Descriptive.
+  S = targets with C4, C5 and C6 donors, Task 2.7 susceptibility, C0 vs C2 change and figures. Descriptive.
+  Case figures use the validation rule: the C6-eligible images sorted by harm C0 − C6 (Dice; mean over the
+  3 methods × 3 seeds, donors averaged), ties by sample id; the images at the 10 / 30 / 50 / 70 / 90%
+  positions (round(q (n − 1))); shown for seed 1001 and donor d1.
 - **The Phase 3 go / no-go rule** (section 5.1) used validation only. It is not re-applied on test.
 
 ## 5. Amendments

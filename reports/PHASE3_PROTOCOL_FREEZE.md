@@ -182,7 +182,8 @@ clean (C0) test results of Phases 0 and 1 were seen earlier (PHASE2_PROTOCOL_FRE
 2. Setup items 1–18 accepted before any gate result; weight normalisation (item 18) fixed before any LR fit.
 3. Tasks 3.2–3.4: features; D-Gate and LR-Gate fitted on GATE_FIT and calibrated on GATE_CAL (commit b58cdf6).
    The GATE_CAL calibration values (C0 / C2 losses, C4–C6 gains, fallback rates) were seen.
-4. Gates fixed as of b58cdf6 after the project lead's independent check.
+4. Gates fixed as of b58cdf6 after they were checked by an independent recomputation with separate code
+   (written without reading the project code): 0 differences, including a refit of the nine LRs.
 5. Task 3.5 on validation with the fixed gates: GATE_FIT, GATE_CAL, all nine conditions and MosMed were seen
    (C1, C3a–C3c and MosMed for the first time), after the gates were fixed. Notably, on GATE_FIT the C0 / C2
    losses lie beyond the −0.005 margin; this was seen and is not used to change the gates.
@@ -216,7 +217,7 @@ clean (C0) test results of Phases 0 and 1 were seen earlier (PHASE2_PROTOCOL_FRE
 | `results/phase3_dgate_thresholds.json` | `df671c1900c82649191175141d73aa4cc7655f77b475c700c8607fa8f1df55bd` |
 | `results/phase3_lr_artifacts.json` | `cecaab140e5f225464e539e8b5076128238155165f3c6533eb5caafabf4260ab` |
 | `slurm/phase3_test.slurm` | `54f092d6386c76eb5707d095ffe0eda61d13c58db2d081231bd61977a53ff4b8` |
-| `reports/PHASE3_SETUP.md` | `8e8a08ff4ae16693c6a10351f562038f6e005a22bb020636b0d61b313b9bf246` |
+| `reports/PHASE3_SETUP.md` | `83312f5135e9a8399b2c0724b2c7ec3d11b105fd2ed80a6214f3263d66c7fa18` |
 <!-- END MANIFEST-PHASE3 -->
 
 ## 11. Open before the freeze

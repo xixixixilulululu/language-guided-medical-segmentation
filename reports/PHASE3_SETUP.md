@@ -328,7 +328,8 @@ are in the two calibration CSVs.
 
 ## 8. Gates fixed (2026-10-28)
 
-The project lead checked commit b58cdf6 independently, with 0 differences, including refitting the nine LRs.
+Commit b58cdf6 was checked by an independent recomputation with separate code (written without reading the
+project code): 0 differences, including a refit of the nine LRs.
 From now on both gates are **fixed as of commit b58cdf6**:
 - IMG = nnU-Net (seed matched);
 - the nine D-Gate thresholds: `results/phase3_dgate_calibration.csv`, at full precision in
@@ -378,7 +379,7 @@ GATE_CAL are reported separately (item 17).
 - Each chosen LR threshold is the score of one GATE_CAL row (rule `score > threshold`). That row is not switched.
 - In `phase3_val_gate_decisions.csv.gz` (scores computed as scaler → coefficients → intercept from
   `results/phase3_lr_artifacts.json`), 8 rows equal their threshold exactly, and none is switched.
-- The project lead's independent recomputation, in a different order of operations, found 3 such rows
+- The independent recomputation (separate code), in a different order of operations, found 3 such rows
   (RecLMIS 1001 C5, RecLMIS 1002 C2, DD-CMD 1003 C2); the others then differ by about 1 ulp.
 - A recomputation can therefore flip at most the single threshold row of a model × seed. The decisions file is
   the reference.
