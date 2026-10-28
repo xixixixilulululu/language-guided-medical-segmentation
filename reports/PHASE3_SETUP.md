@@ -300,6 +300,32 @@ Each item gives a proposal and the reason.
 - **Single rows.** The actual gain ranges from −0.85 to +0.97. The per-row quantiles are in the CSV.
 - **What this is.** Diagnostics on development data; the oracle is not deployable.
 
+## 8. Tasks 3.2–3.4 (validation, QaTa; development data, not an independent evaluation)
+
+**Features (Task 3.2).** `src/phase3/features.py` →
+- `results/phase3_reliability_features.csv.gz`: keys + F1–F5, 228,789 rows, all conditions and both datasets;
+- `results/phase3_feature_labels.csv.gz`: Dice LANG / IMG, gain, y, group, partition.
+
+IMG = nnU-Net, seed matched. Tests: `src/phase3/test_phase3_gates.py` (19 checks passed).
+
+**Gates (Tasks 3.3, 3.4).** `src/phase3/gates.py`:
+- `results/phase3_dgate_calibration.csv`, `results/phase3_lr_calibration.csv`;
+- every candidate: `*_calibration_curve.csv.gz`;
+- LR artifacts: `results/phase3_lr_artifacts.json`, with copies in
+  `runs/phase3/<method>/seed<k>/gate_artifacts/`.
+
+**What was used.** Only QaTa C0, C2, C4–C6. The LRs were fitted on GATE_FIT (9394 rows per model × seed) and the
+thresholds chosen on GATE_CAL. No gate outcome was computed for C1, C3a–C3c or MosMed.
+
+**Classes.** All nine LR fits have both classes (positives 5924–6642, negatives 2752–3470), so no LR-Gate is
+unsupported. scikit-learn 1.9.0; L2 is the default penalty; 11–14 lbfgs iterations.
+
+**Thresholds.** On GATE_CAL every chosen threshold is a "feasible maximum", not never-fallback. The C0 / C2
+constraints (≥ −0.005) are close to binding: Δ(C0) and Δ(C2) are −0.0032 to −0.0050. The per-model × seed values
+are in the two calibration CSVs.
+
+**Diagnostic** (GATE_CAL, unweighted; development data): LR AUROC 0.626–0.684, average precision 0.735–0.787.
+
 ## 6. Next steps (after confirmation)
 
 1. You submit `slurm/phase3_infer_val.slurm`.
