@@ -337,6 +337,31 @@ From now on both gates are **fixed as of commit b58cdf6**:
 **Changes.** Any later change is recorded here as an **amendment**, with its reason. No change may be motivated
 by C1, C3a–C3c or MosMed results. Task 3.5 applies the fixed gates unchanged.
 
+## 10. Task 3.5 on validation (2026-10-28; development data, not an independent evaluation)
+
+**Method.** `src/phase3/evaluate_gates.py` (7 synthetic tests passed) applies the gates fixed in section 9 unchanged
+to every validation row. It fits and tunes nothing.
+
+**Record precision of the D-Gate thresholds** (not a change of the gates).
+- `results/phase3_dgate_calibration.csv` writes the thresholds with 6 significant digits. A chosen threshold is
+  the exact F1 of one calibration row, so the rounded value can flip that one row.
+- The full-precision thresholds produced with b58cdf6 (`runs/phase3/<method>/seed<k>/gate_artifacts/dgate.json`)
+  are therefore copied to `results/phase3_dgate_thresholds.json`. Each one rounds to the CSV value.
+- Task 3.5 reads that file. With it, the decisions reproduce the fixed GATE_CAL calibration of both gates; the
+  remaining difference, ≤ 1.3 × 10⁻⁷, is the 6-digit rounding of the reference CSVs.
+- The LR thresholds were already stored at full precision (`results/phase3_lr_artifacts.json`).
+
+**Outputs** (`results/`):
+- `phase3_validation_results.csv`: image-weighted, mean ± SD over the per-seed means;
+- `phase3_validation_paired_differences.csv`: group-weighted gate − LANG with a 95% t-CI; descriptive;
+- `phase3_fallback_rates.csv`;
+- `phase3_routing_quality.csv`;
+- `phase3_mosmed_exploratory.csv`;
+- `phase3_val_gate_decisions.csv.gz`: keys, F1, LR score, switches; full precision.
+
+The strategy label "NULL (C1)" avoids pandas reading the plain string "NULL" as missing. QaTa GATE_FIT and
+GATE_CAL are reported separately (item 17).
+
 ## 6. Next steps (after confirmation)
 
 1. You submit `slurm/phase3_infer_val.slurm`.

@@ -1,0 +1,47 @@
+{
+  "LViT-T_seed1001": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.140166322
+  },
+  "LViT-T_seed1002": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.133617733
+  },
+  "LViT-T_seed1003": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.141213606
+  },
+  "RecLMIS_seed1001": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.126640495
+  },
+  "RecLMIS_seed1002": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.117704556
+  },
+  "RecLMIS_seed1003": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.135673481
+  },
+  "DD-CMD_seed1001": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.126029371
+  },
+  "DD-CMD_seed1002": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.131128038
+  },
+  "DD-CMD_seed1003": {
+    "feature": "F1",
+    "rule": "F1 > threshold -> IMG",
+    "threshold": 0.142629902
+  }
+}
