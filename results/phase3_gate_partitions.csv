@@ -1,0 +1,1430 @@
+dataset,sample_id,group_id,group_type,partition
+QaTa-COV19,covid_1002,covid_1002,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1008,covid_1008,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_101,covid_101,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1016,covid_1016,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1028,covid_1028,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1039,covid_1039,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1044,covid_1044,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1046,covid_1046,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1058,covid_1058,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1060,covid_1060,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1072,covid_1072,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1098,covid_1098,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1106,covid_1106,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1112,covid_1112,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1114,covid_1114,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1128,covid_1128,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1133,covid_1133,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1143,covid_1143,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1145,covid_1145,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1154,covid_1154,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1155,covid_1155,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1162,covid_1162,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1164,covid_1164,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1166,covid_1166,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1170,covid_1170,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_118,covid_118,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1189,covid_1189,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1192,covid_1192,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_12,covid_12,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_120,covid_120,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1210,covid_1210,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1215,covid_1215,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1217,covid_1217,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1238,covid_1238,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1239,covid_1239,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1255,covid_1255,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1269,covid_1269,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1284,covid_1284,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1295,covid_1295,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1298,covid_1298,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1303,covid_1303,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1318,covid_1318,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_132,covid_132,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1328,covid_1328,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1333,covid_1333,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1351,covid_1351,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1372,covid_1372,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1378,covid_1378,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1388,covid_1388,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1399,covid_1399,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1401,covid_1401,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1408,covid_1408,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1419,covid_1419,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_142,covid_142,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1422,covid_1422,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1423,covid_1423,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1425,covid_1425,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1429,covid_1429,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1437,covid_1437,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1439,covid_1439,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1441,covid_1441,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1446,covid_1446,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1453,covid_1453,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1462,covid_1462,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1468,covid_1468,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1470,covid_1470,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1471,covid_1471,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_148,covid_148,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1481,covid_1481,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1486,covid_1486,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1491,covid_1491,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1505,covid_1505,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1509,covid_1509,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1518,covid_1518,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1523,covid_1523,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_153,covid_153,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1532,covid_1532,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1535,covid_1535,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_154,covid_154,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1546,covid_1546,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1560,covid_1560,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1572,covid_1572,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1573,covid_1573,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1595,covid_1595,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1610,covid_1610,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1613,covid_1613,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1634,covid_1634,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_164,covid_164,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1643,covid_1643,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1653,covid_1653,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1658,covid_1658,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1671,covid_1671,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1675,covid_1675,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1683,covid_1683,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1696,covid_1696,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1698,covid_1698,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1712,covid_1712,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1718,covid_1718,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_172,covid_172,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1725,covid_1725,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1728,covid_1728,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1735,covid_1735,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1748,covid_1748,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_176,covid_176,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1802,covid_1802,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1809,covid_1809,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_181,covid_181,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1812,covid_1812,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_183,covid_183,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1832,covid_1832,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1837,covid_1837,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1855,covid_1855,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1856,covid_1856,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1859,covid_1859,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1860,covid_1860,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1865,covid_1865,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1877,covid_1877,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1894,covid_1894,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_190,covid_190,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1905,covid_1905,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1909,covid_1909,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1920,covid_1920,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1922,covid_1922,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1940,covid_1940,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1956,covid_1956,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1965,covid_1965,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_1976,covid_1976,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1978,covid_1978,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1982,covid_1982,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1984,covid_1984,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1995,covid_1995,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_1999,covid_1999,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_201,covid_201,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2013,covid_2013,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_202,covid_202,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2021,covid_2021,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2023,covid_2023,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2030,covid_2030,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2035,covid_2035,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2042,covid_2042,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2047,covid_2047,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2048,covid_2048,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2050,covid_2050,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2057,covid_2057,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2066,covid_2066,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2067,covid_2067,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_207,covid_207,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2089,covid_2089,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2107,covid_2107,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2115,covid_2115,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2117,covid_2117,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2118,covid_2118,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2125,covid_2125,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2127,covid_2127,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2131,covid_2131,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2132,covid_2132,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2136,covid_2136,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2140,covid_2140,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_216,covid_216,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2165,covid_2165,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2169,covid_2169,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2173,covid_2173,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_218,covid_218,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2184,covid_2184,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2192,covid_2192,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2198,covid_2198,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2208,covid_2208,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_221,covid_221,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2213,covid_2213,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2217,covid_2217,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_222,covid_222,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2236,covid_2236,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2256,covid_2256,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2262,covid_2262,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2273,covid_2273,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2279,covid_2279,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2286,covid_2286,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2288,covid_2288,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_229,covid_229,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2303,covid_2303,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2308,covid_2308,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2310,covid_2310,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2314,covid_2314,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2317,covid_2317,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_236,covid_236,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2371,covid_2371,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2392,covid_2392,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2395,covid_2395,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2401,covid_2401,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2404,covid_2404,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2410,covid_2410,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2411,covid_2411,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2416,covid_2416,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2417,covid_2417,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2422,covid_2422,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2428,covid_2428,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2437,covid_2437,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_244,covid_244,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2442,covid_2442,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2451,covid_2451,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2463,covid_2463,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2470,covid_2470,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_248,covid_248,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2512,covid_2512,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2533,covid_2533,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2540,covid_2540,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2564,covid_2564,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_257,covid_257,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2571,covid_2571,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2575,covid_2575,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2580,covid_2580,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2605,covid_2605,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2614,covid_2614,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2616,covid_2616,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2620,covid_2620,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_263,covid_263,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2637,covid_2637,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2640,covid_2640,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2644,covid_2644,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2646,covid_2646,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2647,covid_2647,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2649,covid_2649,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2650,covid_2650,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2658,covid_2658,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2659,covid_2659,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2661,covid_2661,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2662,covid_2662,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2666,covid_2666,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2692,covid_2692,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2693,covid_2693,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_27,covid_27,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2700,covid_2700,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2706,covid_2706,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2716,covid_2716,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2718,covid_2718,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2732,covid_2732,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2740,covid_2740,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2755,covid_2755,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2756,covid_2756,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2780,covid_2780,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2782,covid_2782,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2787,covid_2787,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2796,covid_2796,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2797,covid_2797,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2812,covid_2812,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2814,covid_2814,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2818,covid_2818,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2832,covid_2832,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2837,covid_2837,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2841,covid_2841,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2857,covid_2857,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2864,covid_2864,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2892,covid_2892,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2895,covid_2895,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2901,covid_2901,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2927,covid_2927,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2933,covid_2933,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2943,covid_2943,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2946,covid_2946,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2947,covid_2947,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2950,covid_2950,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2953,covid_2953,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2954,covid_2954,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2961,covid_2961,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2965,covid_2965,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2969,covid_2969,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2981,covid_2981,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_2987,covid_2987,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_2997,covid_2997,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3006,covid_3006,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3010,covid_3010,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3011,covid_3011,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3021,covid_3021,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3026,covid_3026,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3033,covid_3033,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3034,covid_3034,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3035,covid_3035,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3040,covid_3040,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3043,covid_3043,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3046,covid_3046,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3060,covid_3060,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3100,covid_3100,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3104,covid_3104,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3114,covid_3114,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3119,covid_3119,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3125,covid_3125,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_313,covid_313,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3131,covid_3131,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3133,covid_3133,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3155,covid_3155,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3156,covid_3156,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3159,covid_3159,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_316,covid_316,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3168,covid_3168,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3181,covid_3181,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3182,covid_3182,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3183,covid_3183,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3187,covid_3187,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3191,covid_3191,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3229,covid_3229,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3235,covid_3235,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3239,covid_3239,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3242,covid_3242,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3243,covid_3243,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3251,covid_3251,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3257,covid_3257,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3258,covid_3258,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3266,covid_3266,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3272,covid_3272,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3286,covid_3286,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3309,covid_3309,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3322,covid_3322,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3326,covid_3326,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3332,covid_3332,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3345,covid_3345,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3358,covid_3358,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3374,covid_3374,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3381,covid_3381,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3388,covid_3388,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3391,covid_3391,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3399,covid_3399,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3400,covid_3400,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3402,covid_3402,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3403,covid_3403,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3426,covid_3426,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3439,covid_3439,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3451,covid_3451,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3456,covid_3456,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3461,covid_3461,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3462,covid_3462,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3463,covid_3463,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3464,covid_3464,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_348,covid_348,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3488,covid_3488,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3491,covid_3491,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3495,covid_3495,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3498,covid_3498,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_35,covid_35,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3506,covid_3506,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_351,covid_351,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3516,covid_3516,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3522,covid_3522,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3524,covid_3524,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3535,covid_3535,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3544,covid_3544,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3549,covid_3549,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3556,covid_3556,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3558,covid_3558,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3565,covid_3565,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3578,covid_3578,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_358,covid_358,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3596,covid_3596,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3611,covid_3611,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3612,covid_3612,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3619,covid_3619,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3624,covid_3624,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3627,covid_3627,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_363,covid_363,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3630,covid_3630,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3634,covid_3634,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3640,covid_3640,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3646,covid_3646,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3650,covid_3650,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3651,covid_3651,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3658,covid_3658,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3661,covid_3661,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3665,covid_3665,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3668,covid_3668,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3672,covid_3672,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3676,covid_3676,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_368,covid_368,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3682,covid_3682,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3696,covid_3696,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3702,covid_3702,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_371,covid_371,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3715,covid_3715,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3717,covid_3717,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3722,covid_3722,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3724,covid_3724,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3726,covid_3726,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3735,covid_3735,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3736,covid_3736,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3741,covid_3741,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3748,covid_3748,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3750,covid_3750,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3751,covid_3751,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3765,covid_3765,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3777,covid_3777,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3778,covid_3778,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3779,covid_3779,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3799,covid_3799,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3812,covid_3812,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3818,covid_3818,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3820,covid_3820,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3821,covid_3821,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3838,covid_3838,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3843,covid_3843,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3849,covid_3849,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3852,covid_3852,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3854,covid_3854,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3857,covid_3857,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3864,covid_3864,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3868,covid_3868,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3871,covid_3871,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3878,covid_3878,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3885,covid_3885,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3887,covid_3887,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3888,covid_3888,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3894,covid_3894,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3906,covid_3906,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3909,covid_3909,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3914,covid_3914,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3915,covid_3915,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3931,covid_3931,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3933,covid_3933,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3943,covid_3943,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3954,covid_3954,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3956,covid_3956,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3972,covid_3972,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3973,covid_3973,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3977,covid_3977,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3982,covid_3982,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_3985,covid_3985,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3986,covid_3986,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_3994,covid_3994,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4001,covid_4001,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4005,covid_4005,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4011,covid_4011,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4026,covid_4026,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4044,covid_4044,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4045,covid_4045,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4048,covid_4048,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4050,covid_4050,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4061,covid_4061,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4064,covid_4064,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4066,covid_4066,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4067,covid_4067,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4069,covid_4069,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4080,covid_4080,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4104,covid_4104,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_411,covid_411,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4114,covid_4114,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4119,covid_4119,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4126,covid_4126,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4127,covid_4127,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4128,covid_4128,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4143,covid_4143,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4149,covid_4149,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4158,covid_4158,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4168,covid_4168,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4169,covid_4169,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4174,covid_4174,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4182,covid_4182,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4188,covid_4188,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4190,covid_4190,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4192,covid_4192,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_42,covid_42,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4205,covid_4205,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_424,covid_424,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4245,covid_4245,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4246,covid_4246,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4249,covid_4249,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4265,covid_4265,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4278,covid_4278,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4289,covid_4289,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_429,covid_429,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4294,covid_4294,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4305,covid_4305,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4306,covid_4306,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4316,covid_4316,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4318,covid_4318,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4320,covid_4320,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4324,covid_4324,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4325,covid_4325,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4335,covid_4335,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4336,covid_4336,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4343,covid_4343,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4352,covid_4352,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_437,covid_437,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4374,covid_4374,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4377,covid_4377,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4385,covid_4385,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4396,covid_4396,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4401,covid_4401,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4404,covid_4404,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4407,covid_4407,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_441,covid_441,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4412,covid_4412,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4415,covid_4415,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4433,covid_4433,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_444,covid_444,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4440,covid_4440,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4446,covid_4446,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4447,covid_4447,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_445,covid_445,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4452,covid_4452,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4464,covid_4464,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4469,covid_4469,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4474,covid_4474,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4476,covid_4476,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4493,covid_4493,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4494,covid_4494,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4495,covid_4495,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4501,covid_4501,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4502,covid_4502,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4507,covid_4507,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4513,covid_4513,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4520,covid_4520,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4531,covid_4531,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4534,covid_4534,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4535,covid_4535,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_454,covid_454,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4541,covid_4541,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4549,covid_4549,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4550,covid_4550,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4552,covid_4552,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_456,covid_456,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_4565,covid_4565,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_457,covid_457,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4577,covid_4577,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4578,covid_4578,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4584,covid_4584,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4588,covid_4588,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4590,covid_4590,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_4600,covid_4600,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_463,covid_463,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_466,covid_466,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_471,covid_471,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_478,covid_478,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_487,covid_487,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_5,covid_5,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_512,covid_512,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_513,covid_513,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_520,covid_520,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_528,covid_528,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_548,covid_548,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_552,covid_552,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_563,covid_563,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_564,covid_564,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_569,covid_569,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_570,covid_570,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_573,covid_573,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_587,covid_587,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_596,covid_596,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_603,covid_603,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_61,covid_61,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_610,covid_610,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_621,covid_621,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_64,covid_64,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_652,covid_652,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_665,covid_665,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_671,covid_671,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_678,covid_678,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_683,covid_683,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_685,covid_685,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_694,covid_694,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_698,covid_698,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_706,covid_706,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_716,covid_716,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_728,covid_728,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_732,covid_732,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_744,covid_744,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_753,covid_753,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_759,covid_759,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_768,covid_768,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_771,covid_771,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_796,covid_796,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_797,covid_797,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_803,covid_803,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_806,covid_806,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_813,covid_813,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_815,covid_815,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_827,covid_827,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_83,covid_83,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_833,covid_833,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_838,covid_838,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_844,covid_844,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_846,covid_846,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_855,covid_855,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_865,covid_865,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_870,covid_870,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_872,covid_872,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_875,covid_875,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_886,covid_886,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_893,covid_893,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_897,covid_897,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_899,covid_899,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_903,covid_903,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_908,covid_908,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_910,covid_910,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_916,covid_916,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_919,covid_919,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_937,covid_937,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_95,covid_95,image (patient unverified),GATE_CAL
+QaTa-COV19,covid_952,covid_952,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_974,covid_974,image (patient unverified),GATE_FIT
+QaTa-COV19,covid_999,covid_999,image (patient unverified),GATE_FIT
+QaTa-COV19,sub-S08046_ses-E17352_run-2_bp-chest_vp-ap_dx,sub-S08046,patient,GATE_CAL
+QaTa-COV19,sub-S10047_ses-E24303_run-1_bp-chest_vp-pa_dx,sub-S10047,patient,GATE_CAL
+QaTa-COV19,sub-S10056_ses-E19543_run-1_bp-chest_vp-ap_cr,sub-S10056,patient,GATE_FIT
+QaTa-COV19,sub-S10056_ses-E21561_run-1_bp-chest_vp-ap_cr,sub-S10056,patient,GATE_FIT
+QaTa-COV19,sub-S10056_ses-E24371_run-1_bp-chest_vp-ap_cr,sub-S10056,patient,GATE_FIT
+QaTa-COV19,sub-S10056_ses-E26400_run-1_bp-chest_vp-pa_cr,sub-S10056,patient,GATE_FIT
+QaTa-COV19,sub-S10059_ses-E19915_run-1_bp-chest_vp-ap_dx,sub-S10059,patient,GATE_CAL
+QaTa-COV19,sub-S10059_ses-E23703_run-1_bp-chest_vp-ap_dx,sub-S10059,patient,GATE_CAL
+QaTa-COV19,sub-S10059_ses-E24386_run-1_bp-chest_vp-ap_dx,sub-S10059,patient,GATE_CAL
+QaTa-COV19,sub-S10064_ses-E21608_run-1_bp-chest_vp-ap_dx,sub-S10064,patient,GATE_FIT
+QaTa-COV19,sub-S10064_ses-E22502_run-1_bp-chest_vp-ap_dx,sub-S10064,patient,GATE_FIT
+QaTa-COV19,sub-S10065_ses-E25359_run-1_bp-chest_vp-pa_dx,sub-S10065,patient,GATE_FIT
+QaTa-COV19,sub-S10065_ses-E26461_run-1_bp-chest_vp-ap_dx,sub-S10065,patient,GATE_FIT
+QaTa-COV19,sub-S10071_ses-E23614_run-1_bp-chest_vp-ap_dx,sub-S10071,patient,GATE_FIT
+QaTa-COV19,sub-S10073_ses-E18995_run-1_bp-chest_vp-ap_dx,sub-S10073,patient,GATE_FIT
+QaTa-COV19,sub-S10075_ses-E19843_run-1_bp-chest_cr,sub-S10075,patient,GATE_CAL
+QaTa-COV19,sub-S10075_ses-E20282_run-1_bp-chest_vp-ap_dx,sub-S10075,patient,GATE_CAL
+QaTa-COV19,sub-S10075_ses-E21371_run-1_bp-chest_cr,sub-S10075,patient,GATE_CAL
+QaTa-COV19,sub-S10075_ses-E21679_run-1_bp-chest_vp-ap_dx,sub-S10075,patient,GATE_CAL
+QaTa-COV19,sub-S10079_ses-E24992_acq-2_run-1_bp-chest_vp-ap_dx,sub-S10079,patient,GATE_CAL
+QaTa-COV19,sub-S10085_ses-E18226_run-1_bp-chest_vp-pa_cr,sub-S10085,patient,GATE_CAL
+QaTa-COV19,sub-S10086_ses-E23039_run-1_bp-chest_dx,sub-S10086,patient,GATE_FIT
+QaTa-COV19,sub-S10089_ses-E25912_run-1_bp-chest_vp-ap_cr,sub-S10089,patient,GATE_FIT
+QaTa-COV19,sub-S10093_ses-E23818_run-1_bp-chest_vp-ap_cr,sub-S10093,patient,GATE_FIT
+QaTa-COV19,sub-S10101_ses-E23507_run-1_bp-chest_vp-ap_dx,sub-S10101,patient,GATE_CAL
+QaTa-COV19,sub-S10107_ses-E24674_run-1_bp-chest_vp-pa_cr,sub-S10107,patient,GATE_CAL
+QaTa-COV19,sub-S10108_ses-E26040_run-1_bp-chest_vp-ap_dx,sub-S10108,patient,GATE_FIT
+QaTa-COV19,sub-S10114_ses-E19830_run-1_bp-chest_vp-ap_cr,sub-S10114,patient,GATE_CAL
+QaTa-COV19,sub-S10114_ses-E24706_run-1_bp-chest_vp-ap_cr,sub-S10114,patient,GATE_CAL
+QaTa-COV19,sub-S10118_ses-E24087_run-1_bp-chest_vp-ap_dx,sub-S10118,patient,GATE_FIT
+QaTa-COV19,sub-S10118_ses-E25207_run-1_bp-chest_vp-ap_dx,sub-S10118,patient,GATE_FIT
+QaTa-COV19,sub-S10122_ses-E17438_run-1_bp-chest_vp-ap_cr,sub-S10122,patient,GATE_CAL
+QaTa-COV19,sub-S10124_ses-E17444_run-1_bp-chest_vp-ap_dx,sub-S10124,patient,GATE_FIT
+QaTa-COV19,sub-S10124_ses-E23050_run-1_bp-chest_cr,sub-S10124,patient,GATE_FIT
+QaTa-COV19,sub-S10127_ses-E17461_run-1_bp-chest_vp-ap_cr,sub-S10127,patient,GATE_FIT
+QaTa-COV19,sub-S10128_ses-E18688_run-1_bp-chest_vp-ap_cr,sub-S10128,patient,GATE_FIT
+QaTa-COV19,sub-S10134_ses-E24351_run-1_bp-chest_vp-ap_dx,sub-S10134,patient,GATE_FIT
+QaTa-COV19,sub-S10138_ses-E21291_run-1_bp-chest_vp-ap_cr,sub-S10138,patient,GATE_FIT
+QaTa-COV19,sub-S10141_ses-E25770_run-1_bp-chest_vp-pa_cr,sub-S10141,patient,GATE_CAL
+QaTa-COV19,sub-S10146_ses-E17530_run-1_bp-chest_vp-ap_cr,sub-S10146,patient,GATE_FIT
+QaTa-COV19,sub-S10147_ses-E24151_run-1_bp-chest_vp-ap_cr,sub-S10147,patient,GATE_CAL
+QaTa-COV19,sub-S10147_ses-E24899_run-1_bp-chest_vp-ap_cr,sub-S10147,patient,GATE_CAL
+QaTa-COV19,sub-S10149_ses-E23320_run-1_bp-chest_vp-pa_cr,sub-S10149,patient,GATE_FIT
+QaTa-COV19,sub-S10151_ses-E20446_run-1_bp-chest_vp-pa_cr,sub-S10151,patient,GATE_FIT
+QaTa-COV19,sub-S10153_ses-E17545_run-1_bp-chest_vp-ap_cr,sub-S10153,patient,GATE_FIT
+QaTa-COV19,sub-S10154_ses-E17548_run-1_bp-chest_vp-pa_dx,sub-S10154,patient,GATE_CAL
+QaTa-COV19,sub-S10164_ses-E25619_run-1_bp-chest_vp-pa_cr,sub-S10164,patient,GATE_CAL
+QaTa-COV19,sub-S10170_ses-E23940_run-1_bp-chest_cr,sub-S10170,patient,GATE_FIT
+QaTa-COV19,sub-S10171_ses-E18337_run-1_bp-chest_vp-pa_cr,sub-S10171,patient,GATE_FIT
+QaTa-COV19,sub-S10172_ses-E20744_run-1_bp-chest_vp-ap_dx,sub-S10172,patient,GATE_FIT
+QaTa-COV19,sub-S10177_ses-E19794_run-1_bp-chest_vp-ap_cr,sub-S10177,patient,GATE_CAL
+QaTa-COV19,sub-S10177_ses-E21304_run-1_bp-chest_vp-ap_cr,sub-S10177,patient,GATE_CAL
+QaTa-COV19,sub-S10182_ses-E20607_run-1_bp-chest_vp-pa_dx,sub-S10182,patient,GATE_FIT
+QaTa-COV19,sub-S10182_ses-E25152_run-1_bp-chest_vp-ap_dx,sub-S10182,patient,GATE_FIT
+QaTa-COV19,sub-S10196_ses-E24296_run-1_bp-chest_vp-ap_cr,sub-S10196,patient,GATE_CAL
+QaTa-COV19,sub-S10201_ses-E18214_run-1_bp-chest_vp-ap_dx,sub-S10201,patient,GATE_FIT
+QaTa-COV19,sub-S10201_ses-E18499_run-1_bp-chest_vp-pa_dx,sub-S10201,patient,GATE_FIT
+QaTa-COV19,sub-S10201_ses-E18767_run-1_bp-chest_vp-ap_dx,sub-S10201,patient,GATE_FIT
+QaTa-COV19,sub-S10204_ses-E17772_run-1_bp-chest_vp-ap_dx,sub-S10204,patient,GATE_FIT
+QaTa-COV19,sub-S10205_ses-E18796_run-1_bp-chest_vp-ap_cr,sub-S10205,patient,GATE_FIT
+QaTa-COV19,sub-S10209_ses-E17647_run-1_bp-chest_vp-pa_cr,sub-S10209,patient,GATE_FIT
+QaTa-COV19,sub-S10209_ses-E19056_run-1_bp-chest_vp-ap_dx,sub-S10209,patient,GATE_FIT
+QaTa-COV19,sub-S10216_ses-E19084_run-1_bp-chest_vp-ap_dx,sub-S10216,patient,GATE_FIT
+QaTa-COV19,sub-S10216_ses-E20572_run-1_bp-chest_vp-ap_dx,sub-S10216,patient,GATE_FIT
+QaTa-COV19,sub-S10223_ses-E19139_run-1_bp-chest_vp-ap_dx,sub-S10223,patient,GATE_FIT
+QaTa-COV19,sub-S10236_ses-E25881_run-1_bp-chest_vp-ap_dx,sub-S10236,patient,GATE_CAL
+QaTa-COV19,sub-S10247_ses-E23512_run-1_bp-chest_cr,sub-S10247,patient,GATE_FIT
+QaTa-COV19,sub-S10247_ses-E25666_run-1_bp-chest_vp-ap_dx,sub-S10247,patient,GATE_FIT
+QaTa-COV19,sub-S10253_ses-E24682_run-1_bp-chest_vp-pa_dx,sub-S10253,patient,GATE_CAL
+QaTa-COV19,sub-S10256_ses-E20000_run-1_bp-chest_vp-ap_dx,sub-S10256,patient,GATE_CAL
+QaTa-COV19,sub-S10256_ses-E21999_run-1_bp-chest_vp-ap_dx,sub-S10256,patient,GATE_CAL
+QaTa-COV19,sub-S10256_ses-E23290_run-1_bp-chest_vp-ap_dx,sub-S10256,patient,GATE_CAL
+QaTa-COV19,sub-S10256_ses-E26728_run-1_bp-chest_dx,sub-S10256,patient,GATE_CAL
+QaTa-COV19,sub-S10267_ses-E24747_run-1_bp-chest_vp-pa_dx,sub-S10267,patient,GATE_FIT
+QaTa-COV19,sub-S10274_ses-E17780_run-1_bp-chest_vp-pa_dx,sub-S10274,patient,GATE_FIT
+QaTa-COV19,sub-S10274_ses-E18288_run-1_bp-chest_vp-ap_dx,sub-S10274,patient,GATE_FIT
+QaTa-COV19,sub-S10274_ses-E23927_run-1_bp-chest_vp-ap_cr,sub-S10274,patient,GATE_FIT
+QaTa-COV19,sub-S10275_ses-E20549_run-1_bp-chest_vp-ap_cr,sub-S10275,patient,GATE_FIT
+QaTa-COV19,sub-S10279_ses-E23247_run-1_bp-chest_vp-pa_dx,sub-S10279,patient,GATE_FIT
+QaTa-COV19,sub-S10286_ses-E17805_run-1_bp-chest_dx,sub-S10286,patient,GATE_FIT
+QaTa-COV19,sub-S10291_ses-E17813_run-1_bp-chest_vp-ap_cr,sub-S10291,patient,GATE_FIT
+QaTa-COV19,sub-S10300_ses-E19738_run-1_bp-chest_vp-ap_dx,sub-S10300,patient,GATE_FIT
+QaTa-COV19,sub-S10301_ses-E17831_run-1_bp-chest_vp-ap_dx,sub-S10301,patient,GATE_CAL
+QaTa-COV19,sub-S10304_ses-E19896_run-1_bp-chest_vp-ap_dx,sub-S10304,patient,GATE_FIT
+QaTa-COV19,sub-S10304_ses-E20513_run-1_bp-chest_vp-ap_dx,sub-S10304,patient,GATE_FIT
+QaTa-COV19,sub-S10305_ses-E17836_acq-1_run-1_bp-chest_vp-ll_cr,sub-S10305,patient,GATE_CAL
+QaTa-COV19,sub-S10307_ses-E20094_run-1_bp-chest_vp-ap_cr,sub-S10307,patient,GATE_CAL
+QaTa-COV19,sub-S10307_ses-E22252_run-1_bp-chest_vp-ap_cr,sub-S10307,patient,GATE_CAL
+QaTa-COV19,sub-S10307_ses-E24225_run-1_bp-chest_vp-ap_cr,sub-S10307,patient,GATE_CAL
+QaTa-COV19,sub-S10310_ses-E24619_run-1_bp-chest_cr,sub-S10310,patient,GATE_FIT
+QaTa-COV19,sub-S10313_ses-E24401_run-1_bp-chest_vp-pa_cr,sub-S10313,patient,GATE_CAL
+QaTa-COV19,sub-S10314_ses-E23730_run-1_bp-chest_vp-ap_cr,sub-S10314,patient,GATE_FIT
+QaTa-COV19,sub-S10319_ses-E19928_run-1_bp-chest_vp-pa_cr,sub-S10319,patient,GATE_CAL
+QaTa-COV19,sub-S10324_ses-E19367_run-1_bp-chest_cr,sub-S10324,patient,GATE_CAL
+QaTa-COV19,sub-S10327_ses-E18373_run-1_bp-chest_vp-pa_cr,sub-S10327,patient,GATE_FIT
+QaTa-COV19,sub-S10328_ses-E21317_run-1_bp-chest_vp-ap_dx,sub-S10328,patient,GATE_CAL
+QaTa-COV19,sub-S10338_ses-E17901_run-1_bp-chest_vp-pa_cr,sub-S10338,patient,GATE_FIT
+QaTa-COV19,sub-S10338_ses-E19395_run-1_bp-chest_cr,sub-S10338,patient,GATE_FIT
+QaTa-COV19,sub-S10338_ses-E19822_run-1_bp-chest_vp-ap_dx,sub-S10338,patient,GATE_FIT
+QaTa-COV19,sub-S10340_ses-E18436_run-1_bp-chest_vp-pa_cr,sub-S10340,patient,GATE_CAL
+QaTa-COV19,sub-S10340_ses-E21157_run-1_bp-chest_vp-pa_cr,sub-S10340,patient,GATE_CAL
+QaTa-COV19,sub-S10346_ses-E17917_run-1_bp-chest_vp-ap_cr,sub-S10346,patient,GATE_CAL
+QaTa-COV19,sub-S10348_ses-E17920_run-1_bp-chest_vp-ap_cr,sub-S10348,patient,GATE_FIT
+QaTa-COV19,sub-S10349_ses-E17921_run-1_bp-chest_cr,sub-S10349,patient,GATE_FIT
+QaTa-COV19,sub-S10351_ses-E24286_run-1_bp-chest_vp-pa_cr,sub-S10351,patient,GATE_FIT
+QaTa-COV19,sub-S10357_ses-E17954_run-1_bp-chest_vp-pa_cr,sub-S10357,patient,GATE_CAL
+QaTa-COV19,sub-S10357_ses-E18757_run-1_bp-chest_vp-ap_dx,sub-S10357,patient,GATE_CAL
+QaTa-COV19,sub-S10357_ses-E22666_run-1_bp-chest_vp-ap_dx,sub-S10357,patient,GATE_CAL
+QaTa-COV19,sub-S10357_ses-E23161_run-1_bp-chest_vp-ap_dx,sub-S10357,patient,GATE_CAL
+QaTa-COV19,sub-S10358_ses-E23671_run-1_bp-chest_vp-ap_dx,sub-S10358,patient,GATE_CAL
+QaTa-COV19,sub-S10372_ses-E17975_run-1_bp-chest_vp-ap_dx,sub-S10372,patient,GATE_FIT
+QaTa-COV19,sub-S10373_ses-E18245_run-1_bp-chest_vp-ap_dx,sub-S10373,patient,GATE_CAL
+QaTa-COV19,sub-S10373_ses-E21253_run-1_bp-chest_vp-ap_dx,sub-S10373,patient,GATE_CAL
+QaTa-COV19,sub-S10373_ses-E21413_run-1_bp-chest_vp-ap_dx,sub-S10373,patient,GATE_CAL
+QaTa-COV19,sub-S10373_ses-E21737_run-1_bp-chest_vp-ap_dx,sub-S10373,patient,GATE_CAL
+QaTa-COV19,sub-S10373_ses-E22429_run-1_bp-chest_vp-ap_dx,sub-S10373,patient,GATE_CAL
+QaTa-COV19,sub-S10373_ses-E25603_run-1_bp-chest_cr,sub-S10373,patient,GATE_CAL
+QaTa-COV19,sub-S10374_ses-E17977_run-1_bp-chest_vp-pa_cr,sub-S10374,patient,GATE_CAL
+QaTa-COV19,sub-S10374_ses-E21423_run-1_bp-chest_vp-ap_dx,sub-S10374,patient,GATE_CAL
+QaTa-COV19,sub-S10374_ses-E22436_run-1_bp-chest_vp-ap_dx,sub-S10374,patient,GATE_CAL
+QaTa-COV19,sub-S10375_ses-E25063_run-1_bp-chest_vp-ap_dx,sub-S10375,patient,GATE_CAL
+QaTa-COV19,sub-S10376_ses-E17980_run-1_bp-chest_vp-pa_dx,sub-S10376,patient,GATE_FIT
+QaTa-COV19,sub-S10378_ses-E24408_run-1_bp-chest_vp-pa_cr,sub-S10378,patient,GATE_FIT
+QaTa-COV19,sub-S10378_ses-E26432_run-1_bp-chest_vp-ap_dx,sub-S10378,patient,GATE_FIT
+QaTa-COV19,sub-S10379_ses-E20150_run-1_bp-chest_vp-ap_dx,sub-S10379,patient,GATE_FIT
+QaTa-COV19,sub-S10379_ses-E21782_run-1_bp-chest_vp-ap_dx,sub-S10379,patient,GATE_FIT
+QaTa-COV19,sub-S10380_ses-E23530_run-1_bp-chest_vp-ap_dx,sub-S10380,patient,GATE_CAL
+QaTa-COV19,sub-S10382_ses-E20155_run-1_bp-chest_vp-ap_dx,sub-S10382,patient,GATE_CAL
+QaTa-COV19,sub-S10382_ses-E25691_run-2_bp-chest_vp-ap_dx,sub-S10382,patient,GATE_CAL
+QaTa-COV19,sub-S10385_ses-E19945_run-1_bp-chest_vp-ap_dx,sub-S10385,patient,GATE_FIT
+QaTa-COV19,sub-S10385_ses-E21073_run-1_bp-chest_vp-ap_dx,sub-S10385,patient,GATE_FIT
+QaTa-COV19,sub-S10389_ses-E18004_run-1_bp-chest_vp-pa_cr,sub-S10389,patient,GATE_CAL
+QaTa-COV19,sub-S10389_ses-E20166_run-1_bp-chest_vp-ap_dx,sub-S10389,patient,GATE_CAL
+QaTa-COV19,sub-S10389_ses-E20621_run-1_bp-chest_cr,sub-S10389,patient,GATE_CAL
+QaTa-COV19,sub-S10389_ses-E21478_run-1_bp-chest_vp-ap_dx,sub-S10389,patient,GATE_CAL
+QaTa-COV19,sub-S10389_ses-E23589_run-1_bp-chest_cr,sub-S10389,patient,GATE_CAL
+QaTa-COV19,sub-S10390_ses-E18006_run-1_bp-chest_vp-pa_cr,sub-S10390,patient,GATE_FIT
+QaTa-COV19,sub-S10391_ses-E21152_run-1_bp-chest_vp-ap_dx,sub-S10391,patient,GATE_CAL
+QaTa-COV19,sub-S10392_ses-E20025_run-1_bp-chest_vp-pa_dx,sub-S10392,patient,GATE_FIT
+QaTa-COV19,sub-S10392_ses-E20296_run-1_bp-chest_vp-pa_dx,sub-S10392,patient,GATE_FIT
+QaTa-COV19,sub-S10393_ses-E24957_run-1_bp-chest_vp-ap_dx,sub-S10393,patient,GATE_CAL
+QaTa-COV19,sub-S10395_ses-E20973_run-1_bp-chest_vp-ap_dx,sub-S10395,patient,GATE_CAL
+QaTa-COV19,sub-S10395_ses-E22375_run-1_bp-chest_vp-ap_dx,sub-S10395,patient,GATE_CAL
+QaTa-COV19,sub-S10396_ses-E22389_run-1_bp-chest_vp-ap_dx,sub-S10396,patient,GATE_FIT
+QaTa-COV19,sub-S10402_ses-E20492_run-1_bp-chest_vp-ap_dx,sub-S10402,patient,GATE_FIT
+QaTa-COV19,sub-S10402_ses-E23442_run-1_bp-chest_vp-ap_dx,sub-S10402,patient,GATE_FIT
+QaTa-COV19,sub-S10402_ses-E25605_run-1_bp-chest_vp-ap_dx,sub-S10402,patient,GATE_FIT
+QaTa-COV19,sub-S10405_ses-E18279_run-1_bp-chest_cr,sub-S10405,patient,GATE_FIT
+QaTa-COV19,sub-S10405_ses-E19049_run-1_bp-chest_vp-ap_dx,sub-S10405,patient,GATE_FIT
+QaTa-COV19,sub-S10410_ses-E18846_run-1_bp-chest_vp-ap_dx,sub-S10410,patient,GATE_FIT
+QaTa-COV19,sub-S10410_ses-E21069_run-1_bp-chest_vp-ap_dx,sub-S10410,patient,GATE_FIT
+QaTa-COV19,sub-S10410_ses-E21773_run-1_bp-chest_vp-ap_dx,sub-S10410,patient,GATE_FIT
+QaTa-COV19,sub-S10411_ses-E19919_acq-2_run-1_bp-chest_vp-ap_dx,sub-S10411,patient,GATE_CAL
+QaTa-COV19,sub-S10411_ses-E21054_run-1_bp-chest_vp-ap_dx,sub-S10411,patient,GATE_CAL
+QaTa-COV19,sub-S10411_ses-E24914_run-1_bp-chest_vp-pa_cr,sub-S10411,patient,GATE_CAL
+QaTa-COV19,sub-S10412_ses-E24412_run-1_bp-chest_vp-pa_dx,sub-S10412,patient,GATE_FIT
+QaTa-COV19,sub-S10420_ses-E19108_run-1_bp-chest_vp-ap_dx,sub-S10420,patient,GATE_FIT
+QaTa-COV19,sub-S10420_ses-E19644_run-1_bp-chest_vp-ap_dx,sub-S10420,patient,GATE_FIT
+QaTa-COV19,sub-S10420_ses-E20165_run-1_bp-chest_vp-ap_dx,sub-S10420,patient,GATE_FIT
+QaTa-COV19,sub-S10420_ses-E21113_run-1_bp-chest_vp-pa_cr,sub-S10420,patient,GATE_FIT
+QaTa-COV19,sub-S10420_ses-E23272_acq-2_run-1_bp-chest_vp-ap_dx,sub-S10420,patient,GATE_FIT
+QaTa-COV19,sub-S10424_ses-E25210_run-1_bp-chest_vp-pa_dx,sub-S10424,patient,GATE_FIT
+QaTa-COV19,sub-S10439_ses-E24138_run-1_bp-chest_vp-ap_dx,sub-S10439,patient,GATE_FIT
+QaTa-COV19,sub-S10439_ses-E25477_run-1_bp-chest_vp-ap_dx,sub-S10439,patient,GATE_FIT
+QaTa-COV19,sub-S10439_ses-E26525_run-1_bp-chest_vp-ap_dx,sub-S10439,patient,GATE_FIT
+QaTa-COV19,sub-S10446_ses-E24925_run-1_bp-chest_vp-pa_dx,sub-S10446,patient,GATE_FIT
+QaTa-COV19,sub-S10448_ses-E19081_run-1_bp-chest_vp-pa_cr,sub-S10448,patient,GATE_CAL
+QaTa-COV19,sub-S10456_ses-E25168_run-1_bp-chest_vp-ap_cr,sub-S10456,patient,GATE_CAL
+QaTa-COV19,sub-S10473_ses-E19705_run-1_bp-chest_vp-ap_cr,sub-S10473,patient,GATE_FIT
+QaTa-COV19,sub-S10473_ses-E20034_run-1_bp-chest_vp-ap_cr,sub-S10473,patient,GATE_FIT
+QaTa-COV19,sub-S10473_ses-E21387_run-1_bp-chest_vp-ap_cr,sub-S10473,patient,GATE_FIT
+QaTa-COV19,sub-S10474_ses-E20430_run-1_bp-chest_vp-ap_dx,sub-S10474,patient,GATE_CAL
+QaTa-COV19,sub-S10474_ses-E24988_run-1_bp-chest_vp-ap_dx,sub-S10474,patient,GATE_CAL
+QaTa-COV19,sub-S10476_ses-E18181_run-1_bp-chest_vp-ap_dx,sub-S10476,patient,GATE_FIT
+QaTa-COV19,sub-S10476_ses-E20967_run-1_bp-chest_vp-ap_dx,sub-S10476,patient,GATE_FIT
+QaTa-COV19,sub-S10477_ses-E18184_run-1_bp-chest_vp-ap_dx,sub-S10477,patient,GATE_FIT
+QaTa-COV19,sub-S10477_ses-E19708_run-1_bp-chest_vp-ap_dx,sub-S10477,patient,GATE_FIT
+QaTa-COV19,sub-S10477_ses-E25545_run-1_bp-chest_vp-ap_dx,sub-S10477,patient,GATE_FIT
+QaTa-COV19,sub-S10477_ses-E26324_run-1_bp-chest_vp-ap_dx,sub-S10477,patient,GATE_FIT
+QaTa-COV19,sub-S10480_ses-E18187_acq-1_run-1_bp-chest_vp-pa_dx,sub-S10480,patient,GATE_FIT
+QaTa-COV19,sub-S10488_ses-E20226_run-1_bp-chest_vp-pa_cr,sub-S10488,patient,GATE_CAL
+QaTa-COV19,sub-S10488_ses-E23384_run-1_bp-chest_vp-pa_cr,sub-S10488,patient,GATE_CAL
+QaTa-COV19,sub-S10489_ses-E18196_run-1_bp-chest_vp-pa_cr,sub-S10489,patient,GATE_FIT
+QaTa-COV19,sub-S10489_ses-E22370_run-1_bp-chest_vp-ap_dx,sub-S10489,patient,GATE_FIT
+QaTa-COV19,sub-S10491_ses-E18198_run-2_bp-chest_vp-ap_dx,sub-S10491,patient,GATE_CAL
+QaTa-COV19,sub-S10492_ses-E18199_run-1_bp-chest_vp-ap_cr,sub-S10492,patient,GATE_FIT
+QaTa-COV19,sub-S10492_ses-E19481_run-1_bp-chest_vp-ap_dx,sub-S10492,patient,GATE_FIT
+QaTa-COV19,sub-S10492_ses-E20441_run-1_bp-chest_vp-ap_dx,sub-S10492,patient,GATE_FIT
+QaTa-COV19,sub-S10492_ses-E21203_run-1_bp-chest_vp-ap_dx,sub-S10492,patient,GATE_FIT
+QaTa-COV19,sub-S10492_ses-E22386_run-1_bp-chest_vp-ap_dx,sub-S10492,patient,GATE_FIT
+QaTa-COV19,sub-S10493_ses-E18201_run-1_bp-chest_vp-ap_cr,sub-S10493,patient,GATE_FIT
+QaTa-COV19,sub-S10493_ses-E22387_run-1_bp-chest_vp-ap_dx,sub-S10493,patient,GATE_FIT
+QaTa-COV19,sub-S10495_ses-E20055_run-1_bp-chest_vp-ap_dx,sub-S10495,patient,GATE_FIT
+QaTa-COV19,sub-S10495_ses-E25434_run-1_bp-chest_vp-ap_dx,sub-S10495,patient,GATE_FIT
+QaTa-COV19,sub-S10500_ses-E18208_run-1_bp-chest_vp-ap_dx,sub-S10500,patient,GATE_FIT
+QaTa-COV19,sub-S10500_ses-E25003_run-1_bp-chest_vp-pa_cr,sub-S10500,patient,GATE_FIT
+QaTa-COV19,sub-S10502_ses-E19725_run-1_bp-chest_vp-ap_cr,sub-S10502,patient,GATE_FIT
+QaTa-COV19,sub-S10502_ses-E19872_run-1_bp-chest_vp-ap_cr,sub-S10502,patient,GATE_FIT
+QaTa-COV19,sub-S10502_ses-E25574_run-1_bp-chest_vp-ap_cr,sub-S10502,patient,GATE_FIT
+QaTa-COV19,sub-S10503_ses-E23402_run-1_bp-chest_vp-ap_dx,sub-S10503,patient,GATE_CAL
+QaTa-COV19,sub-S10504_ses-E18215_run-1_bp-chest_vp-ap_cr,sub-S10504,patient,GATE_CAL
+QaTa-COV19,sub-S10504_ses-E23885_run-2_bp-chest_vp-ap_dx,sub-S10504,patient,GATE_CAL
+QaTa-COV19,sub-S10505_ses-E21208_run-1_bp-chest_vp-pa_cr,sub-S10505,patient,GATE_FIT
+QaTa-COV19,sub-S10505_ses-E22392_run-1_bp-chest_vp-pa_cr,sub-S10505,patient,GATE_FIT
+QaTa-COV19,sub-S10508_ses-E24569_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10508,patient,GATE_FIT
+QaTa-COV19,sub-S10511_ses-E21725_run-1_bp-chest_vp-ap_dx,sub-S10511,patient,GATE_FIT
+QaTa-COV19,sub-S10511_ses-E25587_run-1_bp-chest_vp-ap_dx,sub-S10511,patient,GATE_FIT
+QaTa-COV19,sub-S10512_ses-E23434_run-1_bp-chest_vp-ap_dx,sub-S10512,patient,GATE_CAL
+QaTa-COV19,sub-S10513_ses-E24209_run-1_bp-chest_vp-ap_cr,sub-S10513,patient,GATE_FIT
+QaTa-COV19,sub-S10514_ses-E20076_run-1_bp-chest_vp-ap_dx,sub-S10514,patient,GATE_CAL
+QaTa-COV19,sub-S10516_ses-E21554_run-1_bp-chest_vp-pa_cr,sub-S10516,patient,GATE_CAL
+QaTa-COV19,sub-S10517_ses-E18237_run-1_bp-chest_vp-ap_cr,sub-S10517,patient,GATE_CAL
+QaTa-COV19,sub-S10517_ses-E25026_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10517,patient,GATE_CAL
+QaTa-COV19,sub-S10518_ses-E20494_run-1_bp-chest_vp-ap_cr,sub-S10518,patient,GATE_FIT
+QaTa-COV19,sub-S10520_ses-E18244_run-1_bp-chest_vp-ap_dx,sub-S10520,patient,GATE_FIT
+QaTa-COV19,sub-S10521_ses-E21744_run-1_bp-chest_vp-ap_dx,sub-S10521,patient,GATE_FIT
+QaTa-COV19,sub-S10525_ses-E19750_acq-2_run-1_bp-chest_vp-ap_cr,sub-S10525,patient,GATE_CAL
+QaTa-COV19,sub-S10529_ses-E21248_run-1_bp-chest_vp-ap_dx,sub-S10529,patient,GATE_FIT
+QaTa-COV19,sub-S10530_ses-E23911_run-1_bp-chest_vp-ap_dx,sub-S10530,patient,GATE_FIT
+QaTa-COV19,sub-S10530_ses-E24625_run-1_bp-chest_vp-ap_dx,sub-S10530,patient,GATE_FIT
+QaTa-COV19,sub-S10535_ses-E18267_run-1_bp-chest_vp-ap_dx,sub-S10535,patient,GATE_FIT
+QaTa-COV19,sub-S10537_ses-E18269_run-1_bp-chest_vp-ap_cr,sub-S10537,patient,GATE_FIT
+QaTa-COV19,sub-S10538_ses-E18272_run-1_bp-chest_vp-ap_dx,sub-S10538,patient,GATE_FIT
+QaTa-COV19,sub-S10539_ses-E25293_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10539,patient,GATE_CAL
+QaTa-COV19,sub-S10540_ses-E20111_run-1_bp-chest_vp-ap_dx,sub-S10540,patient,GATE_FIT
+QaTa-COV19,sub-S10540_ses-E21033_run-1_bp-chest_vp-ap_dx,sub-S10540,patient,GATE_FIT
+QaTa-COV19,sub-S10541_ses-E18275_run-1_bp-chest_vp-ap_dx,sub-S10541,patient,GATE_CAL
+QaTa-COV19,sub-S10542_ses-E18276_run-1_bp-chest_cr,sub-S10542,patient,GATE_FIT
+QaTa-COV19,sub-S10544_ses-E19550_run-1_bp-chest_vp-pa_cr,sub-S10544,patient,GATE_FIT
+QaTa-COV19,sub-S10545_ses-E18828_run-1_bp-chest_vp-ap_dx,sub-S10545,patient,GATE_FIT
+QaTa-COV19,sub-S10545_ses-E19568_run-1_bp-chest_vp-ap_dx,sub-S10545,patient,GATE_FIT
+QaTa-COV19,sub-S10545_ses-E19923_run-1_bp-chest_vp-ap_dx,sub-S10545,patient,GATE_FIT
+QaTa-COV19,sub-S10545_ses-E20541_run-1_bp-chest_vp-ap_dx,sub-S10545,patient,GATE_FIT
+QaTa-COV19,sub-S10545_ses-E21042_run-1_bp-chest_vp-ap_dx,sub-S10545,patient,GATE_FIT
+QaTa-COV19,sub-S10545_ses-E25307_run-1_bp-chest_vp-ap_cr,sub-S10545,patient,GATE_FIT
+QaTa-COV19,sub-S10546_ses-E21035_run-1_bp-chest_vp-ap_dx,sub-S10546,patient,GATE_FIT
+QaTa-COV19,sub-S10547_ses-E25071_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10547,patient,GATE_CAL
+QaTa-COV19,sub-S10553_ses-E24236_run-1_bp-chest_vp-ap_cr,sub-S10553,patient,GATE_FIT
+QaTa-COV19,sub-S10553_ses-E26253_run-1_bp-chest_vp-ap_cr,sub-S10553,patient,GATE_FIT
+QaTa-COV19,sub-S10554_ses-E18839_run-1_bp-chest_vp-ap_cr,sub-S10554,patient,GATE_FIT
+QaTa-COV19,sub-S10554_ses-E19920_run-1_bp-chest_vp-ap_cr,sub-S10554,patient,GATE_FIT
+QaTa-COV19,sub-S10554_ses-E20757_run-1_bp-chest_vp-ap_cr,sub-S10554,patient,GATE_FIT
+QaTa-COV19,sub-S10556_ses-E19558_run-1_bp-chest_vp-ap_cr,sub-S10556,patient,GATE_FIT
+QaTa-COV19,sub-S10556_ses-E20255_run-1_bp-chest_vp-ap_cr,sub-S10556,patient,GATE_FIT
+QaTa-COV19,sub-S10556_ses-E25656_run-1_bp-chest_vp-ap_cr,sub-S10556,patient,GATE_FIT
+QaTa-COV19,sub-S10556_ses-E25975_run-1_bp-chest_vp-ap_cr,sub-S10556,patient,GATE_FIT
+QaTa-COV19,sub-S10557_ses-E23523_run-1_bp-chest_vp-ap_cr,sub-S10557,patient,GATE_CAL
+QaTa-COV19,sub-S10558_ses-E22117_run-1_bp-chest_vp-ap_cr,sub-S10558,patient,GATE_CAL
+QaTa-COV19,sub-S10558_ses-E22283_run-1_bp-chest_vp-ap_cr,sub-S10558,patient,GATE_CAL
+QaTa-COV19,sub-S10562_ses-E22511_run-1_bp-chest_vp-ap_cr,sub-S10562,patient,GATE_CAL
+QaTa-COV19,sub-S10563_ses-E18315_run-1_bp-chest_vp-pa_cr,sub-S10563,patient,GATE_FIT
+QaTa-COV19,sub-S10563_ses-E23502_run-1_bp-chest_cr,sub-S10563,patient,GATE_FIT
+QaTa-COV19,sub-S10564_ses-E18316_run-1_bp-chest_vp-ap_cr,sub-S10564,patient,GATE_FIT
+QaTa-COV19,sub-S10564_ses-E19578_run-1_bp-chest_vp-ap_cr,sub-S10564,patient,GATE_FIT
+QaTa-COV19,sub-S10564_ses-E20546_run-1_bp-chest_vp-ap_cr,sub-S10564,patient,GATE_FIT
+QaTa-COV19,sub-S10564_ses-E23505_run-1_bp-chest_vp-ap_cr,sub-S10564,patient,GATE_FIT
+QaTa-COV19,sub-S10564_ses-E26413_run-2_bp-chest_vp-ap_cr,sub-S10564,patient,GATE_FIT
+QaTa-COV19,sub-S10566_ses-E18320_run-1_bp-chest_vp-ap_cr,sub-S10566,patient,GATE_CAL
+QaTa-COV19,sub-S10566_ses-E21067_run-1_bp-chest_vp-ap_dx,sub-S10566,patient,GATE_CAL
+QaTa-COV19,sub-S10566_ses-E23979_run-1_bp-chest_vp-ap_cr,sub-S10566,patient,GATE_CAL
+QaTa-COV19,sub-S10566_ses-E24784_run-1_bp-chest_vp-ap_dx,sub-S10566,patient,GATE_CAL
+QaTa-COV19,sub-S10573_ses-E18328_run-1_bp-chest_vp-ap_dx,sub-S10573,patient,GATE_CAL
+QaTa-COV19,sub-S10574_ses-E23525_run-1_bp-chest_vp-ap_cr,sub-S10574,patient,GATE_CAL
+QaTa-COV19,sub-S10575_ses-E19611_run-1_bp-chest_vp-ap_cr,sub-S10575,patient,GATE_FIT
+QaTa-COV19,sub-S10576_ses-E19947_run-1_bp-chest_vp-ap_dx,sub-S10576,patient,GATE_FIT
+QaTa-COV19,sub-S10576_ses-E20574_run-1_bp-chest_vp-ap_dx,sub-S10576,patient,GATE_FIT
+QaTa-COV19,sub-S10576_ses-E23535_run-1_bp-chest_vp-ap_dx,sub-S10576,patient,GATE_FIT
+QaTa-COV19,sub-S10576_ses-E25121_run-1_bp-chest_vp-ap_dx,sub-S10576,patient,GATE_FIT
+QaTa-COV19,sub-S10580_ses-E24437_run-1_bp-chest_vp-ap_cr,sub-S10580,patient,GATE_FIT
+QaTa-COV19,sub-S10582_ses-E18346_run-1_bp-chest_vp-ap_cr,sub-S10582,patient,GATE_FIT
+QaTa-COV19,sub-S10582_ses-E21993_run-1_bp-chest_vp-ap_cr,sub-S10582,patient,GATE_FIT
+QaTa-COV19,sub-S10583_ses-E26026_run-1_bp-chest_vp-pa_cr,sub-S10583,patient,GATE_FIT
+QaTa-COV19,sub-S10584_ses-E18350_run-1_bp-chest_vp-ap_cr,sub-S10584,patient,GATE_FIT
+QaTa-COV19,sub-S10585_ses-E18352_run-1_bp-chest_vp-ap_dx,sub-S10585,patient,GATE_FIT
+QaTa-COV19,sub-S10586_ses-E18353_run-1_bp-chest_vp-ap_dx,sub-S10586,patient,GATE_FIT
+QaTa-COV19,sub-S10586_ses-E24436_run-1_bp-chest_vp-ap_cr,sub-S10586,patient,GATE_FIT
+QaTa-COV19,sub-S10588_ses-E24434_run-1_bp-chest_vp-pa_dx,sub-S10588,patient,GATE_FIT
+QaTa-COV19,sub-S10589_ses-E22537_run-1_bp-chest_vp-ap_dx,sub-S10589,patient,GATE_CAL
+QaTa-COV19,sub-S10590_ses-E18358_run-1_bp-chest_vp-ap_cr,sub-S10590,patient,GATE_CAL
+QaTa-COV19,sub-S10591_ses-E22552_run-1_bp-chest_vp-ap_cr,sub-S10591,patient,GATE_FIT
+QaTa-COV19,sub-S10592_ses-E23574_run-1_bp-chest_vp-pa_cr,sub-S10592,patient,GATE_FIT
+QaTa-COV19,sub-S10594_ses-E20606_run-1_bp-chest_vp-pa_cr,sub-S10594,patient,GATE_CAL
+QaTa-COV19,sub-S10599_ses-E25502_run-1_bp-chest_vp-pa_cr,sub-S10599,patient,GATE_FIT
+QaTa-COV19,sub-S10601_ses-E18377_run-1_bp-chest_vp-ap_cr,sub-S10601,patient,GATE_FIT
+QaTa-COV19,sub-S10605_ses-E21473_run-1_bp-chest_vp-ap_dx,sub-S10605,patient,GATE_FIT
+QaTa-COV19,sub-S10606_ses-E26472_acq-1_run-1_bp-chest_vp-pa_dx,sub-S10606,patient,GATE_FIT
+QaTa-COV19,sub-S10608_ses-E18387_run-1_bp-chest_vp-ap_cr,sub-S10608,patient,GATE_FIT
+QaTa-COV19,sub-S10612_ses-E18391_run-1_bp-chest_vp-pa_cr,sub-S10612,patient,GATE_CAL
+QaTa-COV19,sub-S10612_ses-E24840_run-1_bp-chest_vp-pa_dx,sub-S10612,patient,GATE_CAL
+QaTa-COV19,sub-S10614_ses-E23597_run-1_bp-chest_vp-ap_dx,sub-S10614,patient,GATE_FIT
+QaTa-COV19,sub-S10615_ses-E25175_run-1_bp-chest_vp-ap_dx,sub-S10615,patient,GATE_CAL
+QaTa-COV19,sub-S10615_ses-E25747_run-1_bp-chest_vp-ap_dx,sub-S10615,patient,GATE_CAL
+QaTa-COV19,sub-S10618_ses-E18399_run-1_bp-chest_cr,sub-S10618,patient,GATE_FIT
+QaTa-COV19,sub-S10618_ses-E19398_run-1_bp-chest_cr,sub-S10618,patient,GATE_FIT
+QaTa-COV19,sub-S10618_ses-E21901_run-1_bp-chest_vp-ap_dx,sub-S10618,patient,GATE_FIT
+QaTa-COV19,sub-S10618_ses-E23743_run-1_bp-chest_vp-ap_cr,sub-S10618,patient,GATE_FIT
+QaTa-COV19,sub-S10622_ses-E18407_run-1_bp-chest_vp-ap_dx,sub-S10622,patient,GATE_FIT
+QaTa-COV19,sub-S10623_ses-E23611_run-1_bp-chest_vp-ap_cr,sub-S10623,patient,GATE_CAL
+QaTa-COV19,sub-S10623_ses-E25186_run-1_bp-chest_vp-ap_cr,sub-S10623,patient,GATE_CAL
+QaTa-COV19,sub-S10624_ses-E18412_run-1_bp-chest_vp-pa_dx,sub-S10624,patient,GATE_FIT
+QaTa-COV19,sub-S10627_ses-E20196_run-1_bp-chest_vp-ap_cr,sub-S10627,patient,GATE_CAL
+QaTa-COV19,sub-S10627_ses-E21349_run-1_bp-chest_vp-ap_cr,sub-S10627,patient,GATE_CAL
+QaTa-COV19,sub-S10627_ses-E22013_run-1_bp-chest_vp-ap_cr,sub-S10627,patient,GATE_CAL
+QaTa-COV19,sub-S10627_ses-E22586_run-1_bp-chest_vp-ap_cr,sub-S10627,patient,GATE_CAL
+QaTa-COV19,sub-S10629_ses-E19121_run-1_bp-chest_vp-ap_dx,sub-S10629,patient,GATE_CAL
+QaTa-COV19,sub-S10629_ses-E19655_run-1_bp-chest_vp-ap_cr,sub-S10629,patient,GATE_CAL
+QaTa-COV19,sub-S10636_ses-E26108_run-1_bp-chest_vp-ap_cr,sub-S10636,patient,GATE_CAL
+QaTa-COV19,sub-S10643_ses-E19137_run-1_bp-chest_vp-pa_dx,sub-S10643,patient,GATE_FIT
+QaTa-COV19,sub-S10644_ses-E18445_run-1_bp-chest_vp-ap_cr,sub-S10644,patient,GATE_FIT
+QaTa-COV19,sub-S10645_ses-E19435_run-1_bp-chest_vp-ap_cr,sub-S10645,patient,GATE_CAL
+QaTa-COV19,sub-S10645_ses-E24713_run-1_bp-chest_vp-ap_cr,sub-S10645,patient,GATE_CAL
+QaTa-COV19,sub-S10648_ses-E25217_acq-2_run-1_bp-chest_vp-pa_dx,sub-S10648,patient,GATE_CAL
+QaTa-COV19,sub-S10649_ses-E18452_run-1_bp-chest_vp-ap_cr,sub-S10649,patient,GATE_CAL
+QaTa-COV19,sub-S10650_ses-E26316_run-1_bp-chest_vp-ap_dx,sub-S10650,patient,GATE_FIT
+QaTa-COV19,sub-S10651_ses-E20684_run-1_bp-chest_vp-ap_cr,sub-S10651,patient,GATE_CAL
+QaTa-COV19,sub-S10651_ses-E25215_run-2_bp-chest_vp-ap_dx,sub-S10651,patient,GATE_CAL
+QaTa-COV19,sub-S10652_ses-E19150_run-1_bp-chest_vp-ap_dx,sub-S10652,patient,GATE_CAL
+QaTa-COV19,sub-S10654_ses-E18459_run-1_bp-chest_vp-pa_dx,sub-S10654,patient,GATE_FIT
+QaTa-COV19,sub-S10656_ses-E18461_run-1_bp-chest_vp-ap_cr,sub-S10656,patient,GATE_FIT
+QaTa-COV19,sub-S10656_ses-E23659_run-1_bp-chest_vp-pa_cr,sub-S10656,patient,GATE_FIT
+QaTa-COV19,sub-S10656_ses-E24846_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10656,patient,GATE_FIT
+QaTa-COV19,sub-S10657_ses-E18463_run-1_bp-chest_vp-pa_cr,sub-S10657,patient,GATE_CAL
+QaTa-COV19,sub-S10657_ses-E21174_run-1_bp-chest_vp-pa_cr,sub-S10657,patient,GATE_CAL
+QaTa-COV19,sub-S10659_ses-E18988_run-1_bp-chest_vp-ap_dx,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10659_ses-E19146_run-1_bp-chest_vp-ap_dx,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10659_ses-E21376_run-1_bp-chest_vp-ap_dx,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10659_ses-E21520_run-1_bp-chest_vp-ap_dx,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10659_ses-E22631_run-1_bp-chest_vp-ap_dx,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10659_ses-E24728_run-1_bp-chest_cr,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10659_ses-E26514_run-1_bp-chest_vp-ap_dx,sub-S10659,patient,GATE_FIT
+QaTa-COV19,sub-S10660_ses-E18467_run-1_bp-chest_vp-pa_cr,sub-S10660,patient,GATE_CAL
+QaTa-COV19,sub-S10660_ses-E24121_run-1_bp-chest_vp-pa_cr,sub-S10660,patient,GATE_CAL
+QaTa-COV19,sub-S10660_ses-E24717_run-1_bp-chest_vp-pa_cr,sub-S10660,patient,GATE_CAL
+QaTa-COV19,sub-S10663_ses-E18471_run-1_bp-chest_vp-ap_dx,sub-S10663,patient,GATE_FIT
+QaTa-COV19,sub-S10663_ses-E19706_acq-1_run-1_bp-chest_vp-ap_dx,sub-S10663,patient,GATE_FIT
+QaTa-COV19,sub-S10674_ses-E19231_run-1_bp-chest_vp-ap_cr,sub-S10674,patient,GATE_FIT
+QaTa-COV19,sub-S10674_ses-E22373_run-1_bp-chest_vp-ap_cr,sub-S10674,patient,GATE_FIT
+QaTa-COV19,sub-S10675_ses-E19718_run-1_bp-chest_vp-ap_dx,sub-S10675,patient,GATE_CAL
+QaTa-COV19,sub-S10677_ses-E26326_run-1_bp-chest_vp-ap_dx,sub-S10677,patient,GATE_FIT
+QaTa-COV19,sub-S10679_ses-E21394_run-1_bp-chest_vp-ap_dx,sub-S10679,patient,GATE_CAL
+QaTa-COV19,sub-S10686_ses-E18509_run-1_bp-chest_vp-ap_dx,sub-S10686,patient,GATE_CAL
+QaTa-COV19,sub-S10689_ses-E25052_run-1_bp-chest_vp-pa_cr,sub-S10689,patient,GATE_FIT
+QaTa-COV19,sub-S10692_ses-E18525_run-1_bp-chest_vp-ap_cr,sub-S10692,patient,GATE_CAL
+QaTa-COV19,sub-S10693_ses-E23059_run-1_bp-chest_vp-ap_dx,sub-S10693,patient,GATE_FIT
+QaTa-COV19,sub-S10695_ses-E18529_run-1_bp-chest_vp-ap_cr,sub-S10695,patient,GATE_FIT
+QaTa-COV19,sub-S10695_ses-E20088_run-1_bp-chest_vp-ap_cr,sub-S10695,patient,GATE_FIT
+QaTa-COV19,sub-S10695_ses-E25938_acq-1_run-1_bp-chest_vp-pa_dx,sub-S10695,patient,GATE_FIT
+QaTa-COV19,sub-S10699_ses-E23938_run-1_bp-chest_vp-pa_dx,sub-S10699,patient,GATE_FIT
+QaTa-COV19,sub-S10699_ses-E25634_run-1_bp-chest_vp-ap_dx,sub-S10699,patient,GATE_FIT
+QaTa-COV19,sub-S10703_ses-E23954_run-1_bp-chest_cr,sub-S10703,patient,GATE_CAL
+QaTa-COV19,sub-S10709_ses-E23984_run-1_bp-chest_cr,sub-S10709,patient,GATE_CAL
+QaTa-COV19,sub-S10717_ses-E24143_run-1_bp-chest_vp-pa_dx,sub-S10717,patient,GATE_FIT
+QaTa-COV19,sub-S10718_ses-E23996_run-1_bp-chest_vp-pa_cr,sub-S10718,patient,GATE_FIT
+QaTa-COV19,sub-S10719_ses-E25142_run-1_bp-chest_vp-ap_dx,sub-S10719,patient,GATE_CAL
+QaTa-COV19,sub-S10719_ses-E26067_run-1_bp-chest_vp-ap_dx,sub-S10719,patient,GATE_CAL
+QaTa-COV19,sub-S10724_ses-E18593_run-1_bp-chest_dx,sub-S10724,patient,GATE_FIT
+QaTa-COV19,sub-S10725_ses-E20639_run-1_bp-chest_vp-ap_cr,sub-S10725,patient,GATE_FIT
+QaTa-COV19,sub-S10725_ses-E21132_run-1_bp-chest_vp-ap_cr,sub-S10725,patient,GATE_FIT
+QaTa-COV19,sub-S10725_ses-E25172_run-1_bp-chest_vp-ap_cr,sub-S10725,patient,GATE_FIT
+QaTa-COV19,sub-S10733_ses-E18615_run-1_bp-chest_vp-ap_cr,sub-S10733,patient,GATE_FIT
+QaTa-COV19,sub-S10735_ses-E24720_run-1_bp-chest_cr,sub-S10735,patient,GATE_CAL
+QaTa-COV19,sub-S10740_ses-E18635_run-2_bp-chest_vp-ap_dx,sub-S10740,patient,GATE_CAL
+QaTa-COV19,sub-S10740_ses-E20842_run-2_bp-chest_vp-ap_dx,sub-S10740,patient,GATE_CAL
+QaTa-COV19,sub-S10740_ses-E23140_run-1_bp-chest_vp-ap_dx,sub-S10740,patient,GATE_CAL
+QaTa-COV19,sub-S10741_ses-E22835_run-1_bp-chest_vp-ap_dx,sub-S10741,patient,GATE_FIT
+QaTa-COV19,sub-S10745_ses-E26339_run-1_bp-chest_vp-pa_cr,sub-S10745,patient,GATE_FIT
+QaTa-COV19,sub-S10748_ses-E18652_run-1_bp-chest_vp-ap_dx,sub-S10748,patient,GATE_FIT
+QaTa-COV19,sub-S10748_ses-E19257_run-1_bp-chest_vp-ap_dx,sub-S10748,patient,GATE_FIT
+QaTa-COV19,sub-S10748_ses-E23175_run-1_bp-chest_vp-ap_dx,sub-S10748,patient,GATE_FIT
+QaTa-COV19,sub-S10751_ses-E18655_run-1_bp-chest_vp-ap_dx,sub-S10751,patient,GATE_CAL
+QaTa-COV19,sub-S10753_ses-E19266_run-1_bp-chest_vp-pa_cr,sub-S10753,patient,GATE_FIT
+QaTa-COV19,sub-S10753_ses-E19524_run-1_bp-chest_vp-ap_cr,sub-S10753,patient,GATE_FIT
+QaTa-COV19,sub-S10753_ses-E21565_run-1_bp-chest_vp-ap_cr,sub-S10753,patient,GATE_FIT
+QaTa-COV19,sub-S10753_ses-E25291_acq-1_run-1_bp-chest_vp-pa_dx,sub-S10753,patient,GATE_FIT
+QaTa-COV19,sub-S10758_ses-E18670_run-1_bp-chest_vp-ap_cr,sub-S10758,patient,GATE_CAL
+QaTa-COV19,sub-S10760_ses-E18677_run-1_bp-chest_vp-ap_dx,sub-S10760,patient,GATE_FIT
+QaTa-COV19,sub-S10761_ses-E18681_run-1_bp-chest_vp-ap_cr,sub-S10761,patient,GATE_CAL
+QaTa-COV19,sub-S10762_ses-E21090_run-1_bp-chest_vp-ap_dx,sub-S10762,patient,GATE_CAL
+QaTa-COV19,sub-S10763_ses-E24812_run-1_bp-chest_vp-ap_cr,sub-S10763,patient,GATE_FIT
+QaTa-COV19,sub-S10768_ses-E19199_run-1_bp-chest_vp-ap_cr,sub-S10768,patient,GATE_FIT
+QaTa-COV19,sub-S10768_ses-E20604_run-1_bp-chest_vp-ap_cr,sub-S10768,patient,GATE_FIT
+QaTa-COV19,sub-S10768_ses-E22561_run-1_bp-chest_vp-ap_cr,sub-S10768,patient,GATE_FIT
+QaTa-COV19,sub-S10768_ses-E23286_run-1_bp-chest_vp-ap_cr,sub-S10768,patient,GATE_FIT
+QaTa-COV19,sub-S10768_ses-E23720_run-1_bp-chest_vp-ap_cr,sub-S10768,patient,GATE_FIT
+QaTa-COV19,sub-S10773_ses-E19817_run-1_bp-chest_vp-ap_dx,sub-S10773,patient,GATE_CAL
+QaTa-COV19,sub-S10777_ses-E19122_run-1_bp-chest_vp-ap_dx,sub-S10777,patient,GATE_FIT
+QaTa-COV19,sub-S10777_ses-E22012_run-1_bp-chest_vp-ap_dx,sub-S10777,patient,GATE_FIT
+QaTa-COV19,sub-S10777_ses-E22327_run-1_bp-chest_vp-ap_dx,sub-S10777,patient,GATE_FIT
+QaTa-COV19,sub-S10787_ses-E18746_run-1_bp-chest_vp-ap_dx,sub-S10787,patient,GATE_FIT
+QaTa-COV19,sub-S10789_ses-E25843_run-1_bp-chest_vp-pa_cr,sub-S10789,patient,GATE_FIT
+QaTa-COV19,sub-S10794_ses-E20062_run-1_bp-chest_vp-ap_dx,sub-S10794,patient,GATE_CAL
+QaTa-COV19,sub-S10794_ses-E20986_run-1_bp-chest_vp-ap_dx,sub-S10794,patient,GATE_CAL
+QaTa-COV19,sub-S10794_ses-E24325_run-1_bp-chest_vp-ap_dx,sub-S10794,patient,GATE_CAL
+QaTa-COV19,sub-S10796_ses-E18764_run-1_bp-chest_vp-ap_dx,sub-S10796,patient,GATE_FIT
+QaTa-COV19,sub-S10800_ses-E20460_run-1_bp-chest_vp-pa_cr,sub-S10800,patient,GATE_FIT
+QaTa-COV19,sub-S10801_ses-E19492_run-1_bp-chest_vp-ap_cr,sub-S10801,patient,GATE_FIT
+QaTa-COV19,sub-S10803_ses-E18779_run-2_bp-chest_vp-ap_dx,sub-S10803,patient,GATE_FIT
+QaTa-COV19,sub-S10806_ses-E18784_run-1_bp-chest_vp-ap_dx,sub-S10806,patient,GATE_CAL
+QaTa-COV19,sub-S10815_ses-E19526_run-1_bp-chest_vp-ap_dx,sub-S10815,patient,GATE_CAL
+QaTa-COV19,sub-S10815_ses-E21412_run-1_bp-chest_vp-ap_dx,sub-S10815,patient,GATE_CAL
+QaTa-COV19,sub-S10817_ses-E25897_run-1_bp-chest_vp-ap_dx,sub-S10817,patient,GATE_FIT
+QaTa-COV19,sub-S10820_ses-E20101_run-1_bp-chest_vp-ap_dx,sub-S10820,patient,GATE_CAL
+QaTa-COV19,sub-S10821_ses-E25959_run-1_bp-chest_vp-pa_cr,sub-S10821,patient,GATE_CAL
+QaTa-COV19,sub-S10826_ses-E21254_run-1_bp-chest_vp-pa_cr,sub-S10826,patient,GATE_CAL
+QaTa-COV19,sub-S10829_ses-E21263_run-1_bp-chest_vp-ap_dx,sub-S10829,patient,GATE_CAL
+QaTa-COV19,sub-S10834_ses-E19569_run-1_bp-chest_vp-ap_dx,sub-S10834,patient,GATE_CAL
+QaTa-COV19,sub-S10836_ses-E18845_run-1_bp-chest_vp-ap_dx,sub-S10836,patient,GATE_FIT
+QaTa-COV19,sub-S10837_ses-E19324_run-1_bp-chest_vp-ap_cr,sub-S10837,patient,GATE_CAL
+QaTa-COV19,sub-S10837_ses-E21283_run-1_bp-chest_vp-ap_cr,sub-S10837,patient,GATE_CAL
+QaTa-COV19,sub-S10837_ses-E21472_run-1_bp-chest_vp-ap_cr,sub-S10837,patient,GATE_CAL
+QaTa-COV19,sub-S10837_ses-E21611_run-1_bp-chest_vp-ap_cr,sub-S10837,patient,GATE_CAL
+QaTa-COV19,sub-S10837_ses-E25999_run-1_bp-chest_vp-ap_cr,sub-S10837,patient,GATE_CAL
+QaTa-COV19,sub-S10845_ses-E20570_run-1_bp-chest_vp-pa_cr,sub-S10845,patient,GATE_FIT
+QaTa-COV19,sub-S10846_ses-E23268_run-1_bp-chest_vp-ap_dx,sub-S10846,patient,GATE_FIT
+QaTa-COV19,sub-S10847_ses-E18875_run-1_bp-chest_vp-ap_cr,sub-S10847,patient,GATE_FIT
+QaTa-COV19,sub-S10851_ses-E22953_run-1_bp-chest_vp-ap_dx,sub-S10851,patient,GATE_FIT
+QaTa-COV19,sub-S10853_ses-E21103_run-1_bp-chest_vp-ap_dx,sub-S10853,patient,GATE_FIT
+QaTa-COV19,sub-S10856_ses-E18891_run-1_bp-chest_vp-ap_dx,sub-S10856,patient,GATE_FIT
+QaTa-COV19,sub-S10857_ses-E20163_run-1_bp-chest_vp-ap_dx,sub-S10857,patient,GATE_CAL
+QaTa-COV19,sub-S10859_ses-E18894_run-1_bp-chest_vp-ap_cr,sub-S10859,patient,GATE_CAL
+QaTa-COV19,sub-S10864_ses-E18901_run-1_bp-chest_vp-pa_cr,sub-S10864,patient,GATE_FIT
+QaTa-COV19,sub-S10874_ses-E20625_run-1_bp-chest_vp-ap_dx,sub-S10874,patient,GATE_CAL
+QaTa-COV19,sub-S10874_ses-E26072_run-1_bp-chest_vp-ap_dx,sub-S10874,patient,GATE_CAL
+QaTa-COV19,sub-S10879_ses-E20189_run-1_bp-chest_vp-ap_dx,sub-S10879,patient,GATE_FIT
+QaTa-COV19,sub-S10879_ses-E22800_run-1_bp-chest_vp-ap_dx,sub-S10879,patient,GATE_FIT
+QaTa-COV19,sub-S10882_ses-E21494_run-1_bp-chest_vp-pa_cr,sub-S10882,patient,GATE_FIT
+QaTa-COV19,sub-S10882_ses-E21824_run-2_bp-chest_vp-ap_cr,sub-S10882,patient,GATE_FIT
+QaTa-COV19,sub-S10882_ses-E22590_run-1_bp-chest_vp-ap_cr,sub-S10882,patient,GATE_FIT
+QaTa-COV19,sub-S10882_ses-E26094_run-1_bp-chest_vp-pa_cr,sub-S10882,patient,GATE_FIT
+QaTa-COV19,sub-S10888_ses-E18952_run-1_bp-chest_vp-ap_cr,sub-S10888,patient,GATE_FIT
+QaTa-COV19,sub-S10888_ses-E21358_run-1_bp-chest_vp-ap_cr,sub-S10888,patient,GATE_FIT
+QaTa-COV19,sub-S10888_ses-E22989_run-1_bp-chest_vp-ap_cr,sub-S10888,patient,GATE_FIT
+QaTa-COV19,sub-S10888_ses-E23313_run-1_bp-chest_vp-ap_cr,sub-S10888,patient,GATE_FIT
+QaTa-COV19,sub-S10888_ses-E24078_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10888,patient,GATE_FIT
+QaTa-COV19,sub-S10888_ses-E26115_run-1_bp-chest_vp-ap_cr,sub-S10888,patient,GATE_FIT
+QaTa-COV19,sub-S10893_ses-E18960_run-1_bp-chest_vp-pa_cr,sub-S10893,patient,GATE_CAL
+QaTa-COV19,sub-S10899_ses-E22617_run-1_bp-chest_vp-ap_dx,sub-S10899,patient,GATE_CAL
+QaTa-COV19,sub-S10899_ses-E26505_run-2_bp-chest_vp-pa_dx,sub-S10899,patient,GATE_CAL
+QaTa-COV19,sub-S10900_ses-E20680_run-1_bp-chest_vp-ap_cr,sub-S10900,patient,GATE_FIT
+QaTa-COV19,sub-S10903_ses-E18982_run-1_bp-chest_vp-ap_dx,sub-S10903,patient,GATE_CAL
+QaTa-COV19,sub-S10906_ses-E20418_run-1_bp-chest_vp-ap_dx,sub-S10906,patient,GATE_FIT
+QaTa-COV19,sub-S10910_ses-E19006_run-1_bp-chest_vp-ap_cr,sub-S10910,patient,GATE_CAL
+QaTa-COV19,sub-S10910_ses-E21714_run-1_bp-chest_vp-ap_dx,sub-S10910,patient,GATE_CAL
+QaTa-COV19,sub-S10914_ses-E19011_run-1_bp-chest_vp-pa_cr,sub-S10914,patient,GATE_CAL
+QaTa-COV19,sub-S10916_ses-E26349_run-1_bp-chest_vp-ap_cr,sub-S10916,patient,GATE_CAL
+QaTa-COV19,sub-S10918_ses-E19023_run-1_bp-chest_vp-pa_cr,sub-S10918,patient,GATE_FIT
+QaTa-COV19,sub-S10918_ses-E19888_run-1_bp-chest_vp-ap_cr,sub-S10918,patient,GATE_FIT
+QaTa-COV19,sub-S10923_ses-E19043_run-1_bp-chest_vp-ap_dx,sub-S10923,patient,GATE_FIT
+QaTa-COV19,sub-S10923_ses-E22433_run-1_bp-chest_vp-pa_dx,sub-S10923,patient,GATE_FIT
+QaTa-COV19,sub-S10924_ses-E22899_run-1_bp-chest_vp-ap_dx,sub-S10924,patient,GATE_FIT
+QaTa-COV19,sub-S10924_ses-E26659_run-1_bp-chest_vp-ap_cr,sub-S10924,patient,GATE_FIT
+QaTa-COV19,sub-S10926_ses-E19906_run-2_bp-chest_cr,sub-S10926,patient,GATE_FIT
+QaTa-COV19,sub-S10928_ses-E19306_acq-1_run-1_bp-chest_vp-pa_dx,sub-S10928,patient,GATE_FIT
+QaTa-COV19,sub-S10928_ses-E22104_run-1_bp-chest_vp-ap_cr,sub-S10928,patient,GATE_FIT
+QaTa-COV19,sub-S10928_ses-E22272_run-1_bp-chest_vp-ap_cr,sub-S10928,patient,GATE_FIT
+QaTa-COV19,sub-S10932_ses-E19065_run-1_bp-chest_vp-ap_dx,sub-S10932,patient,GATE_CAL
+QaTa-COV19,sub-S10932_ses-E20119_run-1_bp-chest_vp-ap_dx,sub-S10932,patient,GATE_CAL
+QaTa-COV19,sub-S10940_ses-E19101_run-1_bp-chest_vp-pa_dx,sub-S10940,patient,GATE_FIT
+QaTa-COV19,sub-S10941_ses-E19102_run-1_bp-chest_vp-pa_dx,sub-S10941,patient,GATE_FIT
+QaTa-COV19,sub-S10941_ses-E21127_run-1_bp-chest_vp-pa_dx,sub-S10941,patient,GATE_FIT
+QaTa-COV19,sub-S10945_ses-E24667_run-1_bp-chest_vp-ap_dx,sub-S10945,patient,GATE_FIT
+QaTa-COV19,sub-S10948_ses-E19117_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10948,patient,GATE_CAL
+QaTa-COV19,sub-S10970_ses-E19194_run-1_bp-chest_vp-pa_cr,sub-S10970,patient,GATE_CAL
+QaTa-COV19,sub-S10973_ses-E19197_acq-1_run-1_bp-chest_vp-pa_dx,sub-S10973,patient,GATE_FIT
+QaTa-COV19,sub-S10974_ses-E19198_run-1_bp-chest_vp-pa_cr,sub-S10974,patient,GATE_FIT
+QaTa-COV19,sub-S10979_ses-E24279_acq-1_run-1_bp-chest_vp-ll_dx,sub-S10979,patient,GATE_FIT
+QaTa-COV19,sub-S10987_ses-E24313_run-1_bp-chest_vp-ap_dx,sub-S10987,patient,GATE_FIT
+QaTa-COV19,sub-S10989_ses-E19238_run-1_bp-chest_vp-pa_cr,sub-S10989,patient,GATE_CAL
+QaTa-COV19,sub-S10989_ses-E22390_run-1_bp-chest_vp-pa_cr,sub-S10989,patient,GATE_CAL
+QaTa-COV19,sub-S10992_ses-E22417_run-1_bp-chest_vp-ap_dx,sub-S10992,patient,GATE_CAL
+QaTa-COV19,sub-S10995_ses-E19250_run-1_bp-chest_vp-ap_dx,sub-S10995,patient,GATE_CAL
+QaTa-COV19,sub-S10996_ses-E19251_run-1_bp-chest_vp-pa_cr,sub-S10996,patient,GATE_CAL
+QaTa-COV19,sub-S10999_ses-E25903_run-1_bp-chest_cr,sub-S10999,patient,GATE_FIT
+QaTa-COV19,sub-S11001_ses-E23191_run-1_bp-chest_vp-ap_dx,sub-S11001,patient,GATE_CAL
+QaTa-COV19,sub-S11001_ses-E24591_run-1_bp-chest_cr,sub-S11001,patient,GATE_CAL
+QaTa-COV19,sub-S11009_ses-E25617_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11009,patient,GATE_FIT
+QaTa-COV19,sub-S11013_ses-E20873_run-1_bp-chest_vp-pa_cr,sub-S11013,patient,GATE_FIT
+QaTa-COV19,sub-S11021_ses-E19302_run-1_bp-chest_vp-ap_cr,sub-S11021,patient,GATE_FIT
+QaTa-COV19,sub-S11022_ses-E24391_run-1_bp-chest_vp-ap_cr,sub-S11022,patient,GATE_CAL
+QaTa-COV19,sub-S11031_ses-E20582_run-1_bp-chest_vp-pa_cr,sub-S11031,patient,GATE_FIT
+QaTa-COV19,sub-S11031_ses-E23969_run-1_bp-chest_vp-pa_cr,sub-S11031,patient,GATE_FIT
+QaTa-COV19,sub-S11031_ses-E26956_run-1_bp-chest_vp-pa_dx,sub-S11031,patient,GATE_FIT
+QaTa-COV19,sub-S11034_ses-E19334_run-1_bp-chest_vp-pa_dx,sub-S11034,patient,GATE_CAL
+QaTa-COV19,sub-S11035_ses-E25692_run-1_bp-chest_vp-ap_dx,sub-S11035,patient,GATE_CAL
+QaTa-COV19,sub-S11036_ses-E25119_acq-1_run-1_bp-chest_vp-pa_dx,sub-S11036,patient,GATE_FIT
+QaTa-COV19,sub-S11041_ses-E23555_run-1_bp-chest_vp-ap_cr,sub-S11041,patient,GATE_FIT
+QaTa-COV19,sub-S11046_ses-E19953_run-1_bp-chest_vp-ap_cr,sub-S11046,patient,GATE_FIT
+QaTa-COV19,sub-S11052_ses-E26465_run-1_bp-chest_vp-ap_dx,sub-S11052,patient,GATE_FIT
+QaTa-COV19,sub-S11053_ses-E22556_run-1_bp-chest_vp-pa_cr,sub-S11053,patient,GATE_FIT
+QaTa-COV19,sub-S11056_ses-E26284_acq-1_run-1_bp-chest_vp-pa_dx,sub-S11056,patient,GATE_FIT
+QaTa-COV19,sub-S11060_ses-E25375_run-1_bp-chest_vp-ap_dx,sub-S11060,patient,GATE_CAL
+QaTa-COV19,sub-S11060_ses-E25725_run-1_bp-chest_vp-ap_dx,sub-S11060,patient,GATE_CAL
+QaTa-COV19,sub-S11064_ses-E23619_run-1_bp-chest_vp-ap_dx,sub-S11064,patient,GATE_FIT
+QaTa-COV19,sub-S11064_ses-E25381_run-1_bp-chest_vp-ap_dx,sub-S11064,patient,GATE_FIT
+QaTa-COV19,sub-S11071_ses-E26103_run-1_bp-chest_vp-ap_cr,sub-S11071,patient,GATE_CAL
+QaTa-COV19,sub-S11073_ses-E24504_run-1_bp-chest_vp-ap_dx,sub-S11073,patient,GATE_FIT
+QaTa-COV19,sub-S11074_ses-E24698_run-1_bp-chest_vp-ap_dx,sub-S11074,patient,GATE_FIT
+QaTa-COV19,sub-S11075_ses-E22597_run-1_bp-chest_vp-ap_dx,sub-S11075,patient,GATE_CAL
+QaTa-COV19,sub-S11078_ses-E21156_run-1_bp-chest_vp-ap_dx,sub-S11078,patient,GATE_CAL
+QaTa-COV19,sub-S11079_ses-E19424_run-1_bp-chest_vp-ap_dx,sub-S11079,patient,GATE_CAL
+QaTa-COV19,sub-S11079_ses-E24694_run-1_bp-chest_vp-ap_dx,sub-S11079,patient,GATE_CAL
+QaTa-COV19,sub-S11082_ses-E19430_run-2_bp-chest_vp-ap_dx,sub-S11082,patient,GATE_CAL
+QaTa-COV19,sub-S11084_ses-E24721_run-1_bp-chest_vp-ap_cr,sub-S11084,patient,GATE_CAL
+QaTa-COV19,sub-S11087_ses-E19440_run-1_bp-chest_vp-ap_cr,sub-S11087,patient,GATE_FIT
+QaTa-COV19,sub-S11093_ses-E19454_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11093,patient,GATE_FIT
+QaTa-COV19,sub-S11094_ses-E25405_run-1_bp-chest_vp-pa_cr,sub-S11094,patient,GATE_CAL
+QaTa-COV19,sub-S11096_ses-E25429_run-1_bp-chest_vp-ap_dx,sub-S11096,patient,GATE_FIT
+QaTa-COV19,sub-S11099_ses-E21707_acq-1_run-1_bp-chest_vp-ap_dx,sub-S11099,patient,GATE_CAL
+QaTa-COV19,sub-S11099_ses-E21707_acq-2_run-1_bp-chest_vp-ap_dx,sub-S11099,patient,GATE_CAL
+QaTa-COV19,sub-S11100_ses-E24307_run-1_bp-chest_vp-ap_dx,sub-S11100,patient,GATE_CAL
+QaTa-COV19,sub-S11102_ses-E24202_run-1_bp-chest_vp-ap_dx,sub-S11102,patient,GATE_CAL
+QaTa-COV19,sub-S11107_ses-E23176_run-1_bp-chest_vp-ap_dx,sub-S11107,patient,GATE_FIT
+QaTa-COV19,sub-S11108_ses-E19515_run-1_bp-chest_vp-pa_cr,sub-S11108,patient,GATE_FIT
+QaTa-COV19,sub-S11108_ses-E20077_run-1_bp-chest_vp-ap_cr,sub-S11108,patient,GATE_FIT
+QaTa-COV19,sub-S11108_ses-E21252_run-1_bp-chest_vp-pa_cr,sub-S11108,patient,GATE_FIT
+QaTa-COV19,sub-S11115_ses-E19541_run-1_bp-chest_vp-pa_cr,sub-S11115,patient,GATE_FIT
+QaTa-COV19,sub-S11118_ses-E19560_run-1_bp-chest_vp-ap_dx,sub-S11118,patient,GATE_CAL
+QaTa-COV19,sub-S11123_ses-E19574_run-1_bp-chest_vp-pa_cr,sub-S11123,patient,GATE_CAL
+QaTa-COV19,sub-S11123_ses-E26181_run-1_bp-chest_vp-pa_cr,sub-S11123,patient,GATE_CAL
+QaTa-COV19,sub-S11124_ses-E19575_run-1_bp-chest_vp-ap_dx,sub-S11124,patient,GATE_CAL
+QaTa-COV19,sub-S11124_ses-E20125_run-1_bp-chest_vp-ap_dx,sub-S11124,patient,GATE_CAL
+QaTa-COV19,sub-S11124_ses-E21271_run-1_bp-chest_vp-ap_dx,sub-S11124,patient,GATE_CAL
+QaTa-COV19,sub-S11130_ses-E19605_run-1_bp-chest_vp-ap_dx,sub-S11130,patient,GATE_CAL
+QaTa-COV19,sub-S11131_ses-E19606_run-1_bp-chest_vp-ap_dx,sub-S11131,patient,GATE_FIT
+QaTa-COV19,sub-S11132_ses-E25134_run-1_bp-chest_vp-ap_cr,sub-S11132,patient,GATE_CAL
+QaTa-COV19,sub-S11143_ses-E22553_acq-1_run-1_bp-chest_vp-pa_dx,sub-S11143,patient,GATE_FIT
+QaTa-COV19,sub-S11148_ses-E20632_run-1_bp-chest_vp-ap_dx,sub-S11148,patient,GATE_CAL
+QaTa-COV19,sub-S11148_ses-E24681_run-1_bp-chest_vp-pa_cr,sub-S11148,patient,GATE_CAL
+QaTa-COV19,sub-S11153_ses-E20672_run-1_bp-chest_vp-pa_cr,sub-S11153,patient,GATE_FIT
+QaTa-COV19,sub-S11153_ses-E23631_run-1_bp-chest_vp-pa_cr,sub-S11153,patient,GATE_FIT
+QaTa-COV19,sub-S11158_ses-E19683_run-1_bp-chest_vp-ap_cr,sub-S11158,patient,GATE_FIT
+QaTa-COV19,sub-S11159_ses-E19684_run-1_bp-chest_vp-ap_cr,sub-S11159,patient,GATE_FIT
+QaTa-COV19,sub-S11161_ses-E23759_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11161,patient,GATE_CAL
+QaTa-COV19,sub-S11162_ses-E26141_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11162,patient,GATE_FIT
+QaTa-COV19,sub-S11180_ses-E19777_run-1_bp-chest_vp-ap_cr,sub-S11180,patient,GATE_CAL
+QaTa-COV19,sub-S11180_ses-E23255_run-2_bp-chest_vp-ap_dx,sub-S11180,patient,GATE_CAL
+QaTa-COV19,sub-S11182_ses-E19787_run-1_bp-chest_vp-ap_cr,sub-S11182,patient,GATE_CAL
+QaTa-COV19,sub-S11182_ses-E21467_run-1_bp-chest_vp-pa_cr,sub-S11182,patient,GATE_CAL
+QaTa-COV19,sub-S11183_ses-E19790_run-1_bp-chest_vp-ap_cr,sub-S11183,patient,GATE_FIT
+QaTa-COV19,sub-S11190_ses-E22960_run-1_bp-chest_vp-ap_cr,sub-S11190,patient,GATE_CAL
+QaTa-COV19,sub-S11195_ses-E19846_run-1_bp-chest_vp-ap_dx,sub-S11195,patient,GATE_CAL
+QaTa-COV19,sub-S11206_ses-E20992_run-1_bp-chest_vp-ap_cr,sub-S11206,patient,GATE_FIT
+QaTa-COV19,sub-S11209_ses-E19894_run-1_bp-chest_vp-ap_cr,sub-S11209,patient,GATE_CAL
+QaTa-COV19,sub-S11209_ses-E21246_run-1_bp-chest_vp-pa_cr,sub-S11209,patient,GATE_CAL
+QaTa-COV19,sub-S11209_ses-E22701_run-1_bp-chest_vp-ap_cr,sub-S11209,patient,GATE_CAL
+QaTa-COV19,sub-S11210_ses-E19909_run-1_bp-chest_vp-ap_cr,sub-S11210,patient,GATE_CAL
+QaTa-COV19,sub-S11211_ses-E19910_run-1_bp-chest_vp-ap_cr,sub-S11211,patient,GATE_CAL
+QaTa-COV19,sub-S11214_ses-E20550_run-1_bp-chest_vp-ap_dx,sub-S11214,patient,GATE_CAL
+QaTa-COV19,sub-S11214_ses-E23494_run-1_bp-chest_vp-ap_dx,sub-S11214,patient,GATE_CAL
+QaTa-COV19,sub-S11214_ses-E25080_run-1_bp-chest_vp-pa_cr,sub-S11214,patient,GATE_CAL
+QaTa-COV19,sub-S11214_ses-E25659_run-1_bp-chest_vp-ap_dx,sub-S11214,patient,GATE_CAL
+QaTa-COV19,sub-S11220_ses-E19934_run-1_bp-chest_vp-pa_cr,sub-S11220,patient,GATE_FIT
+QaTa-COV19,sub-S11223_ses-E19940_run-1_bp-chest_vp-ap_dx,sub-S11223,patient,GATE_FIT
+QaTa-COV19,sub-S11226_ses-E21312_run-1_bp-chest_vp-ap_cr,sub-S11226,patient,GATE_FIT
+QaTa-COV19,sub-S11233_ses-E19976_run-1_bp-chest_vp-ap_cr,sub-S11233,patient,GATE_CAL
+QaTa-COV19,sub-S11237_ses-E24263_run-1_bp-chest_vp-ap_dx,sub-S11237,patient,GATE_FIT
+QaTa-COV19,sub-S11242_ses-E20020_run-1_bp-chest_cr,sub-S11242,patient,GATE_FIT
+QaTa-COV19,sub-S11247_ses-E25807_acq-1_run-1_bp-chest_vp-pa_dx,sub-S11247,patient,GATE_FIT
+QaTa-COV19,sub-S11248_ses-E23364_run-1_bp-chest_vp-ap_dx,sub-S11248,patient,GATE_FIT
+QaTa-COV19,sub-S11250_ses-E24293_run-1_bp-chest_dx,sub-S11250,patient,GATE_FIT
+QaTa-COV19,sub-S11257_ses-E20049_run-1_bp-chest_vp-ap_cr,sub-S11257,patient,GATE_FIT
+QaTa-COV19,sub-S11265_ses-E20080_run-1_bp-chest_vp-ap_dx,sub-S11265,patient,GATE_CAL
+QaTa-COV19,sub-S11272_ses-E20103_run-1_bp-chest_cr,sub-S11272,patient,GATE_CAL
+QaTa-COV19,sub-S11273_ses-E20344_run-1_bp-chest_vp-ap_cr,sub-S11273,patient,GATE_FIT
+QaTa-COV19,sub-S11273_ses-E27102_run-1_bp-chest_vp-ap_cr,sub-S11273,patient,GATE_FIT
+QaTa-COV19,sub-S11276_ses-E20118_run-1_bp-chest_vp-pa_dx,sub-S11276,patient,GATE_CAL
+QaTa-COV19,sub-S11280_ses-E23243_run-1_bp-chest_cr,sub-S11280,patient,GATE_FIT
+QaTa-COV19,sub-S11284_ses-E22738_run-1_bp-chest_vp-ap_cr,sub-S11284,patient,GATE_FIT
+QaTa-COV19,sub-S11284_ses-E22944_run-1_bp-chest_vp-ap_cr,sub-S11284,patient,GATE_FIT
+QaTa-COV19,sub-S11288_ses-E20160_run-1_bp-chest_vp-ap_cr,sub-S11288,patient,GATE_FIT
+QaTa-COV19,sub-S11291_ses-E20259_run-1_bp-chest_vp-ap_cr,sub-S11291,patient,GATE_FIT
+QaTa-COV19,sub-S11296_ses-E21116_run-1_bp-chest_vp-ap_cr,sub-S11296,patient,GATE_FIT
+QaTa-COV19,sub-S11296_ses-E22773_run-1_bp-chest_vp-ap_cr,sub-S11296,patient,GATE_FIT
+QaTa-COV19,sub-S11299_ses-E20203_run-1_bp-chest_vp-pa_cr,sub-S11299,patient,GATE_CAL
+QaTa-COV19,sub-S11300_ses-E23338_run-1_bp-chest_vp-ap_cr,sub-S11300,patient,GATE_FIT
+QaTa-COV19,sub-S11301_ses-E20214_run-1_bp-chest_vp-ap_dx,sub-S11301,patient,GATE_CAL
+QaTa-COV19,sub-S11303_ses-E21922_run-1_bp-chest_vp-ap_dx,sub-S11303,patient,GATE_FIT
+QaTa-COV19,sub-S11306_ses-E20240_run-1_bp-chest_vp-ll_dx,sub-S11306,patient,GATE_FIT
+QaTa-COV19,sub-S11306_ses-E22242_run-1_bp-chest_dx,sub-S11306,patient,GATE_FIT
+QaTa-COV19,sub-S11317_ses-E21145_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11317,patient,GATE_CAL
+QaTa-COV19,sub-S11319_ses-E20283_run-1_bp-chest_vp-ap_dx,sub-S11319,patient,GATE_CAL
+QaTa-COV19,sub-S11322_ses-E23121_run-1_bp-chest_vp-ap_dx,sub-S11322,patient,GATE_CAL
+QaTa-COV19,sub-S11323_ses-E20425_run-1_bp-chest_vp-ap_dx,sub-S11323,patient,GATE_FIT
+QaTa-COV19,sub-S11326_ses-E20298_run-1_bp-chest_vp-ap_cr,sub-S11326,patient,GATE_FIT
+QaTa-COV19,sub-S11331_ses-E23031_run-1_bp-chest_vp-ap_dx,sub-S11331,patient,GATE_CAL
+QaTa-COV19,sub-S11333_ses-E20346_run-1_bp-chest_vp-ap_cr,sub-S11333,patient,GATE_FIT
+QaTa-COV19,sub-S11334_ses-E20348_run-1_bp-chest_vp-ap_cr,sub-S11334,patient,GATE_CAL
+QaTa-COV19,sub-S11339_ses-E20360_run-1_bp-chest_vp-ap_cr,sub-S11339,patient,GATE_FIT
+QaTa-COV19,sub-S11343_ses-E21887_run-1_bp-chest_vp-ap_dx,sub-S11343,patient,GATE_CAL
+QaTa-COV19,sub-S11348_ses-E22005_run-1_bp-chest_vp-ap_dx,sub-S11348,patient,GATE_CAL
+QaTa-COV19,sub-S11348_ses-E22147_run-2_bp-chest_vp-ap_dx,sub-S11348,patient,GATE_CAL
+QaTa-COV19,sub-S11353_ses-E22339_run-1_bp-chest_vp-ap_dx,sub-S11353,patient,GATE_FIT
+QaTa-COV19,sub-S11360_ses-E26331_run-1_bp-chest_vp-ap_dx,sub-S11360,patient,GATE_FIT
+QaTa-COV19,sub-S11361_ses-E20452_run-1_bp-chest_vp-pa_dx,sub-S11361,patient,GATE_CAL
+QaTa-COV19,sub-S11367_ses-E22395_run-1_bp-chest_vp-ap_dx,sub-S11367,patient,GATE_FIT
+QaTa-COV19,sub-S11378_ses-E20489_run-1_bp-chest_vp-ap_cr,sub-S11378,patient,GATE_FIT
+QaTa-COV19,sub-S11394_ses-E25633_run-1_bp-chest_vp-ap_dx,sub-S11394,patient,GATE_FIT
+QaTa-COV19,sub-S11400_ses-E23978_run-1_bp-chest_vp-pa_dx,sub-S11400,patient,GATE_CAL
+QaTa-COV19,sub-S11400_ses-E25688_run-1_bp-chest_vp-ap_dx,sub-S11400,patient,GATE_CAL
+QaTa-COV19,sub-S11401_ses-E24442_run-1_bp-chest_vp-pa_dx,sub-S11401,patient,GATE_FIT
+QaTa-COV19,sub-S11402_ses-E23729_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11402,patient,GATE_CAL
+QaTa-COV19,sub-S11403_ses-E25317_run-1_bp-chest_vp-ap_cr,sub-S11403,patient,GATE_CAL
+QaTa-COV19,sub-S11407_ses-E24824_run-1_bp-chest_vp-ap_cr,sub-S11407,patient,GATE_FIT
+QaTa-COV19,sub-S11410_ses-E21093_run-1_bp-chest_vp-ap_dx,sub-S11410,patient,GATE_FIT
+QaTa-COV19,sub-S11416_ses-E21122_run-1_bp-chest_vp-pa_cr,sub-S11416,patient,GATE_CAL
+QaTa-COV19,sub-S11424_ses-E22592_run-2_bp-chest_vp-ap_dx,sub-S11424,patient,GATE_FIT
+QaTa-COV19,sub-S11426_ses-E20673_run-1_bp-chest_vp-ap_dx,sub-S11426,patient,GATE_FIT
+QaTa-COV19,sub-S11428_ses-E20683_run-1_bp-chest_vp-pa_cr,sub-S11428,patient,GATE_CAL
+QaTa-COV19,sub-S11429_ses-E21173_run-1_bp-chest_vp-pa_cr,sub-S11429,patient,GATE_FIT
+QaTa-COV19,sub-S11432_ses-E20695_run-1_bp-chest_vp-ap_cr,sub-S11432,patient,GATE_CAL
+QaTa-COV19,sub-S11432_ses-E25808_run-1_bp-chest_vp-ap_dx,sub-S11432,patient,GATE_CAL
+QaTa-COV19,sub-S11434_ses-E22669_run-1_bp-chest_vp-ap_dx,sub-S11434,patient,GATE_FIT
+QaTa-COV19,sub-S11437_ses-E20731_run-1_bp-chest_vp-pa_dx,sub-S11437,patient,GATE_FIT
+QaTa-COV19,sub-S11438_ses-E20732_run-2_bp-chest_vp-pa_cr,sub-S11438,patient,GATE_FIT
+QaTa-COV19,sub-S11440_ses-E22247_run-1_bp-chest_vp-pa_dx,sub-S11440,patient,GATE_FIT
+QaTa-COV19,sub-S11442_ses-E25635_run-1_bp-chest_vp-pa_cr,sub-S11442,patient,GATE_FIT
+QaTa-COV19,sub-S11444_ses-E20751_run-1_bp-chest_vp-ap_dx,sub-S11444,patient,GATE_FIT
+QaTa-COV19,sub-S11448_ses-E24006_run-1_bp-chest_vp-pa_cr,sub-S11448,patient,GATE_CAL
+QaTa-COV19,sub-S11450_ses-E25709_run-1_bp-chest_vp-ap_dx,sub-S11450,patient,GATE_FIT
+QaTa-COV19,sub-S11451_ses-E25715_run-1_bp-chest_vp-pa_dx,sub-S11451,patient,GATE_CAL
+QaTa-COV19,sub-S11457_ses-E22983_run-1_bp-chest_vp-ap_dx,sub-S11457,patient,GATE_FIT
+QaTa-COV19,sub-S11461_ses-E25776_run-1_bp-chest_vp-pa_cr,sub-S11461,patient,GATE_FIT
+QaTa-COV19,sub-S11470_ses-E20839_run-1_bp-chest_vp-ap_cr,sub-S11470,patient,GATE_CAL
+QaTa-COV19,sub-S11486_ses-E20915_run-1_bp-chest_vp-pa_cr,sub-S11486,patient,GATE_CAL
+QaTa-COV19,sub-S11494_ses-E23839_run-1_bp-chest_vp-ap_dx,sub-S11494,patient,GATE_CAL
+QaTa-COV19,sub-S11497_ses-E23863_acq-1_run-1_bp-chest_vp-pa_dx,sub-S11497,patient,GATE_FIT
+QaTa-COV19,sub-S11497_ses-E25849_run-1_bp-chest_vp-ap_dx,sub-S11497,patient,GATE_FIT
+QaTa-COV19,sub-S11505_ses-E21014_run-1_bp-chest_vp-ap_cr,sub-S11505,patient,GATE_CAL
+QaTa-COV19,sub-S11511_ses-E25960_run-1_bp-chest_vp-ap_dx,sub-S11511,patient,GATE_CAL
+QaTa-COV19,sub-S11514_ses-E21055_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11514,patient,GATE_FIT
+QaTa-COV19,sub-S11520_ses-E21082_acq-1_run-1_bp-chest_vp-ll_cr,sub-S11520,patient,GATE_FIT
+QaTa-COV19,sub-S11522_ses-E21087_run-1_bp-chest_vp-ap_cr,sub-S11522,patient,GATE_CAL
+QaTa-COV19,sub-S11525_ses-E21095_run-1_bp-chest_vp-pa_cr,sub-S11525,patient,GATE_FIT
+QaTa-COV19,sub-S11534_ses-E22968_run-1_bp-chest_vp-ap_dx,sub-S11534,patient,GATE_FIT
+QaTa-COV19,sub-S11536_ses-E21493_run-1_bp-chest_vp-pa_cr,sub-S11536,patient,GATE_FIT
+QaTa-COV19,sub-S11538_ses-E23327_run-1_bp-chest_vp-ap_cr,sub-S11538,patient,GATE_CAL
+QaTa-COV19,sub-S11540_ses-E21168_run-1_bp-chest_vp-pa_cr,sub-S11540,patient,GATE_FIT
+QaTa-COV19,sub-S11562_ses-E21972_run-1_bp-chest_vp-ap_cr,sub-S11562,patient,GATE_CAL
+QaTa-COV19,sub-S11563_ses-E21259_run-1_bp-chest_vp-ap_cr,sub-S11563,patient,GATE_FIT
+QaTa-COV19,sub-S11567_ses-E23968_run-1_bp-chest_vp-ap_cr,sub-S11567,patient,GATE_CAL
+QaTa-COV19,sub-S11572_ses-E21305_acq-1_run-1_bp-chest_vp-pa_cr,sub-S11572,patient,GATE_FIT
+QaTa-COV19,sub-S11580_ses-E21350_run-1_bp-chest_vp-ap_cr,sub-S11580,patient,GATE_FIT
+QaTa-COV19,sub-S11595_ses-E22408_run-1_bp-chest_vp-ap_cr,sub-S11595,patient,GATE_FIT
+QaTa-COV19,sub-S11596_ses-E21420_run-1_bp-chest_vp-ap_dx,sub-S11596,patient,GATE_CAL
+QaTa-COV19,sub-S11598_ses-E21956_run-1_bp-chest_vp-pa_cr,sub-S11598,patient,GATE_CAL
+QaTa-COV19,sub-S11601_ses-E21432_acq-1_run-1_bp-chest_vp-pa_cr,sub-S11601,patient,GATE_CAL
+QaTa-COV19,sub-S11604_ses-E23926_acq-1_run-1_bp-chest_vp-pa_dx,sub-S11604,patient,GATE_CAL
+QaTa-COV19,sub-S11605_ses-E21447_run-1_bp-chest_vp-ap_dx,sub-S11605,patient,GATE_CAL
+QaTa-COV19,sub-S11620_ses-E21512_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11620,patient,GATE_CAL
+QaTa-COV19,sub-S11632_ses-E21724_run-1_bp-chest_vp-ap_cr,sub-S11632,patient,GATE_FIT
+QaTa-COV19,sub-S11635_ses-E22106_run-1_bp-chest_vp-ap_cr,sub-S11635,patient,GATE_FIT
+QaTa-COV19,sub-S11636_ses-E26653_run-1_bp-chest_vp-ap_dx,sub-S11636,patient,GATE_CAL
+QaTa-COV19,sub-S11648_ses-E22022_run-1_bp-chest_vp-ap_dx,sub-S11648,patient,GATE_FIT
+QaTa-COV19,sub-S11656_ses-E21688_run-1_bp-chest_vp-ap_cr,sub-S11656,patient,GATE_CAL
+QaTa-COV19,sub-S11659_ses-E25428_run-1_bp-chest_vp-ap_dx,sub-S11659,patient,GATE_FIT
+QaTa-COV19,sub-S11669_ses-E22706_run-1_bp-chest_vp-ap_dx,sub-S11669,patient,GATE_FIT
+QaTa-COV19,sub-S11670_ses-E21770_run-1_bp-chest_vp-pa_cr,sub-S11670,patient,GATE_FIT
+QaTa-COV19,sub-S11676_ses-E21799_run-1_bp-chest_vp-ap_cr,sub-S11676,patient,GATE_FIT
+QaTa-COV19,sub-S11680_ses-E21818_run-1_bp-chest_vp-ap_dx,sub-S11680,patient,GATE_FIT
+QaTa-COV19,sub-S11683_ses-E23314_run-1_bp-chest_vp-ap_dx,sub-S11683,patient,GATE_FIT
+QaTa-COV19,sub-S11690_ses-E26248_run-1_bp-chest_vp-ap_dx,sub-S11690,patient,GATE_FIT
+QaTa-COV19,sub-S11694_ses-E21895_run-1_bp-chest_cr,sub-S11694,patient,GATE_FIT
+QaTa-COV19,sub-S11694_ses-E22004_run-1_bp-chest_cr,sub-S11694,patient,GATE_FIT
+QaTa-COV19,sub-S11707_ses-E25445_run-1_bp-chest_vp-pa_cr,sub-S11707,patient,GATE_FIT
+QaTa-COV19,sub-S11709_ses-E21964_run-1_bp-chest_vp-ap_dx,sub-S11709,patient,GATE_CAL
+QaTa-COV19,sub-S11719_ses-E22016_run-1_bp-chest_vp-pa_dx,sub-S11719,patient,GATE_FIT
+QaTa-COV19,sub-S11719_ses-E24274_acq-1_run-1_bp-chest_cr,sub-S11719,patient,GATE_FIT
+QaTa-COV19,sub-S11732_ses-E22079_run-1_bp-chest_vp-ap_cr,sub-S11732,patient,GATE_CAL
+QaTa-COV19,sub-S11733_ses-E22881_run-1_bp-chest_vp-ap_cr,sub-S11733,patient,GATE_CAL
+QaTa-COV19,sub-S11735_ses-E22088_run-1_bp-chest_vp-pa_cr,sub-S11735,patient,GATE_CAL
+QaTa-COV19,sub-S11740_ses-E23914_run-1_bp-chest_vp-pa_cr,sub-S11740,patient,GATE_CAL
+QaTa-COV19,sub-S11743_ses-E26173_run-1_bp-chest_vp-ap_dx,sub-S11743,patient,GATE_FIT
+QaTa-COV19,sub-S11752_ses-E25512_run-1_bp-chest_vp-ap_cr,sub-S11752,patient,GATE_FIT
+QaTa-COV19,sub-S11757_ses-E22195_run-1_bp-chest_vp-pa_cr,sub-S11757,patient,GATE_FIT
+QaTa-COV19,sub-S11768_ses-E22237_run-1_bp-chest_vp-pa_dx,sub-S11768,patient,GATE_CAL
+QaTa-COV19,sub-S11768_ses-E23815_run-1_bp-chest_vp-ap_cr,sub-S11768,patient,GATE_CAL
+QaTa-COV19,sub-S11768_ses-E24773_run-1_bp-chest_vp-ap_cr,sub-S11768,patient,GATE_CAL
+QaTa-COV19,sub-S11768_ses-E25290_run-1_bp-chest_vp-pa_cr,sub-S11768,patient,GATE_CAL
+QaTa-COV19,sub-S11771_ses-E23206_run-2_bp-chest_vp-ap_dx,sub-S11771,patient,GATE_CAL
+QaTa-COV19,sub-S11773_ses-E22260_run-1_bp-chest_vp-ap_dx,sub-S11773,patient,GATE_CAL
+QaTa-COV19,sub-S11776_ses-E22715_run-1_bp-chest_vp-ap_cr,sub-S11776,patient,GATE_FIT
+QaTa-COV19,sub-S11794_ses-E22366_run-1_bp-chest_vp-ap_dx,sub-S11794,patient,GATE_FIT
+QaTa-COV19,sub-S11807_ses-E23898_run-1_bp-chest_vp-ap_dx,sub-S11807,patient,GATE_FIT
+QaTa-COV19,sub-S11807_ses-E24357_run-1_bp-chest_vp-ap_dx,sub-S11807,patient,GATE_FIT
+QaTa-COV19,sub-S11815_ses-E22467_run-1_bp-chest_vp-ap_cr,sub-S11815,patient,GATE_FIT
+QaTa-COV19,sub-S11818_ses-E22479_run-1_bp-chest_vp-ap_dx,sub-S11818,patient,GATE_FIT
+QaTa-COV19,sub-S11819_ses-E22480_acq-1_run-1_bp-chest_vp-ll_cr,sub-S11819,patient,GATE_FIT
+QaTa-COV19,sub-S11824_ses-E26252_run-1_bp-chest_vp-ap_cr,sub-S11824,patient,GATE_FIT
+QaTa-COV19,sub-S11833_ses-E24673_run-1_bp-chest_vp-ap_dx,sub-S11833,patient,GATE_CAL
+QaTa-COV19,sub-S11835_ses-E26201_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11835,patient,GATE_FIT
+QaTa-COV19,sub-S11838_ses-E22577_run-1_bp-chest_vp-ap_dx,sub-S11838,patient,GATE_FIT
+QaTa-COV19,sub-S11838_ses-E26077_run-1_bp-chest_vp-ap_dx,sub-S11838,patient,GATE_FIT
+QaTa-COV19,sub-S11839_ses-E22591_run-1_bp-chest_vp-ap_dx,sub-S11839,patient,GATE_CAL
+QaTa-COV19,sub-S11843_ses-E26511_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11843,patient,GATE_FIT
+QaTa-COV19,sub-S11854_ses-E23963_run-1_bp-chest_cr,sub-S11854,patient,GATE_FIT
+QaTa-COV19,sub-S11854_ses-E25103_run-1_bp-chest_vp-ap_dx,sub-S11854,patient,GATE_FIT
+QaTa-COV19,sub-S11863_ses-E22775_run-1_bp-chest_vp-ap_dx,sub-S11863,patient,GATE_CAL
+QaTa-COV19,sub-S11896_ses-E24703_run-1_bp-chest_vp-pa_cr,sub-S11896,patient,GATE_FIT
+QaTa-COV19,sub-S11907_ses-E23025_run-1_bp-chest_vp-ap_dx,sub-S11907,patient,GATE_FIT
+QaTa-COV19,sub-S11908_ses-E23028_run-1_bp-chest_vp-ap_dx,sub-S11908,patient,GATE_CAL
+QaTa-COV19,sub-S11920_ses-E23094_run-1_bp-chest_vp-pa_cr,sub-S11920,patient,GATE_FIT
+QaTa-COV19,sub-S11961_ses-E24963_run-1_bp-chest_vp-ap_dx,sub-S11961,patient,GATE_CAL
+QaTa-COV19,sub-S11961_ses-E26186_run-1_bp-chest_vp-ap_dx,sub-S11961,patient,GATE_CAL
+QaTa-COV19,sub-S11974_ses-E23431_run-1_bp-chest_vp-ap_cr,sub-S11974,patient,GATE_FIT
+QaTa-COV19,sub-S11977_ses-E23440_run-1_bp-chest_vp-ap_dx,sub-S11977,patient,GATE_FIT
+QaTa-COV19,sub-S11977_ses-E24348_acq-1_run-1_bp-chest_vp-ll_dx,sub-S11977,patient,GATE_FIT
+QaTa-COV19,sub-S11978_ses-E23446_run-1_bp-chest_vp-ap_cr,sub-S11978,patient,GATE_FIT
+QaTa-COV19,sub-S11989_ses-E25639_acq-1_run-1_bp-chest_vp-pa_cr,sub-S11989,patient,GATE_CAL
+QaTa-COV19,sub-S11996_ses-E23511_run-1_bp-chest_vp-ap_cr,sub-S11996,patient,GATE_FIT
+QaTa-COV19,sub-S12001_ses-E25315_run-1_bp-chest_vp-pa_cr,sub-S12001,patient,GATE_CAL
+QaTa-COV19,sub-S12003_ses-E23529_acq-1_run-1_bp-chest_vp-ll_cr,sub-S12003,patient,GATE_CAL
+QaTa-COV19,sub-S12012_ses-E24937_acq-2_run-1_bp-chest_vp-pa_dx,sub-S12012,patient,GATE_FIT
+QaTa-COV19,sub-S12015_ses-E23571_run-2_bp-chest_vp-ll_dx,sub-S12015,patient,GATE_FIT
+QaTa-COV19,sub-S12021_ses-E23739_run-1_bp-chest_vp-ap_dx,sub-S12021,patient,GATE_FIT
+QaTa-COV19,sub-S12021_ses-E24933_run-1_bp-chest_vp-ap_dx,sub-S12021,patient,GATE_FIT
+QaTa-COV19,sub-S12026_ses-E23623_run-1_bp-chest_vp-ap_cr,sub-S12026,patient,GATE_FIT
+QaTa-COV19,sub-S12027_ses-E23624_run-1_bp-chest_vp-ap_cr,sub-S12027,patient,GATE_FIT
+QaTa-COV19,sub-S12030_ses-E23632_run-1_bp-chest_vp-pa_cr,sub-S12030,patient,GATE_CAL
+QaTa-COV19,sub-S12033_ses-E24084_run-1_bp-chest_vp-pa_cr,sub-S12033,patient,GATE_FIT
+QaTa-COV19,sub-S12037_ses-E23647_run-1_bp-chest_vp-ap_dx,sub-S12037,patient,GATE_FIT
+QaTa-COV19,sub-S12038_ses-E26112_run-1_bp-chest_vp-ap_dx,sub-S12038,patient,GATE_FIT
+QaTa-COV19,sub-S12050_ses-E26222_acq-1_run-1_bp-chest_vp-ll_dx,sub-S12050,patient,GATE_CAL
+QaTa-COV19,sub-S12051_ses-E24133_run-2_bp-chest_vp-ap_dx,sub-S12051,patient,GATE_CAL
+QaTa-COV19,sub-S12051_ses-E24278_acq-1_run-1_bp-chest_vp-ll_dx,sub-S12051,patient,GATE_CAL
+QaTa-COV19,sub-S12061_ses-E23711_run-1_bp-chest_vp-pa_cr,sub-S12061,patient,GATE_FIT
+QaTa-COV19,sub-S12064_ses-E25665_run-1_bp-chest_vp-ap_dx,sub-S12064,patient,GATE_FIT
+QaTa-COV19,sub-S12075_ses-E24029_run-1_bp-chest_vp-pa_cr,sub-S12075,patient,GATE_CAL
+QaTa-COV19,sub-S12078_ses-E24967_run-1_bp-chest_vp-ap_cr,sub-S12078,patient,GATE_CAL
+QaTa-COV19,sub-S12084_ses-E23774_run-1_bp-chest_vp-pa_cr,sub-S12084,patient,GATE_CAL
+QaTa-COV19,sub-S12085_ses-E26166_run-1_bp-chest_vp-ap_dx,sub-S12085,patient,GATE_FIT
+QaTa-COV19,sub-S12087_ses-E26538_run-1_bp-chest_vp-ap_cr,sub-S12087,patient,GATE_FIT
+QaTa-COV19,sub-S12092_ses-E26170_run-1_bp-chest_vp-ap_dx,sub-S12092,patient,GATE_CAL
+QaTa-COV19,sub-S12098_ses-E23801_run-1_bp-chest_vp-ap_dx,sub-S12098,patient,GATE_CAL
+QaTa-COV19,sub-S12102_ses-E25969_run-1_bp-chest_vp-ap_cr,sub-S12102,patient,GATE_CAL
+QaTa-COV19,sub-S12108_ses-E23840_run-1_bp-chest_vp-ap_cr,sub-S12108,patient,GATE_FIT
+QaTa-COV19,sub-S12110_ses-E23847_run-1_bp-chest_vp-pa_dx,sub-S12110,patient,GATE_FIT
+QaTa-COV19,sub-S12118_ses-E25592_run-1_bp-chest_vp-ap_dx,sub-S12118,patient,GATE_FIT
+QaTa-COV19,sub-S12119_ses-E23878_acq-1_run-1_bp-chest_vp-ll_dx,sub-S12119,patient,GATE_FIT
+QaTa-COV19,sub-S12121_ses-E25870_run-1_bp-chest_vp-ap_dx,sub-S12121,patient,GATE_CAL
+QaTa-COV19,sub-S12125_ses-E23895_run-1_bp-chest_vp-pa_cr,sub-S12125,patient,GATE_CAL
+QaTa-COV19,sub-S12127_ses-E24360_run-1_bp-chest_vp-ap_cr,sub-S12127,patient,GATE_CAL
+QaTa-COV19,sub-S12137_ses-E25630_run-1_bp-chest_vp-pa_cr,sub-S12137,patient,GATE_FIT
+QaTa-COV19,sub-S12138_ses-E23946_run-1_bp-chest_vp-ap_dx,sub-S12138,patient,GATE_FIT
+QaTa-COV19,sub-S12138_ses-E25304_acq-2_run-1_bp-chest_vp-ap_dx,sub-S12138,patient,GATE_FIT
+QaTa-COV19,sub-S12141_ses-E24921_run-1_bp-chest_vp-pa_cr,sub-S12141,patient,GATE_FIT
+QaTa-COV19,sub-S12149_ses-E24243_run-1_bp-chest_vp-ap_dx,sub-S12149,patient,GATE_CAL
+QaTa-COV19,sub-S12151_ses-E24643_run-1_bp-chest_vp-pa_dx,sub-S12151,patient,GATE_CAL
+QaTa-COV19,sub-S12162_ses-E25147_run-1_bp-chest_vp-ap_dx,sub-S12162,patient,GATE_CAL
+QaTa-COV19,sub-S12163_ses-E24023_run-1_bp-chest_vp-pa_dx,sub-S12163,patient,GATE_CAL
+QaTa-COV19,sub-S12165_ses-E24027_run-2_bp-chest_vp-ap_dx,sub-S12165,patient,GATE_CAL
+QaTa-COV19,sub-S12168_ses-E24041_run-1_bp-chest_vp-pa_cr,sub-S12168,patient,GATE_FIT
+QaTa-COV19,sub-S12168_ses-E24837_run-1_bp-chest_vp-pa_cr,sub-S12168,patient,GATE_FIT
+QaTa-COV19,sub-S12174_ses-E24054_run-1_bp-chest_vp-ap_dx,sub-S12174,patient,GATE_FIT
+QaTa-COV19,sub-S12174_ses-E26483_run-1_bp-chest_vp-pa_dx,sub-S12174,patient,GATE_FIT
+QaTa-COV19,sub-S12175_ses-E24058_run-1_bp-chest_vp-pa_dx,sub-S12175,patient,GATE_CAL
+QaTa-COV19,sub-S12178_ses-E24677_run-1_bp-chest_vp-ap_dx,sub-S12178,patient,GATE_CAL
+QaTa-COV19,sub-S12182_ses-E24081_run-1_bp-chest_vp-pa_cr,sub-S12182,patient,GATE_FIT
+QaTa-COV19,sub-S12182_ses-E26304_run-1_bp-chest_vp-pa_cr,sub-S12182,patient,GATE_FIT
+QaTa-COV19,sub-S12191_ses-E24120_run-2_bp-chest_vp-ap_cr,sub-S12191,patient,GATE_CAL
+QaTa-COV19,sub-S12197_ses-E24753_run-1_bp-chest_vp-ap_cr,sub-S12197,patient,GATE_CAL
+QaTa-COV19,sub-S12197_ses-E25278_run-1_bp-chest_vp-ap_cr,sub-S12197,patient,GATE_CAL
+QaTa-COV19,sub-S12207_ses-E26155_run-1_bp-chest_vp-ap_cr,sub-S12207,patient,GATE_FIT
+QaTa-COV19,sub-S12213_ses-E25399_run-1_bp-chest_vp-ap_cr,sub-S12213,patient,GATE_FIT
+QaTa-COV19,sub-S12214_ses-E24546_run-1_bp-chest_vp-pa_dx,sub-S12214,patient,GATE_FIT
+QaTa-COV19,sub-S12214_ses-E24877_run-1_bp-chest_vp-ap_dx,sub-S12214,patient,GATE_FIT
+QaTa-COV19,sub-S12217_ses-E24194_run-1_bp-chest_vp-pa_cr,sub-S12217,patient,GATE_CAL
+QaTa-COV19,sub-S12221_ses-E24211_run-1_bp-chest_vp-pa_dx,sub-S12221,patient,GATE_FIT
+QaTa-COV19,sub-S12233_ses-E24241_run-1_bp-chest_vp-pa_cr,sub-S12233,patient,GATE_FIT
+QaTa-COV19,sub-S12239_ses-E26087_run-1_bp-chest_vp-ap_dx,sub-S12239,patient,GATE_FIT
+QaTa-COV19,sub-S12250_ses-E24291_run-1_bp-chest_vp-ap_cr,sub-S12250,patient,GATE_CAL
+QaTa-COV19,sub-S12261_ses-E26219_run-1_bp-chest_vp-pa_cr,sub-S12261,patient,GATE_FIT
+QaTa-COV19,sub-S12262_ses-E25877_run-1_bp-chest_vp-ap_dx,sub-S12262,patient,GATE_FIT
+QaTa-COV19,sub-S12267_ses-E24343_run-1_bp-chest_vp-ap_cr,sub-S12267,patient,GATE_FIT
+QaTa-COV19,sub-S12269_ses-E25036_run-1_bp-chest_vp-ap_dx,sub-S12269,patient,GATE_CAL
+QaTa-COV19,sub-S12276_ses-E24374_run-1_bp-chest_vp-pa_cr,sub-S12276,patient,GATE_FIT
+QaTa-COV19,sub-S12295_ses-E26273_run-2_bp-chest_vp-ap_dx,sub-S12295,patient,GATE_FIT
+QaTa-COV19,sub-S12302_ses-E26056_run-1_bp-chest_vp-ap_dx,sub-S12302,patient,GATE_FIT
+QaTa-COV19,sub-S12307_ses-E26107_run-1_bp-chest_vp-pa_dx,sub-S12307,patient,GATE_CAL
+QaTa-COV19,sub-S12308_ses-E24489_run-1_bp-chest_vp-ap_cr,sub-S12308,patient,GATE_FIT
+QaTa-COV19,sub-S12308_ses-E24692_run-1_bp-chest_vp-ap_dx,sub-S12308,patient,GATE_FIT
+QaTa-COV19,sub-S12325_ses-E25253_acq-1_run-1_bp-chest_vp-pa_cr,sub-S12325,patient,GATE_FIT
+QaTa-COV19,sub-S12326_ses-E25012_acq-1_run-1_bp-chest_vp-ll_cr,sub-S12326,patient,GATE_FIT
+QaTa-COV19,sub-S12331_ses-E24581_run-1_bp-chest_vp-ap_dx,sub-S12331,patient,GATE_CAL
+QaTa-COV19,sub-S12332_ses-E24583_run-1_bp-chest_vp-ap_cr,sub-S12332,patient,GATE_FIT
+QaTa-COV19,sub-S12341_ses-E24637_run-1_bp-chest_vp-ap_dx,sub-S12341,patient,GATE_CAL
+QaTa-COV19,sub-S12344_ses-E24640_run-1_bp-chest_vp-ap_dx,sub-S12344,patient,GATE_CAL
+QaTa-COV19,sub-S12368_ses-E24743_run-1_bp-chest_vp-pa_dx,sub-S12368,patient,GATE_CAL
+QaTa-COV19,sub-S12368_ses-E25436_run-1_bp-chest_vp-ap_dx,sub-S12368,patient,GATE_CAL
+QaTa-COV19,sub-S12378_ses-E24771_run-1_bp-chest_vp-pa_cr,sub-S12378,patient,GATE_CAL
+QaTa-COV19,sub-S12379_ses-E26570_run-1_bp-chest_vp-pa_dx,sub-S12379,patient,GATE_FIT
+QaTa-COV19,sub-S12381_ses-E24778_run-1_bp-chest_vp-ap_cr,sub-S12381,patient,GATE_FIT
+QaTa-COV19,sub-S12389_ses-E24803_run-1_bp-chest_vp-ap_cr,sub-S12389,patient,GATE_CAL
+QaTa-COV19,sub-S12405_ses-E25526_run-1_bp-chest_vp-ap_dx,sub-S12405,patient,GATE_FIT
+QaTa-COV19,sub-S12408_ses-E26542_run-1_bp-chest_vp-pa_cr,sub-S12408,patient,GATE_FIT
+QaTa-COV19,sub-S12415_ses-E24901_run-1_bp-chest_vp-ap_dx,sub-S12415,patient,GATE_FIT
+QaTa-COV19,sub-S12417_ses-E25606_run-1_bp-chest_vp-ap_cr,sub-S12417,patient,GATE_FIT
+QaTa-COV19,sub-S12436_ses-E24973_run-1_bp-chest_vp-ap_cr,sub-S12436,patient,GATE_CAL
+QaTa-COV19,sub-S12453_ses-E25033_run-1_bp-chest_vp-ap_cr,sub-S12453,patient,GATE_CAL
+QaTa-COV19,sub-S12455_ses-E25037_run-1_bp-chest_vp-pa_dx,sub-S12455,patient,GATE_CAL
+QaTa-COV19,sub-S12461_ses-E25076_run-1_bp-chest_vp-ap_cr,sub-S12461,patient,GATE_FIT
+QaTa-COV19,sub-S12472_ses-E25102_run-1_bp-chest_vp-ap_dx,sub-S12472,patient,GATE_FIT
+QaTa-COV19,sub-S12476_ses-E25118_run-1_bp-chest_vp-pa_cr,sub-S12476,patient,GATE_FIT
+QaTa-COV19,sub-S12478_ses-E25132_run-1_bp-chest_vp-ap_dx,sub-S12478,patient,GATE_FIT
+QaTa-COV19,sub-S12480_ses-E26038_run-1_bp-chest_vp-ap_cr,sub-S12480,patient,GATE_FIT
+QaTa-COV19,sub-S12493_ses-E25191_run-1_bp-chest_vp-pa_cr,sub-S12493,patient,GATE_CAL
+QaTa-COV19,sub-S12497_ses-E25213_run-1_bp-chest_vp-pa_dx,sub-S12497,patient,GATE_CAL
+QaTa-COV19,sub-S12510_ses-E25295_acq-1_run-1_bp-chest_vp-pa_cr,sub-S12510,patient,GATE_FIT
+QaTa-COV19,sub-S12517_ses-E25336_run-1_bp-chest_vp-pa_cr,sub-S12517,patient,GATE_CAL
+QaTa-COV19,sub-S12521_ses-E25350_run-2_bp-chest_vp-pa_dx,sub-S12521,patient,GATE_FIT
+QaTa-COV19,sub-S12528_ses-E25391_acq-1_run-1_bp-chest_vp-pa_cr,sub-S12528,patient,GATE_FIT
+QaTa-COV19,sub-S12529_ses-E25392_acq-2_run-1_bp-chest_vp-ap_cr,sub-S12529,patient,GATE_FIT
+QaTa-COV19,sub-S12537_ses-E25431_acq-1_run-1_bp-chest_vp-pa_dx,sub-S12537,patient,GATE_FIT
+QaTa-COV19,sub-S12539_ses-E25438_acq-1_run-1_bp-chest_vp-ll_cr,sub-S12539,patient,GATE_CAL
+QaTa-COV19,sub-S12540_ses-E25443_run-1_bp-chest_vp-pa_cr,sub-S12540,patient,GATE_CAL
+QaTa-COV19,sub-S12542_ses-E25446_run-1_bp-chest_vp-ap_cr,sub-S12542,patient,GATE_FIT
+QaTa-COV19,sub-S12566_ses-E25538_run-1_bp-chest_vp-pa_cr,sub-S12566,patient,GATE_CAL
+QaTa-COV19,sub-S12593_ses-E25676_acq-1_run-1_bp-chest_vp-ll_cr,sub-S12593,patient,GATE_FIT
+QaTa-COV19,sub-S12598_ses-E25704_run-1_bp-chest_vp-ap_dx,sub-S12598,patient,GATE_FIT
+QaTa-COV19,sub-S12598_ses-E26020_run-1_bp-chest_vp-ap_dx,sub-S12598,patient,GATE_FIT
+QaTa-COV19,sub-S12603_ses-E25737_acq-1_run-1_bp-chest_vp-ll_cr,sub-S12603,patient,GATE_FIT
+QaTa-COV19,sub-S12607_ses-E25777_run-1_bp-chest_vp-ap_dx,sub-S12607,patient,GATE_FIT
+QaTa-COV19,sub-S12636_ses-E26127_run-1_bp-chest_vp-pa_dx,sub-S12636,patient,GATE_FIT
+QaTa-COV19,sub-S12649_ses-E26218_run-1_bp-chest_vp-ap_cr,sub-S12649,patient,GATE_FIT
+QaTa-COV19,sub-S12660_ses-E26431_run-1_bp-chest_vp-ap_dx,sub-S12660,patient,GATE_FIT
+QaTa-COV19,sub-S12665_ses-E26271_run-1_bp-chest_vp-pa_dx,sub-S12665,patient,GATE_CAL
+QaTa-COV19,sub-S12667_ses-E26276_run-1_bp-chest_cr,sub-S12667,patient,GATE_FIT
+QaTa-COV19,sub-S12725_ses-E26609_run-1_bp-chest_vp-ap_cr,sub-S12725,patient,GATE_FIT
+QaTa-COV19,sub-S12730_ses-E26627_run-1_bp-chest_vp-ap_dx,sub-S12730,patient,GATE_CAL
+QaTa-COV19,sub-S12744_ses-E26672_run-1_bp-chest_vp-ap_dx,sub-S12744,patient,GATE_CAL
+QaTa-COV19,sub-S12746_ses-E26677_run-1_bp-chest_vp-pa_dx,sub-S12746,patient,GATE_FIT
+QaTa-COV19,sub-S12761_ses-E27007_run-1_bp-chest_vp-pa_cr,sub-S12761,patient,GATE_FIT
+QaTa-COV19,sub-S12808_ses-E26989_run-1_bp-chest_vp-pa_cr,sub-S12808,patient,GATE_CAL
