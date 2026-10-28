@@ -14,9 +14,10 @@ Scoring: the common evaluator's case function (prob > 0.5). New probabilities, m
 together; old scores are never attached to new masks. Reconciliation with the Phase 0 archive (per-case Dice
 and the scored mask PNGs) is written as a reproducibility record only.
 
-Validation only: the test split is not accepted (Task 3.6: test after both protocols are frozen).
+Split: validation by default. --split test runs only when the Phase 2 lock is open (both protocols frozen,
+Task 3.6); the check happens before anything is read; nnU-Net then reads imagesTs. Test runs are logged.
 
-Outputs: runs/phase3/val/img/<arch>/<dataset>/seed<k>/
+Outputs: runs/phase3/<split>/img/<arch>/<dataset>/seed<k>/
   per_case.csv (dataset, split, arch, checkpoint_sha256, seed, sample_id, dice, miou, hd95, assd, empty),
   masks.npz (packed bits), probs.npz (float32), reconcile_phase0.csv, passes.tsv (Slurm job id)
 
@@ -35,7 +36,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(REPO, "src"))
 SEEDS = [1001, 1002, 1003]
 NNUNET_DS = {"QaTa-COV19": "Dataset501_QaTaCOV19", "MosMedData+": "Dataset502_MosMedDataPlus"}
-OUT = os.path.join(REPO, "runs", "phase3", "val", "img")
+OUT_ROOT = os.path.join(REPO, "runs", "phase3")
 CKPTS = os.path.join(REPO, "results", "phase3_checkpoints.tsv")
 
 
@@ -65,10 +66,11 @@ def predict_unet(path, dataset, ids, images, masks):
     return probs.astype(np.float32)
 
 
-def predict_nnunet(path, dataset, ids):
+def predict_nnunet(path, dataset, ids, split="val"):
     import nnunet_select as N
     raw = os.path.join(os.environ["nnUNet_raw"], NNUNET_DS[dataset])
-    files = [os.path.join(raw, "imagesTr", f"{i}_0000.png") for i in ids]
+    folder = "imagesTs" if split == "test" else "imagesTr"                   # Phase 0 layout (prepare_nnunet.py)
+    files = [os.path.join(raw, folder, f"{i}_0000.png") for i in ids]
     model_dir, checkpoint = os.path.dirname(os.path.dirname(path)), os.path.basename(path)
     return N.predict(N.make_predictor(model_dir, checkpoint), files, True, 4).astype(np.float32)
 
@@ -78,14 +80,19 @@ def main():
     ap.add_argument("--arch", required=True, choices=["unet", "nnunet"])
     ap.add_argument("--dataset", required=True, choices=list(NNUNET_DS))
     ap.add_argument("--seeds", type=int, nargs="+", default=SEEDS)
+    ap.add_argument("--split", default="val", choices=["val", "test"])
     args = ap.parse_args()
+    info = {}
+    if args.split == "test":                                                 # before anything is read
+        from phase2 import lock
+        info = lock.require_open(what="Phase 3 IMG test inference")
     import cv2
     from lgms import data, runner
     from phase2.infer import score, sha_file
-    ids, images, masks = data.load_split_arrays(args.dataset, "val")
+    ids, images, masks = data.load_split_arrays(args.dataset, args.split)
     masks_by_id = dict(zip(ids, masks))
     for seed in args.seeds:
-        out = os.path.join(OUT, args.arch, args.dataset, f"seed{seed}")
+        out = os.path.join(OUT_ROOT, args.split, "img", args.arch, args.dataset, f"seed{seed}")
         if os.path.exists(os.path.join(out, "per_case.csv")):
             print(f"{args.arch} {args.dataset} {seed}: done earlier, skipped", flush=True)
             continue
@@ -94,14 +101,17 @@ def main():
         if sha_file(path) != rec:
             raise RuntimeError(f"{path}: sha256 differs from {CKPTS}")
         runner.set_seed(seed, True)
+        if args.split == "test":
+            from phase2 import lock
+            lock.log_test_run("start", info, "phase3/infer_img.py", args.dataset, args.arch, seed, "IMG")
         t0 = time.time()
         probs = (predict_unet(path, args.dataset, ids, images, masks) if args.arch == "unet"
-                 else predict_nnunet(path, args.dataset, ids))
+                 else predict_nnunet(path, args.dataset, ids, args.split))
         m = score(ids, probs, masks_by_id)
         np.savez_compressed(os.path.join(out, "masks.npz"), **{i: np.packbits(p > 0.5) for i, p in zip(ids, probs)})
         np.savez_compressed(os.path.join(out, "probs.npz"), **dict(zip(ids, probs)))
         # reproducibility record against the Phase 0 archive (scores are NOT taken from it)
-        p0 = os.path.join(REPO, "runs", args.arch, args.dataset, f"seed{seed}", "eval_val")
+        p0 = os.path.join(REPO, "runs", args.arch, args.dataset, f"seed{seed}", f"eval_{args.split}")
         old = pd.read_csv(os.path.join(p0, "per_case.csv")).set_index("sample_id")
         rec_rows = [{"sample_id": i, "dice_phase3": d, "dice_phase0": old.dice[i], "abs_dice_diff": abs(d - old.dice[i]),
                      "mask_pixels_differing": int(((cv2.imread(os.path.join(p0, "masks", f"{i}.png"), 0) > 0) != (p > 0.5)).sum())}
@@ -110,9 +120,11 @@ def main():
         m.insert(0, "seed", seed)
         m.insert(0, "checkpoint_sha256", rec)
         m.insert(0, "arch", args.arch)
-        m.insert(0, "split", "val")
+        m.insert(0, "split", args.split)
         m.insert(0, "dataset", args.dataset)
         m.to_csv(os.path.join(out, "per_case.csv"), index=False, float_format="%.6f")   # written last
+        if args.split == "test":
+            lock.log_test_run("end", info, "phase3/infer_img.py", args.dataset, args.arch, seed, "IMG")
         with open(os.path.join(out, "passes.tsv"), "a") as f:
             f.write(f"{os.environ.get('SLURM_JOB_ID', 'none')}\t{time.strftime('%Y-%m-%d %H:%M:%S')}\t{len(ids)}\n")
         r = pd.DataFrame(rec_rows)

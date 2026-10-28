@@ -1,7 +1,9 @@
 """Phase 2, additional VALIDATION analyses for the supervisor's summary (Tasks 2.6, 2.7, C2 change, figures).
 
-Validation only. The Phase 2 lock stays closed; no test file is read. Existing results files and the outputs
-of src/phase2/analyze_phase2.py are not changed. Inputs:
+Split: validation by default (draft stage: refused once the lock is open). --split test (after the freeze, Phase 2
+lock open; draft test pipeline of reports/PHASE2_PROTOCOL_FREEZE.md) runs the same steps on the test files and
+writes the same outputs with "test" in place of "val" in every file name. Existing results files and the outputs
+of src/phase2/analyze_phase2.py are not changed. Inputs (validation names):
   results/phase2_val_per_case.csv.gz             per-case metrics of every condition pass (analyze_phase2.py)
   results/phase2_donor_manifest_val.csv          donor manifest without text (step A of this script)
   results/phase2_pairwise_results_val.csv        for figures 1 and 3
@@ -20,7 +22,7 @@ Steps and outputs (results/, reports/figures/):
      phase2_effective_input_val_audit.csv        audit of the benchmark manifest: text changed / input unchanged
   E  reports/figures/phase2_val_fig1..fig4.png, phase2_val_cases_<dataset>.png, phase2_val_case_selection.json
 
-Usage:  python src/phase2/analyze_phase2_extra.py       (all steps, foreground, CPU)
+Usage:  python src/phase2/analyze_phase2_extra.py [--split test]       (all steps, foreground, CPU)
 Tests:  python src/phase2/test_analyze_phase2_extra.py
 """
 import argparse
@@ -47,7 +49,8 @@ MARKERS = {"lvit": "^", "reclmis": "v", "ddcmd": "P"}
 INK, INK2, GRID, GT_COLOR = "#0b0b0b", "#52514e", "#d9d8d4", "#f2c200"
 CASE_QUANTILES = [0.10, 0.30, 0.50, 0.70, 0.90]
 CASE_SEED, CASE_DONOR = 1001, "d1"
-RUNS = os.path.join(REPO, "runs", "phase2", "val")
+SPLIT = "val"                                   # set by main(); "test" only with the Phase 2 lock open
+RUNS = os.path.join(REPO, "runs", "phase2", SPLIT)
 RES = os.path.join(REPO, "results")
 FIG = os.path.join(REPO, "reports", "figures")
 
@@ -74,7 +77,7 @@ def donor_manifest():
     from phase2 import conditions as C
     rows = []
     for ds in DATASETS:
-        man, _ = C.build(ds, "val")
+        man, _ = C.build(ds, SPLIT)
         d = man[man.condition.isin(MISMATCH) & man.eligible]
         rows.append(pd.DataFrame({"dataset": ds, "target_id": d.sample_id, "condition": d.condition,
                                   "variant": d.variant_id, "donor_id": d.donor_sample_id,
@@ -199,7 +202,8 @@ def unpack(npz, key):
     return np.unpackbits(npz[key])[:224 * 224].reshape(224, 224).astype(bool)
 
 
-def c2_mask_change(runs=RUNS):
+def c2_mask_change(runs=None):
+    runs = runs or RUNS
     rows = []
     for m in METHODS:
         for ds in DATASETS:
@@ -242,7 +246,8 @@ def c2_change(pc, mc):
     return pd.DataFrame(rows)
 
 
-def audit_summary(runs=RUNS):
+def audit_summary(runs=None):
+    runs = runs or RUNS
     rows = []
     for f in sorted(glob.glob(os.path.join(runs, "effective_input_*.csv"))):
         a = pd.read_csv(f)
@@ -403,8 +408,8 @@ def fig_cases(pc, man, dataset, picks, path, texts):
              for m in METHODS for c, v in (("C0", "0"), ("C1", "0"), ("C6", CASE_DONOR))}
     for r, pk in enumerate(picks):
         sid = pk["sample_id"]
-        img = data.read_image(dataset, "val", sid)
-        gt = data.read_mask(dataset, "val", sid) > 0
+        img = data.read_image(dataset, SPLIT, sid)
+        gt = data.read_mask(dataset, SPLIT, sid) > 0
         for c in range(len(cols)):
             ax = axes[r, c]
             ax.imshow(img, cmap="gray", vmin=0, vmax=255)
@@ -436,41 +441,48 @@ def fig_cases(pc, man, dataset, picks, path, texts):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.parse_args()
+    ap.add_argument("--split", default="val", choices=["val", "test"])
+    global SPLIT, RUNS
+    SPLIT = ap.parse_args().split
+    RUNS = os.path.join(REPO, "runs", "phase2", SPLIT)
     from phase2 import lock
-    ok, _, _ = lock.check(fetch=False)
-    if ok:                                     # this script is for the draft validation stage only
-        sys.exit("Phase 2 lock is open: this validation-only script is not meant to run after the freeze")
+    if SPLIT == "test":
+        lock.require_open(what="Phase 2 test analysis (extra)")
+    else:
+        ok, _, _ = lock.check(fetch=False)
+        if ok:                                 # the validation run is for the draft stage only
+            sys.exit("Phase 2 lock is open: the validation run is not meant to run after the freeze")
+    sp, label = SPLIT, {"val": "validation", "test": "test"}[SPLIT]
     man = donor_manifest()
-    man.to_csv(os.path.join(RES, "phase2_donor_manifest_val.csv"), index=False)
-    pc = load_per_case(os.path.join(RES, "phase2_val_per_case.csv.gz"))
-    man = pd.read_csv(os.path.join(RES, "phase2_donor_manifest_val.csv"), dtype=str)
+    man.to_csv(os.path.join(RES, f"phase2_donor_manifest_{sp}.csv"), index=False)
+    pc = load_per_case(os.path.join(RES, f"phase2_{sp}_per_case.csv.gz"))
+    man = pd.read_csv(os.path.join(RES, f"phase2_donor_manifest_{sp}.csv"), dtype=str)
     sev = severity(pc, man)
-    sev.to_csv(os.path.join(RES, "phase2_severity_results_val.csv"), index=False, float_format="%.6g")
-    severity_by_attribute(pc, man).to_csv(os.path.join(RES, "phase2_severity_by_attribute_val.csv"), index=False,
+    sev.to_csv(os.path.join(RES, f"phase2_severity_results_{sp}.csv"), index=False, float_format="%.6g")
+    severity_by_attribute(pc, man).to_csv(os.path.join(RES, f"phase2_severity_by_attribute_{sp}.csv"), index=False,
                                           float_format="%.6g")
-    susceptibility(pc, man).to_csv(os.path.join(RES, "phase2_susceptibility_val.csv"), index=False, float_format="%.6g")
+    susceptibility(pc, man).to_csv(os.path.join(RES, f"phase2_susceptibility_{sp}.csv"), index=False, float_format="%.6g")
     mc = c2_mask_change()
-    mc.to_csv(os.path.join(RES, "phase2_c2_mask_change_val.csv.gz"), index=False)
-    c2_change(pc, mc).to_csv(os.path.join(RES, "phase2_c2_change_val.csv"), index=False, float_format="%.6g")
-    audit_summary().to_csv(os.path.join(RES, "phase2_effective_input_val_audit.csv"), index=False)
-    pw = pd.read_csv(os.path.join(RES, "phase2_pairwise_results_val.csv"))
-    fig_effects(pw, ["C0-C1", "C0-C2", "C0-C3a", "C0-C3b", "C0-C3c"], os.path.join(FIG, "phase2_val_fig1_c0_c1_c3.png"),
-                "Null, equivalent and incomplete text: unit-weighted C0 − Cx (validation)",
+    mc.to_csv(os.path.join(RES, f"phase2_c2_mask_change_{sp}.csv.gz"), index=False)
+    c2_change(pc, mc).to_csv(os.path.join(RES, f"phase2_c2_change_{sp}.csv"), index=False, float_format="%.6g")
+    audit_summary().to_csv(os.path.join(RES, f"phase2_effective_input_{sp}_audit.csv"), index=False)
+    pw = pd.read_csv(os.path.join(RES, f"phase2_pairwise_results_{sp}.csv"))
+    fig_effects(pw, ["C0-C1", "C0-C2", "C0-C3a", "C0-C3b", "C0-C3c"], os.path.join(FIG, f"phase2_{sp}_fig1_c0_c1_c3.png"),
+                "Null, equivalent and incomplete text: unit-weighted C0 − Cx (" + label + ")",
                 "Positive = lower Dice under the changed text. n = images in the paired set. Units: patients (QaTa), "
                 "CT volumes (MosMed).")
-    fig_extent(sev, os.path.join(FIG, "phase2_val_fig2_extent.png"))
-    fig_effects(pw, ["C1-C4", "C1-C5", "C1-C6"], os.path.join(FIG, "phase2_val_fig3_wrong_vs_null.png"),
-                "Wrong text versus no text: unit-weighted C1 − Cx (validation)",
+    fig_extent(sev, os.path.join(FIG, f"phase2_{sp}_fig2_extent.png"))
+    fig_effects(pw, ["C1-C4", "C1-C5", "C1-C6"], os.path.join(FIG, f"phase2_{sp}_fig3_wrong_vs_null.png"),
+                "Wrong text versus no text: unit-weighted C1 − Cx (" + label + ")",
                 "Positive = the mismatched report gives lower Dice than the empty text (C1).")
-    fig_units(unit_effects(pc, man), os.path.join(FIG, "phase2_val_fig4_units.png"))
+    fig_units(unit_effects(pc, man), os.path.join(FIG, f"phase2_{sp}_fig4_units.png"))
     from phase2 import texts as T
     sel = {}
     for ds in DATASETS:
         sel[ds] = select_cases(pc, man, ds)
-        tx = T.read_texts(ds, "val")
-        fig_cases(pc, man, ds, sel[ds], os.path.join(FIG, f"phase2_val_cases_{ds.replace('+', 'plus')}.png"), tx)
-    with open(os.path.join(RES, "phase2_val_case_selection.json"), "w") as f:
+        tx = T.read_texts(ds, SPLIT)
+        fig_cases(pc, man, ds, sel[ds], os.path.join(FIG, f"phase2_{sp}_cases_{ds.replace('+', 'plus')}.png"), tx)
+    with open(os.path.join(RES, f"phase2_{sp}_case_selection.json"), "w") as f:
         json.dump(sel, f, indent=2)
     print(json.dumps(sel, indent=1))
 

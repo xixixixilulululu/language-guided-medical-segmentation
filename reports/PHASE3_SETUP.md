@@ -1,6 +1,6 @@
 # Phase 3 — Setup (Task 3.1 preparation; DRAFT)
 
-Status: 2026-10-28, **draft** (section 5 accepted by the project lead, items 16–18 added). Covers Task 3.1A (inventory, rerun plan) and Task 3.1B (the fixed QaTa group split)
+Status: 2026-10-28, **draft** (section 5 accepted by the project lead, items 16–18 added; sections renumbered on 2026-10-28, the outdated "next steps" section removed). Covers Task 3.1A (inventory, rerun plan) and Task 3.1B (the fixed QaTa group split)
 of [PHASE3_PLAN.md](PHASE3_PLAN.md), plus the implementation details that the plan leaves open and that must be
 fixed before any Phase 3 result is seen (section 5).
 
@@ -256,7 +256,7 @@ Each item gives a proposal and the reason.
 
 **Decisions recorded.** On 2026-10-28 the project lead accepted items 1–15 and added items 16–18.
 
-## 7. Results of the rerun and of Tasks 3.1C / 3.1D (validation, QaTa GATE_FIT; development data)
+## 6. Results of the rerun and of Tasks 3.1C / 3.1D (validation, QaTa GATE_FIT; development data)
 
 **Rerun** (job 371, 2026-10-27 22:25–22:49 EDT, 0 failures). Checks: `src/phase3/check_rerun.py` →
 `results/phase3_rerun_checks.csv`, over every case of every new file.
@@ -300,7 +300,7 @@ Each item gives a proposal and the reason.
 - **Single rows.** The actual gain ranges from −0.85 to +0.97. The per-row quantiles are in the CSV.
 - **What this is.** Diagnostics on development data; the oracle is not deployable.
 
-## 8. Tasks 3.2–3.4 (validation, QaTa; development data, not an independent evaluation)
+## 7. Tasks 3.2–3.4 (validation, QaTa; development data, not an independent evaluation)
 
 **Features (Task 3.2).** `src/phase3/features.py` →
 - `results/phase3_reliability_features.csv.gz`: keys + F1–F5, 228,789 rows, all conditions and both datasets;
@@ -326,20 +326,21 @@ are in the two calibration CSVs.
 
 **Diagnostic** (GATE_CAL, unweighted; development data): LR AUROC 0.626–0.684, average precision 0.735–0.787.
 
-## 9. Gates fixed (2026-10-28)
+## 8. Gates fixed (2026-10-28)
 
 The project lead checked commit b58cdf6 independently, with 0 differences, including refitting the nine LRs.
 From now on both gates are **fixed as of commit b58cdf6**:
 - IMG = nnU-Net (seed matched);
-- the nine D-Gate thresholds: `results/phase3_dgate_calibration.csv`;
+- the nine D-Gate thresholds: `results/phase3_dgate_calibration.csv`, at full precision in
+  `results/phase3_dgate_thresholds.json` (section 9; the file the gates are read from);
 - the nine LR-Gates (scaler mean and scale, coefficients, intercept, threshold): `results/phase3_lr_artifacts.json`.
 
 **Changes.** Any later change is recorded here as an **amendment**, with its reason. No change may be motivated
 by C1, C3a–C3c or MosMed results. Task 3.5 applies the fixed gates unchanged.
 
-## 10. Task 3.5 on validation (2026-10-28; development data, not an independent evaluation)
+## 9. Task 3.5 on validation (2026-10-28; development data, not an independent evaluation)
 
-**Method.** `src/phase3/evaluate_gates.py` (7 synthetic tests passed) applies the gates fixed in section 9 unchanged
+**Method.** `src/phase3/evaluate_gates.py` (7 synthetic tests passed) applies the gates fixed in section 8 unchanged
 to every validation row. It fits and tunes nothing.
 
 **Record precision of the D-Gate thresholds** (not a change of the gates).
@@ -362,12 +363,47 @@ to every validation row. It fits and tunes nothing.
 The strategy label "NULL (C1)" avoids pandas reading the plain string "NULL" as missing. QaTa GATE_FIT and
 GATE_CAL are reported separately (item 17).
 
-## 6. Next steps (after confirmation)
+**Column definitions** (added 2026-10-28):
+- **`fallback_rate` in `phase3_validation_results.csv` is image-weighted.** The switch indicator is averaged
+  over the donors within image and seed, then over images; the table shows mean ± SD over the three per-seed
+  values, as for the metrics.
+- **`switch_rate` in `phase3_routing_quality.csv` is row-weighted:** switched rows / all rows, pooled over seeds
+  and donors. The counts `n_switched`, `n_beneficial`, `n_harmful` and `n_neutral` are rows.
+- **`net_dice_gain_image_weighted`** = mean over images (donors and seeds averaged within image) of
+  Dice(gate) − Dice(LANG).
+- **Group-weighted differences** (`phase3_validation_paired_differences.csv`): donors → seeds → images →
+  groups, then a 95% t-CI over groups. Descriptive.
 
-1. You submit `slurm/phase3_infer_val.slurm`.
-2. Checks after the job:
-   - reconciliation of IMG with Phase 0;
-   - LANG C2/C3 differences to Phase 2;
-   - the mask = probability > 0.5 check on all new files.
-3. Task 3.1C (IMG choice on GATE_FIT) and 3.1D (oracle diagnostics), with the details of section 5 fixed in
-   advance.
+**Rows at the LR threshold.**
+- Each chosen LR threshold is the score of one GATE_CAL row (rule `score > threshold`). That row is not switched.
+- In `phase3_val_gate_decisions.csv.gz` (scores computed as scaler → coefficients → intercept from
+  `results/phase3_lr_artifacts.json`), 8 rows equal their threshold exactly, and none is switched.
+- The project lead's independent recomputation, in a different order of operations, found 3 such rows
+  (RecLMIS 1001 C5, RecLMIS 1002 C2, DD-CMD 1003 C2); the others then differ by about 1 ulp.
+- A recomputation can therefore flip at most the single threshold row of a model × seed. The decisions file is
+  the reference.
+
+## 10. Task 3.7 statistics and Task 3.8 cost (2026-10-28; prepared, validation only)
+
+**Task 3.7.** `src/phase3/stats_phase3.py` (16 synthetic checks passed, `src/phase3/test_stats_phase3.py`).
+- Comparisons and families as in PHASE3_PLAN Task 3.7; the full rules are in
+  `reports/PHASE3_PROTOCOL_FREEZE.md` (draft), section 5.
+- Validation run, **descriptive only** → `results/phase3_pairwise_results_val.csv`. The gates were fitted on
+  GATE_FIT and calibrated on GATE_CAL, so no p-value in this file is a test; it checks the program.
+- Its group-weighted deltas and CIs equal those of `phase3_validation_paired_differences.csv` (Task 3.5)
+  exactly, for all 162 shared rows.
+
+**Task 3.8.** `src/phase3/cost.py`, job `slurm/phase3_cost.slurm` (not yet run).
+- Fixed subset: the first 64 QaTa validation sample ids in sorted order, C0 text, seed 1001 checkpoints, 3 untimed
+  warm-up images.
+- Per image, end to end, batch size 1: LANG only; IMG only; LANG + IMG + D-Gate; LANG + IMG + LR-Gate (both
+  models and the features). Latency (mean, median, p95) and peak GPU memory per mode.
+- Output `results/phase3_computational_cost.csv`.
+
+## 11. Next steps
+
+1. Run `slurm/phase3_cost.slurm` (by hand).
+2. Freeze drafts: `reports/PHASE2_PROTOCOL_FREEZE.md`, `reports/PHASE3_PROTOCOL_FREEZE.md`, the test jobs
+   `slurm/phase2_test_benchmark.slurm` and `slurm/phase3_test.slurm`. **Not frozen**; the lock stays closed.
+3. Nothing is frozen before the supervisor's reply, which may change the gate constraints. A change after that
+   reply is recorded as an amendment (section 8) and the gates and drafts are regenerated.

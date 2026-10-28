@@ -23,7 +23,8 @@ Outputs: runs/phase2/<split>/<method>/<dataset>/seed<k>/
   per_case_<cond>_<variant>.csv   dataset, split, method, config, checkpoint_sha256, seed, sample_id, condition,
                                   variant_id, donor_sample_id, dice, miou, hd95, assd, empty (Dice in [0, 1])
   masks_<cond>_<variant>.npz      scored binary masks, packed bits (np.packbits), key = sample id
-  probs_<cond>_<variant>.npz      float32 probabilities, compressed; validation C0, C1, C4-C6 only (D13)
+  probs_<cond>_<variant>.npz      float32 probabilities, compressed; validation: C0, C1, C4-C6 (D13);
+                                  test: every condition and donor (amendment A1)
   textpath/                       reconcile_C0.csv, repeat_C0.csv, subset_changes.csv, summary.json
 runs/phase2/<split>/effective_input_<method>_<dataset>.csv
 
@@ -52,7 +53,9 @@ METHODS = ["lvit", "reclmis", "ddcmd"]
 SEEDS = [1001, 1002, 1003]
 SUBSET_N = 64                                     # fixed text-path subset size per dataset
 SUBSET_SALT = "phase2-textpath-subset-v1"
-PROB_CONDITIONS = {"C0", "C1", "C4", "C5", "C6"}  # D13: float32 probabilities kept for validation only
+PROB_CONDITIONS = {"C0", "C1", "C4", "C5", "C6"}  # D13: float32 probabilities kept for these validation conditions
+# Amendment A1 (2026-10-28, PHASE2_PROTOCOL.md section 9): on the TEST split the float32 probabilities of EVERY
+# condition and donor are kept, because the Phase 3 gates need P_lang of all conditions (Task 3.2).
 CKPT_TABLE = os.path.join(REPO, "results", "phase2_checkpoint_sha256.tsv")
 OUT_ROOT = os.path.join(REPO, "runs", "phase2")
 
@@ -370,7 +373,7 @@ def run(args):
                 raise RuntimeError("targets differ from the common masks (pairing error)")
             m = score(ids, probs, masks_by_id)
             save_pass(out, cond, variant, meta, ids, probs, m, donors,
-                      args.split == "val" and cond in PROB_CONDITIONS)
+                      args.split == "test" or (args.split == "val" and cond in PROB_CONDITIONS))
             log_pass(out, args.stage, cond, variant, len(ids), f"model_input_changed={n_input}/{len(ids)}")
             if args.split == "test":
                 lock.log_test_run("end", info, "infer.py", args.dataset, args.method, seed, f"{cond}/{variant}")

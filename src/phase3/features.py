@@ -15,7 +15,10 @@ Outputs (item 12):
   results/phase3_feature_labels.csv.gz         keys + dice_lang, dice_img, gain = dice_img - dice_lang,
                                                y = gain > 0.005, group (Phase 2 unit), partition
                                                (GATE_FIT / GATE_CAL for QaTa, "MosMed" for MosMedData+)
-Usage:  python src/phase3/features.py
+Test (--split test; Phase 2 lock open, both protocols frozen): every P_lang comes from the Phase 2 test benchmark
+(amendment A1 keeps all test probabilities), P_img from runs/phase3/test/img; partition "test" for QaTa;
+outputs results/phase3_reliability_features_test.csv.gz and results/phase3_feature_labels_test.csv.gz.
+Usage:  python src/phase3/features.py [--split test]
 """
 import glob
 import os
@@ -27,8 +30,9 @@ import pandas as pd
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(REPO, "src"))
-P2 = os.path.join(REPO, "runs", "phase2", "val")
-P3 = os.path.join(REPO, "runs", "phase3", "val")
+SPLIT = "val"                                   # set by main(); "test" only with the Phase 2 lock open
+P2_ROOT = os.path.join(REPO, "runs", "phase2")
+P3_ROOT = os.path.join(REPO, "runs", "phase3")
 DATASETS = ["QaTa-COV19", "MosMedData+"]
 METHODS = ["lvit", "reclmis", "ddcmd"]
 SEEDS = [1001, 1002, 1003]
@@ -58,24 +62,26 @@ def features(pl, pi, f5=None):
             float(entropy(pi).mean()) if f5 is None else f5)
 
 
-def passes(method, dataset, seed):
+def passes(method, dataset, seed, split=None):
     """[(condition, variant, per-case csv, probs npz)] of one language model x dataset x seed."""
+    split = split or SPLIT
     out = []
-    for f in sorted(glob.glob(os.path.join(P2, method, dataset, f"seed{seed}", "per_case_*.csv"))):
+    for f in sorted(glob.glob(os.path.join(P2_ROOT, split, method, dataset, f"seed{seed}", "per_case_*.csv"))):
         cond, var = re.match(r"per_case_(C\w+?)_(\w+)\.csv", os.path.basename(f)).groups()
-        d = os.path.join(P3, "lang", method, dataset, f"seed{seed}") if cond in RERUN else os.path.dirname(f)
+        rerun = split == "val" and cond in RERUN                  # validation C2 / C3: Phase 3 rerun (item 1)
+        d = os.path.join(P3_ROOT, split, "lang", method, dataset, f"seed{seed}") if rerun else os.path.dirname(f)
         out.append((cond, var, os.path.join(d, f"per_case_{cond}_{var}.csv"), os.path.join(d, f"probs_{cond}_{var}.npz")))
     return out
 
 
-def one_run(arch, ds, s, m):
+def one_run(arch, ds, s, m, split="val"):
     """Feature and label rows of one dataset x seed x language model."""
-    di = os.path.join(P3, "img", arch, ds, f"seed{s}")
+    di = os.path.join(P3_ROOT, split, "img", arch, ds, f"seed{s}")
     pimg = dict(np.load(os.path.join(di, "probs.npz")))
     f5 = {k: float(entropy(v).mean()) for k, v in pimg.items()}                   # F5 depends on the image only
     dimg = pd.read_csv(os.path.join(di, "per_case.csv"), dtype={"sample_id": str}).set_index("sample_id").dice
     feats, labels = [], []
-    for cond, var, fcsv, fnpz in passes(m, ds, s):
+    for cond, var, fcsv, fnpz in passes(m, ds, s, split):
         pc = pd.read_csv(fcsv, dtype={"sample_id": str, "variant_id": str}, keep_default_na=False)
         pl = np.load(fnpz)
         for r in pc.itertuples():
@@ -87,13 +93,20 @@ def one_run(arch, ds, s, m):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--split", default="val", choices=["val", "test"])
+    split = ap.parse_args().split
+    if split == "test":
+        from phase2 import lock
+        lock.require_open(what="Phase 3 test features")
     from phase2 import texts as T
     arch = {"U-Net": "unet", "nnU-Net": "nnunet"}[
         pd.read_csv(os.path.join(REPO, "results", "phase3_fallback_selection.csv")).query("chosen").arch.iloc[0]]
     part = pd.read_csv(os.path.join(REPO, "results", "phase3_gate_partitions.csv"), dtype=str).set_index("sample_id").partition
     from multiprocessing import Pool
     with Pool(9) as pool:                                       # one task per dataset x seed x language model
-        parts = pool.starmap(one_run, [(arch, ds, s, m) for ds in DATASETS for s in SEEDS for m in METHODS])
+        parts = pool.starmap(one_run, [(arch, ds, s, m, split) for ds in DATASETS for s in SEEDS for m in METHODS])
     feats = [x for p in parts for x in p[0]]
     labels = [x for p in parts for x in p[1]]
     F = pd.DataFrame(feats, columns=KEYS + ["F1", "F2", "F3", "F4", "F5"])
@@ -102,11 +115,13 @@ def main():
     L["y"] = (L.gain > LABEL_MARGIN).astype(int)
     grp = {(d, i): T.groups(d, i)[2] for d, i in L[["dataset", "sample_id"]].drop_duplicates().itertuples(index=False)}
     L["group"] = [grp[(d, i)] for d, i in zip(L.dataset, L.sample_id)]
-    L["partition"] = [part.get(i, "?") if d == "QaTa-COV19" else "MosMed" for d, i in zip(L.dataset, L.sample_id)]
+    L["partition"] = [("test" if split == "test" else part.get(i, "?")) if d == "QaTa-COV19" else "MosMed"
+                      for d, i in zip(L.dataset, L.sample_id)]
     if (L.partition == "?").any():
         raise ValueError("QaTa sample without partition")
-    F.to_csv(os.path.join(REPO, "results", "phase3_reliability_features.csv.gz"), index=False, float_format="%.9g")
-    L.to_csv(os.path.join(REPO, "results", "phase3_feature_labels.csv.gz"), index=False, float_format="%.6f")
+    sfx = "" if split == "val" else "_test"                  # validation file names unchanged
+    F.to_csv(os.path.join(REPO, "results", f"phase3_reliability_features{sfx}.csv.gz"), index=False, float_format="%.9g")
+    L.to_csv(os.path.join(REPO, "results", f"phase3_feature_labels{sfx}.csv.gz"), index=False, float_format="%.6f")
     print(F.groupby(["dataset", "condition"]).size().unstack(0).to_string())
     print("IMG architecture:", arch)
 

@@ -4,7 +4,8 @@ Two independent locks (as in Phase 1, decisions D14 of reports/PHASE2_SETUP_PLAN
   1. Program lock (this file). Open only if ALL hold:
      a. the frozen record configs/phase2_frozen/phase2_lock.json exists;
      b. it covers the Phase 3 decision record (configs/phase2_frozen/phase3_decision.json: Phase 3 protocol
-        frozen, or Phase 3 cancelled) and PHASE2_PROTOCOL.md, and the decision record exists;
+        frozen, or Phase 3 cancelled), PHASE2_PROTOCOL.md and PHASE2_PROTOCOL_FREEZE.md, and the decision
+        record exists;
      c. every recorded file has the recorded sha256 now;
      d. the recorded commit is on GitHub: after `git fetch`, an ancestor of origin/main;
      e. in that commit, every recorded file has the recorded sha256.
@@ -19,6 +20,7 @@ Commands:
   python src/phase2/lock.py make-view   create the text view with Train/Val only (no lock needed)
   python src/phase2/lock.py freeze      write the record for HEAD (files committed and unchanged)
   python src/phase2/lock.py link-test   only if `check` passes: add the Test text files to the view (logged)
+  python src/phase2/lock.py manifest    sha256 of every locked file in the working tree (freeze drafts; no record)
 Tests: src/phase2/test_phase2_lock.py.
 """
 import argparse
@@ -36,11 +38,20 @@ from phase1.analysis_lock import git, sha256_bytes, sha256_file  # noqa: E402  (
 RECORD = os.path.join("configs", "phase2_frozen", "phase2_lock.json")
 DECISION = os.path.join("configs", "phase2_frozen", "phase3_decision.json")
 PROTOCOL = os.path.join("reports", "PHASE2_PROTOCOL.md")
-# Files that define Phase 2 (the record must cover all of them; inference driver and analysis are added
-# here when they are written, before the freeze)
-LOCKED_FILES = ["src/phase2/lock.py", "src/phase2/texts.py", "src/phase2/conditions.py", "src/phase2/infer.py",
-                PROTOCOL, DECISION]
-REQUIRED_IN_RECORD = [DECISION, PROTOCOL]
+PHASE2_FREEZE = os.path.join("reports", "PHASE2_PROTOCOL_FREEZE.md")
+PHASE3_FREEZE = os.path.join("reports", "PHASE3_PROTOCOL_FREEZE.md")
+# Files that define the test stage of Phase 2 and Phase 3 (the record must cover all of them). The lists are
+# the drafts of reports/PHASE2_PROTOCOL_FREEZE.md and reports/PHASE3_PROTOCOL_FREEZE.md (section "Frozen files").
+PHASE2_FILES = ["src/phase2/lock.py", "src/phase2/texts.py", "src/phase2/conditions.py", "src/phase2/infer.py",
+                "src/phase2/analyze_phase2.py", "src/phase2/analyze_phase2_extra.py", "src/phase2/reconcile_test_c0.py",
+                "results/phase2_checkpoint_sha256.tsv", "slurm/phase2_test_benchmark.slurm", PROTOCOL, PHASE2_FREEZE]
+PHASE3_FILES = ["src/phase3/infer_img.py", "src/phase3/features.py", "src/phase3/gates.py", "src/phase3/evaluate_gates.py",
+                "src/phase3/export_per_case.py", "src/phase3/stats_phase3.py", "src/phase3/make_partitions.py",
+                "results/phase3_checkpoints.tsv", "results/phase3_fallback_selection.csv",
+                "results/phase3_gate_partitions.csv", "results/phase3_dgate_thresholds.json",
+                "results/phase3_lr_artifacts.json", "slurm/phase3_test.slurm", "reports/PHASE3_SETUP.md", PHASE3_FREEZE]
+LOCKED_FILES = PHASE2_FILES + PHASE3_FILES + [DECISION]
+REQUIRED_IN_RECORD = [DECISION, PROTOCOL, PHASE2_FREEZE]
 CLOSED_EXIT_CODE = 5
 TEXT_SOURCE = os.path.expanduser("~/datasets")                      # LViT layout: <ds>/<S>_Folder/<S>_text.xlsx
 TEXT_VIEW = os.path.expanduser(os.environ.get("LGMS_P2_TEXT_VIEW", "~/datasets/phase2/text_view"))
@@ -146,6 +157,15 @@ def freeze(repo=REPO, files=None):
     return rec
 
 
+def manifest(repo=REPO, files=None):
+    """[(path, sha256 or 'missing')] of the locked files as they are now (for the freeze drafts; writes nothing)."""
+    out = []
+    for path in files or LOCKED_FILES:
+        full = os.path.join(repo, path)
+        out.append((path, sha256_file(full) if os.path.exists(full) else "missing"))
+    return out
+
+
 def make_view(view=None, source=TEXT_SOURCE):
     """Text view with the Train and Val text files only (symbolic links; the Test file is never linked here)."""
     view = view or TEXT_VIEW
@@ -178,12 +198,16 @@ def link_test(repo=REPO, view=None, source=TEXT_SOURCE):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["check", "make-view", "freeze", "link-test"])
+    ap.add_argument("command", choices=["check", "make-view", "freeze", "link-test", "manifest"])
     args = ap.parse_args()
     if args.command == "check":
         ok, reasons, _ = check()
         print("Phase 2 lock OPEN" if ok else "Phase 2 lock CLOSED:", *reasons, sep="\n  ")
         sys.exit(0 if ok else CLOSED_EXIT_CODE)
+    if args.command == "manifest":
+        for path, digest in manifest():
+            print(f"{digest}  {path}")
+        return
     if args.command == "make-view":
         make_view()
     elif args.command == "freeze":

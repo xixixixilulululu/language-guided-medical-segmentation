@@ -25,7 +25,13 @@ Tables (results/):
   phase3_mosmed_exploratory.csv   MosMed: per model x condition, units (11), oracle headroom, gate - LANG,
                                   unnecessary C0 / C2 switches
   phase3_val_gate_decisions.csv.gz  keys, partition, F1, LR score, D-Gate switch, LR-Gate switch
-Usage:  python src/phase3/evaluate_gates.py
+Test (--split test; Phase 2 lock open, both protocols frozen): the same gates, unchanged, on the test rows; LANG
+from results/phase2_test_per_case.csv.gz (all conditions from the Phase 2 test benchmark; no rerun), IMG from
+results/phase3_img_test_per_case.csv.gz; QaTa part "test". Outputs: phase3_test_results.csv,
+phase3_test_paired_differences.csv, phase3_test_fallback_rates.csv, phase3_test_routing_quality.csv,
+phase3_test_mosmed_exploratory.csv, phase3_test_gate_decisions.csv.gz, phase3_test_per_case.csv.gz (every row x
+strategy with the metrics of the selected prediction). Inference: src/phase3/stats_phase3.py.
+Usage:  python src/phase3/evaluate_gates.py [--split test]
 Tests:  python src/phase3/test_evaluate_gates.py
 """
 import json
@@ -49,18 +55,22 @@ NEUTRAL = 1e-6
 RERUN = {"C2", "C3a", "C3b", "C3c"}
 
 
-def load_rows():
+def load_rows(split="val"):
     """One DataFrame: keys, partition, group, F1-F5, LANG / IMG / NULL metrics."""
     dt = {"sample_id": str, "variant_id": str, "donor_sample_id": str}
-    F = pd.read_csv(R("phase3_reliability_features.csv.gz"), dtype=dt, keep_default_na=False)
-    L = pd.read_csv(R("phase3_feature_labels.csv.gz"), dtype=dt, keep_default_na=False)
+    sfx = "" if split == "val" else "_test"
+    F = pd.read_csv(R(f"phase3_reliability_features{sfx}.csv.gz"), dtype=dt, keep_default_na=False)
+    L = pd.read_csv(R(f"phase3_feature_labels{sfx}.csv.gz"), dtype=dt, keep_default_na=False)
     D = F.merge(L, on=KEYS, validate="one_to_one")
-    p2 = pd.read_csv(R("phase2_val_per_case.csv.gz"), dtype=dt, keep_default_na=False)
-    p3 = pd.read_csv(R("phase3_lang_rerun_val_per_case.csv.gz"), dtype=dt, keep_default_na=False)
-    lang = pd.concat([p2[~p2.condition.isin(RERUN)], p3], ignore_index=True)       # item 1
+    p2 = pd.read_csv(R(f"phase2_{split}_per_case.csv.gz"), dtype=dt, keep_default_na=False)
+    if split == "val":
+        p3 = pd.read_csv(R("phase3_lang_rerun_val_per_case.csv.gz"), dtype=dt, keep_default_na=False)
+        lang = pd.concat([p2[~p2.condition.isin(RERUN)], p3], ignore_index=True)   # item 1
+    else:
+        lang = p2                                                                    # test: one benchmark run
     lang = lang[KEYS + METRICS].rename(columns={m: f"lang_{m}" for m in METRICS})
     D = D.merge(lang, on=KEYS, validate="one_to_one")
-    img = pd.read_csv(R("phase3_img_val_per_case.csv.gz"), dtype={"sample_id": str})
+    img = pd.read_csv(R(f"phase3_img_{split}_per_case.csv.gz"), dtype={"sample_id": str})
     arch = {"U-Net": "unet", "nnU-Net": "nnunet"}[pd.read_csv(R("phase3_fallback_selection.csv")).query("chosen").arch.iloc[0]]
     img = img[img.arch == arch][["dataset", "seed", "sample_id"] + METRICS].rename(columns={m: f"img_{m}" for m in METRICS})
     D = D.merge(img, on=["dataset", "seed", "sample_id"], validate="many_to_one")
@@ -162,25 +172,43 @@ def routing(D):
     return pd.DataFrame(rows)
 
 
+OUT = {"val": {"res": "phase3_validation_results.csv", "pg": "phase3_validation_paired_differences.csv",
+               "fr": "phase3_fallback_rates.csv", "rq": "phase3_routing_quality.csv",
+               "mo": "phase3_mosmed_exploratory.csv", "dec": "phase3_val_gate_decisions.csv.gz"},
+       "test": {"res": "phase3_test_results.csv", "pg": "phase3_test_paired_differences.csv",
+                "fr": "phase3_test_fallback_rates.csv", "rq": "phase3_test_routing_quality.csv",
+                "mo": "phase3_test_mosmed_exploratory.csv", "dec": "phase3_test_gate_decisions.csv.gz"}}
+
+
 def main():
-    D, arch = load_rows()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--split", default="val", choices=["val", "test"])
+    split = ap.parse_args().split
+    if split == "test":
+        from phase2 import lock
+        lock.require_open(what="Phase 3 test evaluation")
+    o = OUT[split]
+    D, arch = load_rows(split)
     D = apply_gates(D)
     S = strategy_metrics(D)
     res = image_weighted(S)
     pg = pd.concat([paired_group(S, g) for g in ("D-Gate", "LR-Gate", "IMG", "NULL (C1)", "ORACLE")], ignore_index=True)
-    res.to_csv(R("phase3_validation_results.csv"), index=False, float_format="%.6g")
-    pg.to_csv(R("phase3_validation_paired_differences.csv"), index=False, float_format="%.6g")
+    res.to_csv(R(o["res"]), index=False, float_format="%.6g")
+    pg.to_csv(R(o["pg"]), index=False, float_format="%.6g")
     fr = S[S.strategy.isin(["D-Gate", "LR-Gate"])].groupby(["dataset", "part", "method", "condition", "strategy", "seed"]
                                                           ).switch.mean().rename("fallback_rate").reset_index()
-    fr.to_csv(R("phase3_fallback_rates.csv"), index=False, float_format="%.6g")
+    fr.to_csv(R(o["fr"]), index=False, float_format="%.6g")
     rq = routing(D)
-    rq.to_csv(R("phase3_routing_quality.csv"), index=False, float_format="%.6g")
+    rq.to_csv(R(o["rq"]), index=False, float_format="%.6g")
     mo = res[res.dataset == "MosMedData+"].merge(pg[pg.dataset == "MosMedData+"].pivot_table(
         index=["method", "condition"], columns="comparison", values="group_weighted_delta").reset_index(),
         on=["method", "condition"])
-    mo.to_csv(R("phase3_mosmed_exploratory.csv"), index=False, float_format="%.6g")
+    mo.to_csv(R(o["mo"]), index=False, float_format="%.6g")
+    if split == "test":                                                   # Task 3.6 deliverable (per case x strategy)
+        S.to_csv(R("phase3_test_per_case.csv.gz"), index=False, float_format="%.6f")
     D[KEYS + ["part", "F1", "lr_score", "d_switch", "lr_switch"]].to_csv(
-        R("phase3_val_gate_decisions.csv.gz"), index=False, float_format="%.17g")      # full precision
+        R(o["dec"]), index=False, float_format="%.17g")      # full precision
     print("rows", len(D), "IMG", arch)
 
 
