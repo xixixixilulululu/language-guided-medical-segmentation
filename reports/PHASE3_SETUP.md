@@ -326,6 +326,17 @@ are in the two calibration CSVs.
 
 **Diagnostic** (GATE_CAL, unweighted; development data): LR AUROC 0.626–0.684, average precision 0.735–0.787.
 
+## 9. Gates fixed (2026-10-28)
+
+The project lead checked commit b58cdf6 independently, with 0 differences, including refitting the nine LRs.
+From now on both gates are **fixed as of commit b58cdf6**:
+- IMG = nnU-Net (seed matched);
+- the nine D-Gate thresholds: `results/phase3_dgate_calibration.csv`;
+- the nine LR-Gates (scaler mean and scale, coefficients, intercept, threshold): `results/phase3_lr_artifacts.json`.
+
+**Changes.** Any later change is recorded here as an **amendment**, with its reason. No change may be motivated
+by C1, C3a–C3c or MosMed results. Task 3.5 applies the fixed gates unchanged.
+
 ## 6. Next steps (after confirmation)
 
 1. You submit `slurm/phase3_infer_val.slurm`.
