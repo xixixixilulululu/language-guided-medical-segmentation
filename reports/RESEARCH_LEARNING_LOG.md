@@ -5,7 +5,7 @@ asked, mistakes that were found (including mistakes in AI-assisted advice), how 
 rule I took away from each. It covers the training stage (BUSI, Tasks 1–8) and Phases 0, 1 and 2 of this
 project.
 
-Last updated: 2026-10-30 (reflection E4 and principle 12 added). Part D still describes Phase 2 as in
+Last updated: 2026-10-30 (reflection E4 and principles 12–13 added; E4 corrected the same day). Part D still describes Phase 2 as in
 progress; the Phase 2 and Phase 3 test results will be added later.
 
 ---
@@ -282,25 +282,60 @@ the baselines ourselves, score every method with one evaluator, and check what e
 
 ### E4. Look for the root cause and a breakthrough, not a list of fixes
 
-- **What happened.** After the Phase 3 test, I asked how the gate's limitations could be improved. The first
-  answer was a list of reasonable fixes: more features, a stronger classifier, a stricter calibration,
-  per-dataset thresholds, fewer collinear features. Each would help a little; none would change the picture.
-  Only when I asked what would really be a breakthrough did the root cause appear.
-- **The root cause.** The limit was the design itself, choosing between two predictions, not how well the
-  choice was tuned. Under C6 (a fully mismatched report), even a perfect selector that knows the answer (the
-  ORACLE) reaches only about 81 Dice, 1.3–1.5 points above nnU-Net alone (79.7). Switching away from the
-  report also throws away what a correct report is worth (81.7–84.8 Dice with the original report). No better
-  switch can go far beyond that ceiling.
-- **A different direction.** Instead of discarding a wrong report, correct it. The reports follow a fixed
-  template (scope, count, location); Phase 2 showed that the harm comes almost entirely from the location; and
-  the location can be read from an image-only mask. The ceiling of this approach is the performance with a
-  correct report, above the perfect selector. This is an idea to be tested on validation, not a result.
-- **Lesson:**
-  - before improving a method, work out its ceiling (what even its ideal version could reach) and why the gap
-    exists;
-  - if the ceiling itself is too low, change the approach instead of tuning it;
-  - my own earlier findings (here, that the location drives the harm) are a good source of new directions;
-  - aim for a breakthrough: ask "what is the root cause?" every time, not only "what else can we try?".
+- **What happened.** After the Phase 3 test, I asked how the gate's limitations could be improved.
+  - **First answer: a list of reasonable fixes.** More features, a stronger classifier, a stricter
+    calibration, per-dataset thresholds, fewer collinear features. Each would help a little; none would change
+    the picture.
+  - **Second answer, after I asked for a breakthrough: a "root cause" that was wrong.**
+    - It said the limit was the selection design itself. Under C6 (a fully mismatched report), even a perfect
+      selector that knows the answer (the ORACLE) reaches only about 81 Dice, 1.3–1.5 points above nnU-Net
+      alone (79.7).
+    - It proposed correcting the report instead of discarding it. It sounded convincing, came with real
+      numbers, and was written into this log and into an e-mail draft.
+  - **Third answer, after I asked for a rethink from scratch: the second answer did not hold.**
+- **Why the second answer was wrong.**
+  - **The ceiling is not the bottleneck.** Under C6 the gates reach 63–68 Dice, 12–17 points below simply
+    using nnU-Net. They are far below the ceiling, so the ceiling is not what limits them now. What limits them
+    is that they do not recognise a wrong report and do not switch when they should.
+  - **"Correcting" a wrong report cannot bring back the information.** A correct report is worth 2–5 points
+    over nnU-Net (81.7–84.8 Dice) because a person wrote down where the lesions are. Once the report is wrong,
+    that information is not in the input any more. A location derived from nnU-Net's mask carries only
+    nnU-Net's own opinion. Whether feeding it back to the language-guided model helps is an open question, not
+    a ceiling of 82–85.
+- **The root cause, as far as I can tell now.** The gates decide only from the two segmentations and never
+  look at what the report says. So when the two segmentations disagree, they cannot tell whether the report
+  or nnU-Net is wrong.
+  - **C1 shows it most clearly.** With no text at all, the trivial rule "no text → nnU-Net" gives 79.7; the
+    gates give 65–74. C1 is only an illustration, since a real system would apply that rule anyway. The real
+    target is the wrong reports (C4–C6).
+  - **Validation data (development data) support this.**
+    - The existing gate signals separate clean (C0) from fully wrong (C6) reports only moderately: AUROC
+      0.68–0.76.
+    - When the two masks strongly disagree under the clean report (mask Dice < 0.3, 2.5–4% of the rows), the
+      language-guided model is still the better one in 49–79% of these rows.
+    - Under C6, in the rows where switching is clearly right (LANG < 0.3, nnU-Net > 0.6), LR-Gate switches only
+      33–53%.
+- **Direction now (an idea to test on validation, not a result).** Give the gate a signal of whether the
+  report fits the image. There are two ways to get it:
+  - **A simple rule.** Compare the location stated in the report with the location found by nnU-Net. It needs
+    no training. Its risk is that it shares nnU-Net's errors: on validation, 49–68% of LR-Gate's harmful
+    switches under the clean report come with a poor nnU-Net mask (Dice < 0.5), which such a rule would also
+    flag.
+  - **A small classifier trained to recognise mismatch.** Train it on the training split with real and swapped
+    reports, so that it learns directly whether a report fits an image. Its errors are not tied to nnU-Net's
+    segmentation. Its risk is that it learns how the benchmark swaps reports, which may differ from real
+    report errors.
+  - **The first measurement** is how well each signal separates C0 from C4–C6 on validation, compared with
+    0.68–0.76 now.
+- **Lessons:**
+  - Before improving a method, compare three numbers: the current result, the simplest baseline (here
+    nnU-Net alone) and the ceiling (here the ORACLE). The real gap shows where the bottleneck is. Looking only
+    at the ceiling misled the second answer.
+  - If even the ideal version of an approach cannot solve the problem, change the approach. If the current
+    result is far below a simple baseline, fix the real bottleneck first.
+  - A first "root cause" can be wrong too. It also needs checking against the numbers, and a rethink from
+    scratch, before it goes into a document or an e-mail (see E1).
+  - Aim for a breakthrough: ask "what is the root cause?" every time, not only "what else can we try?".
 
 ---
 
@@ -319,5 +354,7 @@ the baselines ourselves, score every method with one evaluator, and check what e
 9. **A convincing explanation is not evidence.** Ask for checkable evidence, not "are you sure?".
 10. **Read a paper as the authors' best case.** Check the code, the baselines and the metrics yourself.
 11. **Count independent units, not images.** With few units, conclusions are exploratory.
-12. **Find the root cause and the ceiling before improving.** If even the ideal version of a method cannot
-    solve the problem, change the approach, not its settings.
+12. **Find the root cause before improving.** Compare the current result with the simplest baseline and with
+    the ceiling to see where the real gap is; change the approach only if even its ideal version cannot solve
+    the problem.
+13. **Rethink a root-cause analysis from scratch** before it goes into a document or an e-mail.
