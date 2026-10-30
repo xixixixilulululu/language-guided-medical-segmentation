@@ -41,8 +41,12 @@ if [ "$1" = stop ]; then
   if [ "${LGMS_NOTIFY_DRYRUN:-0}" = 1 ]; then
     echo "[dry-run e-mail] ✅ Claude is waiting for you: ${msg}"
   else
-    timeout 12 python3 "$here/send_email.py" "✅ Claude is waiting for you" "$msg" > /dev/null 2>&1 \
-      || echo "claude_notify_hook.sh: e-mail failed; the phone push is not affected" >&2
+    # one log line per attempt (time, exit status, error type; never addresses or credentials), since 2026-10-30
+    err=$(timeout 12 python3 "$here/send_email.py" "✅ Claude is waiting for you" "$msg" 2>&1 > /dev/null)
+    rc=$?
+    printf '%s\tstop\texit=%s\t%s\t%s\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')" "$rc" "${err//$'\n'/ }" \
+      "$(printf '%s' "$msg" | head -c 60)" >> "$HOME/.cache/lgms/email.log"
+    [ "$rc" -eq 0 ] || echo "claude_notify_hook.sh: e-mail failed (exit $rc); the phone push is not affected" >&2
   fi
 fi
 exit 0
