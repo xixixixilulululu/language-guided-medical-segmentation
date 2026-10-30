@@ -1,0 +1,33 @@
+{
+  "commit": "b593d7fa50acd86c9f97a5d6f755c876fc82576e",
+  "frozen": "2026-10-30 16:42",
+  "files": {
+    "src/phase2/lock.py": "70fca4bd7806f533a0061dd1054e4f57ca65fbbabeef3e9a19f4399fdea65a64",
+    "src/phase2/texts.py": "5740a18cf5efe946e2bc656c0412d246794657421156cd7099a2c08fa4687de9",
+    "src/phase2/conditions.py": "109ccb9d0f59205990ce0cd96759fb5c7d3b23da7f8dc4c335ed98efce29d5b0",
+    "src/phase2/infer.py": "e7f17195caa9f714a1f23fdf4543116e011274cda26445accb1150ecd041f3ad",
+    "src/phase2/analyze_phase2.py": "ac901fcbb05ec22e059a0932991d2ea131bd6415d8d8cacb267dd0573d111208",
+    "src/phase2/analyze_phase2_extra.py": "9c84625c6a51017b3d5b58a5411d825656a52c705d2271901f64c4575852278d",
+    "src/phase2/reconcile_test_c0.py": "48d0e8b900a2e496bd76d724c82b45def40171c42b9efb57f2233bca1f7d46bb",
+    "results/phase2_checkpoint_sha256.tsv": "fa3eeaed86d427ca94f5f0f12011b0faa194a5dc7bc0512236fb8c301cca42dd",
+    "slurm/phase2_test_benchmark.slurm": "514cfa87ea50533c2ed69df432692cdd6ef8238dfaf4b9a25227daac5f4da7a9",
+    "reports/PHASE2_PROTOCOL.md": "76c9b22940a48f4a888e7509a4b782e12c82b7bfa0261574a79ce80140d19aff",
+    "reports/PHASE2_PROTOCOL_FREEZE.md": "a586f601d11774b06c960b7e89d7878e584ba44162280d928b1fa8b0b731aa4b",
+    "src/phase3/infer_img.py": "bc4a7193359316b536ff46f896e45c0b611f64a449042097fc3b3434e6a07a00",
+    "src/phase3/features.py": "ef725248800431ca00f188270327b539db4526ed8e4c5c12da1f7280ce34ad4e",
+    "src/phase3/gates.py": "5ab292335def427e300bb836211be5622a2a45c0a81c64e07be4b72bc9b66e41",
+    "src/phase3/evaluate_gates.py": "503b59bb38a0af6f2437f7714bb0302ebd3f8f7933f708006b62abca36fe6674",
+    "src/phase3/export_per_case.py": "c8341c0a456d36be9bd07d5aff0c69e78754dc2081bcddcc37f7f390536e2fb7",
+    "src/phase3/stats_phase3.py": "11fd0150797a441020d33e6bf216eeccd53db8b153664172a7d2c4af16525ed5",
+    "src/phase3/make_partitions.py": "acb535faeb7a027c33f17847f67ce92cb7763e89ee9741bf6bfd2f5dd65c87cd",
+    "results/phase3_checkpoints.tsv": "a075167c9bd8df54a90ab7a1049df24a9985a450aee1791ae381d20eb3c2ea91",
+    "results/phase3_fallback_selection.csv": "bce80a171ce1ad50f5e5f47c837c689d231eb068cd4b17724a7e4130f1399064",
+    "results/phase3_gate_partitions.csv": "77c254e2eb00868668a737b523656ac3075985966b204eedb5a8f3d61d14574d",
+    "results/phase3_dgate_thresholds.json": "df671c1900c82649191175141d73aa4cc7655f77b475c700c8607fa8f1df55bd",
+    "results/phase3_lr_artifacts.json": "cecaab140e5f225464e539e8b5076128238155165f3c6533eb5caafabf4260ab",
+    "slurm/phase3_test.slurm": "d66fc693265eff2af5473f4b4b50466aeef280bffdd56ccc884339793730c48f",
+    "reports/PHASE3_SETUP.md": "a826693abc149637dbe854f5d0b66b7117e072396faf4ab038217404f75b1f5d",
+    "reports/PHASE3_PROTOCOL_FREEZE.md": "832bbe378eaf47da1842a9d588d173a97951dba792e1c84bfbac345a4b31e951",
+    "configs/phase2_frozen/phase3_decision.json": "fd19c8edc820a89ac020f58fef91978db31ecb1971403c425f584b61517d2d37"
+  }
+}
