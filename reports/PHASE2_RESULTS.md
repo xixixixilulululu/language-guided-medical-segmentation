@@ -380,7 +380,10 @@ reported in PHASE2_VALIDATION_SUMMARY.md; test: section 4). MosMed has 11 valida
 - `reports/figures/phase2_test_cases_<dataset>.png`: real cases selected by the frozen rule
   (PHASE2_PROTOCOL_FREEZE.md section 4): C6-eligible images sorted by harm C0 − C6 (mean over 3 methods × 3
   seeds, donors averaged), ties by sample id; the images at the 10 / 30 / 50 / 70 / 90% positions; seed 1001,
-  donor d1 (`results/phase2_test_case_selection.json`).
+  donor d1 (`results/phase2_test_case_selection.json`). **Label error:** the title of these two case figures
+  reads "<dataset> validation: …" although they show **test** cases (all files are named `phase2_test_*`). The
+  title text is fixed in the frozen `src/phase2/analyze_phase2_extra.py` (`fig_cases`) and is not changed;
+  figures 1–4 are labelled correctly (figures 1 and 3 say "(test)"; 2 and 4 name no split).
 
 ## 12. Interpretation and conclusions
 
