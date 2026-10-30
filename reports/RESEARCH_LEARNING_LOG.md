@@ -2,11 +2,9 @@
 
 A running record of what I learned during the research training and the research project: questions I
 asked, mistakes that were found (including mistakes in AI-assisted advice), how they were checked, and the
-rule I took away from each. It covers the training stage (BUSI, Tasks 1–8) and Phases 0, 1 and 2 of this
-project.
+rule I took away from each. It covers the training stage (BUSI, Tasks 1–8) and Phases 0–3 of this project.
 
-Last updated: 2026-10-30 (reflection E4 and principles 12–13 added; E4 corrected the same day). Part D still describes Phase 2 as in
-progress; the Phase 2 and Phase 3 test results will be added later.
+Last updated: 2026-10-30 (Phases 2 and 3 completed: Part D; reflections E4–E5 and principles 12–15 added).
 
 ---
 
@@ -188,7 +186,9 @@ Problems found before any training:
 
 ---
 
-## Part D — Phase 2: text reliability (in progress)
+## Part D — Phases 2 and 3: text reliability and selective fallback (completed 2026-10-30)
+
+### D1. Phase 2: does the model depend on its text?
 
 - **Goal:** test whether the trained models depend on their text, by changing the text (null, equivalent
   wording, deleted attributes, real reports from other cases) without retraining.
@@ -204,6 +204,66 @@ Problems found before any training:
   - MosMedData+ has only about 10 independent CT-volume units, so its unit-level inference is exploratory.
 - **Honesty about who checked what:** the 40 rewrites were reviewed for equal meaning, and the record states
   who reviewed them.
+- **Freeze and test.**
+  - Before any counterfactual test run, the Phase 2 and Phase 3 rules were frozen on GitHub (commit b593d7f,
+    27 files with their sha256). A lock program refused every test run until then.
+  - The test benchmark ran once (job 392): 270 passes, 0 failures.
+  - The clean-text (C0) results matched the Phase 1 test archive within the pre-set rule.
+- **Results on the QaTa-COV19 test set** (472–474 patient units, Dice points; `reports/PHASE2_RESULTS.md`):
+  - Removing the report (C0 − C1) costs 12.35–20.13 points. A fully mismatched report (C0 − C6) costs
+    23.31–24.40, more than removing it (C1 − C6 +3.12 to +11.39).
+  - The harm follows the location: a location-only change costs 12.6–13.8 points, a count-only or scope-only
+    change 0.1–1.1.
+  - RecLMIS is sensitive to equivalent rewording (−1.25 points); LViT-T and DD-CMD are not, on average.
+  - Validation and test agree:
+    - same sign in 31 of 33 comparisons;
+    - same Holm decision in 30 of 33;
+    - the three that did not replicate are "wrong versus no text" comparisons for partial mismatches.
+  - MosMedData+ (9 test units) is exploratory; its effects are small.
+- **Lessons:**
+  - **The replication can be trusted because the rules were fixed before the test.** There was nothing left to
+    choose after seeing the results.
+  - **A frozen program can still contain a small error.** The test case figures carry the title "validation",
+    because the title is fixed text in the frozen code. It was documented, not fixed.
+  - **A frozen program can write files that must not be used.** The frozen analysis also wrote the Phase 3
+    go/no-go files for the test split. That rule is defined on validation only, so the files were labelled
+    descriptive and not used.
+
+### D2. Phase 3: falling back to an image-only model when the text may be wrong
+
+- **Goal.** A gate chooses, per image, between the language-guided prediction (LANG) and nnU-Net (IMG).
+  - D-Gate is a threshold on one disagreement feature.
+  - LR-Gate is a logistic regression on five features of the two probability maps.
+  - Both were developed on QaTa validation only: GATE_FIT for fitting, GATE_CAL for thresholds.
+  - MosMedData+ is exploratory.
+- **Before the freeze:**
+  - On GATE_FIT the clean-text losses were already beyond the planned margin (−0.66 to −0.94 points against
+    −0.5). I wrote this to the supervisor before the freeze, with "keep the gates as specified" as the default.
+    With no reply by the freeze, the gates were kept as specified and the decision was recorded.
+  - The first cost measurement (job 379) reported 66.6 GB of GPU memory for LViT-T's D-Gate (395 MB for its LR-Gate).
+    This was an artifact of the measurement order. It was withdrawn and remeasured with one process per mode (job 391).
+- **Results on the QaTa-COV19 test set** (`reports/PHASE3_RESULTS.md`):
+  - **Primary family** (LR-Gate − LANG under C4–C6): 9 of 9 significant after Holm, +1.36 to +6.53 points.
+  - **Secondary family** (LR-Gate − D-Gate): 9 of 9 significant, +0.76 to +2.68.
+  - **Clean and reworded text (C0/C2):** the gates cost −0.17 to −0.30 points.
+    - D-Gate keeps the −0.005 margin in 6 of 6 cells.
+    - LR-Gate keeps it in 4 of 6; for LViT-T, the CI lower bounds for C0 and C2 reach −0.56 and −0.52.
+  - **Limits:**
+    - LR-Gate recovers only 11–33% of the oracle headroom.
+    - When the report is wrong or missing, nnU-Net alone is 4.85–17.12 points better than either gate.
+    - On MosMedData+ the QaTa gates almost never switch.
+- **Checks:**
+  - **Independent recomputation with separate code: 14,373,709 checks, 0 differences.** It recomputed the gate
+    decisions from the frozen parameters, the tables, the routing counts, and the statistics with Holm.
+  - **Every table in the summary was right, but four of its sentences did not match the files.** For example,
+    "77–97% beneficial" where the file says 77.4–94.8%. All four were corrected before the report was final.
+  - **The log shows one failed `git fetch` on the compute node.** The lock allows this by design: it falls back
+    to the local reference. It was written into the run record instead of being left out.
+- **Lessons:**
+  - Check the sentences, not only the tables.
+  - A measurement setup can create its own numbers (job 379).
+  - A small irregularity in a log is reported, not left out.
+  - What the results mean for improving the gate is in E4.
 
 ---
 
@@ -340,6 +400,40 @@ the baselines ourselves, score every method with one evaluator, and check what e
     scratch, before it goes into a document or an e-mail (see E1).
   - Aim for a breakthrough: ask "what is the root cause?" every time, not only "what else can we try?".
 
+### E5. Let the data speak: real numbers, and no more speculation than the data allow
+
+- **What happened** (2026-10-30, while finishing Phases 2 and 3):
+  - **Reasoning without checking.** The second "root cause" in E4 used correct numbers but was not checked
+    against the data. Once it was checked on validation, it did not hold.
+  - **Statements that went beyond what was measured.** Each was found and corrected:
+    - "the features cost < 1 ms" was never measured;
+    - "IMG is 5–15 points better than the gates" was a rough estimate; the file says 4.85–17.12;
+    - "C5 is the same size on validation and test" was wrong: for LViT-T it was about three times larger on
+      test (+2.99 versus +0.97);
+    - "the gates recover 11–33%" is true only of LR-Gate; D-Gate recovers 5–21%;
+    - "RecLMIS misses both lungs" went beyond the figure, which only shows an almost empty prediction.
+  - **A number that depends on an arbitrary choice.** "The language-guided model is still the better one in
+    49–79% of strong disagreements" became 35–85% when the cutoff for "strong" changed. The e-mail used a
+    measure without a cutoff (AUROC) instead.
+  - **Documentation versus code.** The setup document describes F2 as "Dice of the two masks", but the code
+    stores 1 − Dice. The AI assistant's first diagnostic read F2 the wrong way round and found that 78–80% of
+    clean-text rows strongly disagree. The number was implausible, and the code showed the real definition.
+  - **Summaries versus files.** VS Code's summary had four sentences that did not match its own files. The AI
+    assistant that checks VS Code's work swapped two numbers in its own message (DD-CMD +3.4 / +3.7); VS Code
+    caught it by reading the file.
+  - **"Are you sure?"** When I asked whether everything was now based on data, the honest answer was in two
+    parts. The numbers are. The conclusions are interpretations of the numbers, and the proposed next step is
+    an untested idea, so both have to be labelled as such.
+- **Lessons:**
+  - Every number must come from a file or a script that can be rerun, and the text around it must not say
+    more than the number does.
+  - Check the sentences of a summary against the files, not only its tables. This includes every AI summary,
+    the checker's own messages, and my own e-mails.
+  - Mark what is a measured fact, what is an interpretation and what is an untested idea.
+  - If a number depends on a cutoff or another choice, say so, or use a measure that does not depend on it.
+  - An implausible result is a reason to check the definition in the code, not to explain the result.
+  - Answer "are you sure?" with evidence: what was checked, against which file, and what is still a judgment.
+
 ---
 
 ## Part F — Principles I now follow
@@ -361,3 +455,6 @@ the baselines ourselves, score every method with one evaluator, and check what e
     the ceiling to see where the real gap is; change the approach only if even its ideal version cannot solve
     the problem.
 13. **Rethink a root-cause analysis from scratch** before it goes into a document or an e-mail.
+14. **Let the data speak.** Every number comes from a file or a script that can be rerun. Statements stay
+    within what was measured, and facts, interpretations and untested ideas are labelled as such.
+15. **Check the sentences, not only the tables**, in AI summaries and in my own e-mails.
