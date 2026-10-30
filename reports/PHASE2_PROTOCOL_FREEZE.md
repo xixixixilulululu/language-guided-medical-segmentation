@@ -1,10 +1,15 @@
-# Phase 2 — Protocol freeze (DRAFT, not frozen)
+# Phase 2 — Protocol freeze (FROZEN)
 
-Status: 2026-10-28, **draft**.
-- **Not frozen.** The Phase 2 lock stays closed; no test file has been read by Phase 2 or Phase 3 code, and no
-  test job has been submitted.
-- **Waiting for:** the supervisor's reply on the Phase 3 gate constraints. It may change Phase 3 (and so the
-  Phase 3 decision record); this draft is then updated before the freeze.
+Status: 2026-10-30, **frozen** (`python src/phase2/lock.py freeze`; record `configs/phase2_frozen/phase2_lock.json`).
+- At the freeze, no test file had been read by Phase 2 or Phase 3 code and no test job had been submitted.
+- **Phase 3 decision** (`configs/phase2_frozen/phase3_decision.json`): Phase 3 continues; the gates are frozen as
+  fixed at b58cdf6, with no amendment. On 2026-10-28 the project lead informed the supervisor that the C0 / C2
+  losses on GATE_FIT lie beyond the −0.005 margin, with the default of keeping the gates as planned; by
+  2026-10-30 the supervisor had not asked for a change.
+- **C2 manual reviews.** Both 40-row reviews (P2-1, section 4.3.1, and the superseded D9 template, section 4.3.2)
+  were done by the project lead personally; their records are verified.
+- This file and every file of the record are not changed after the freeze. Test results and their explanations
+  go to files outside the record (e.g. `reports/PHASE2_RESULTS.md`).
 - **Scope.** PHASE3_PLAN Task 3.6, items 1 and 4 for Phase 2: the condition and donor-generation rules,
   eligibility, statistical rules, the validation / test exposure history and the reproducibility information.
   The full rules are in [PHASE2_PROTOCOL.md](PHASE2_PROTOCOL.md); this file states what is frozen and where.
@@ -120,11 +125,11 @@ the same checkpoint (`runs/<method>/<dataset>/seed<k>/eval_test`; MosMed LViT-T:
 
 - **Record.** `python src/phase2/lock.py freeze` writes `configs/phase2_frozen/phase2_lock.json`: the commit and
   the sha256 of every file of `LOCKED_FILES` in `src/phase2/lock.py` (Phase 2 and Phase 3 files, both freeze
-  documents and the Phase 3 decision record). That record is authoritative; the table below is a **draft
-  snapshot** of the Phase 2 files in the working tree of this draft commit (`python src/phase2/lock.py
-  manifest`), recomputed at the freeze.
-- **Code commit.** The freeze commit is the one recorded in `phase2_lock.json` (it cannot be written into this
-  file, which is part of it). This draft builds on b6467b0.
+  documents and the Phase 3 decision record). That record is authoritative; the table below lists the sha256
+  of the Phase 2 files in the frozen commit (`python src/phase2/lock.py manifest`, generated just before the
+  freeze).
+- **Code commit.** The frozen commit is the one recorded in `phase2_lock.json` (it cannot be written into this
+  file, which is part of it). Gates fixed as of b58cdf6.
 - **Environment.** `~/envs/lgms_p1`: torch 2.14.0+cu130, scikit-learn 1.9.0, nnunetv2; Phase 1 method repositories
   at the commits of `configs/phase1_frozen/*.commit`.
 
@@ -139,14 +144,12 @@ the same checkpoint (`runs/<method>/<dataset>/seed<k>/eval_test`; MosMed LViT-T:
 | `src/phase2/analyze_phase2_extra.py` | `9c84625c6a51017b3d5b58a5411d825656a52c705d2271901f64c4575852278d` |
 | `src/phase2/reconcile_test_c0.py` | `48d0e8b900a2e496bd76d724c82b45def40171c42b9efb57f2233bca1f7d46bb` |
 | `results/phase2_checkpoint_sha256.tsv` | `fa3eeaed86d427ca94f5f0f12011b0faa194a5dc7bc0512236fb8c301cca42dd` |
-| `slurm/phase2_test_benchmark.slurm` | `bb49fdf9178fff44db89ae3a389e0fd729fbc353822b5cf55757ff99fdbb9d23` |
-| `reports/PHASE2_PROTOCOL.md` | `1c0a7709442e863f475cb258dc08211ed6fad7810b63f7b808a9a7c11ea2e5fd` |
-| `configs/phase2_frozen/phase3_decision.json` | `missing` |
+| `slurm/phase2_test_benchmark.slurm` | `514cfa87ea50533c2ed69df432692cdd6ef8238dfaf4b9a25227daac5f4da7a9` |
+| `reports/PHASE2_PROTOCOL.md` | `76c9b22940a48f4a888e7509a4b782e12c82b7bfa0261574a79ce80140d19aff` |
+| `configs/phase2_frozen/phase3_decision.json` | `fd19c8edc820a89ac020f58fef91978db31ecb1971403c425f584b61517d2d37` |
 <!-- END MANIFEST-PHASE2 -->
 
-## 9. Open before the freeze
+## 9. After the freeze
 
-1. The supervisor's reply (gate constraints); then the Phase 3 decision record
-   `configs/phase2_frozen/phase3_decision.json` (Phase 3 protocol frozen, or Phase 3 cancelled).
-2. The project lead's check of both drafts.
-3. Recompute the snapshot tables; `lock.py freeze`; push; `lock.py check` OPEN.
+1. Commit and push the record; `python src/phase2/lock.py check` must report OPEN.
+2. Then the test pipeline of section 7, from step 2 (`link-test`).

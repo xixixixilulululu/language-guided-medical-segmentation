@@ -1,11 +1,13 @@
-# Phase 3 — Protocol freeze (DRAFT, not frozen)
+# Phase 3 — Protocol freeze (FROZEN)
 
-Status: 2026-10-28, **draft**.
-- **Not frozen.** The Phase 2 lock stays closed; no test inference, feature or gate decision on test exists.
-- **Waiting for:** the supervisor's reply, which may change the gate constraints (the −0.005 margin, the
-  constraint set, the objective). Any change is recorded as an amendment in PHASE3_SETUP.md section 8, the
-  gates are refitted / recalibrated on validation by the same programs, and the tables below are regenerated.
-  No change may be motivated by C1, C3a–C3c or MosMed results.
+Status: 2026-10-30, **frozen** together with PHASE2_PROTOCOL_FREEZE.md (record
+`configs/phase2_frozen/phase2_lock.json`).
+- At the freeze, no test inference, feature or gate decision on test existed.
+- **Decision** (`configs/phase2_frozen/phase3_decision.json`): Phase 3 continues; gates as fixed at b58cdf6, no
+  amendment. The supervisor was informed on 2026-10-28 that the C0 / C2 losses on GATE_FIT lie beyond the −0.005
+  margin (default: keep the gates as planned) and had not asked for a change by 2026-10-30.
+- The gates are not changed because of test results. This file and every file of the record are not changed
+  after the freeze; test results and their explanations go to `reports/PHASE3_RESULTS.md`.
 - **Scope.** PHASE3_PLAN Task 3.6, items 2–4: IMG architecture, checkpoint identifiers, feature definitions,
   evaluation rules; partitions, LR artifacts, all thresholds (including never-fallback), comparison families;
   exposure history and reproducibility. Development record: [PHASE3_SETUP.md](PHASE3_SETUP.md).
@@ -195,10 +197,9 @@ clean (C0) test results of Phases 0 and 1 were seen earlier (PHASE2_PROTOCOL_FRE
 
 - **Record.** The Phase 3 files below are in `LOCKED_FILES` of `src/phase2/lock.py`; the freeze record
   `configs/phase2_frozen/phase2_lock.json` (commit + sha256 of every file) is authoritative. The table is a
-  **draft snapshot** of the working tree of this draft commit (`python src/phase2/lock.py manifest`),
-  recomputed at the freeze. This file itself is covered by the record only.
-- **Code commit.** Gates fixed as of b58cdf6; this draft builds on b6467b0; the freeze commit is the one in the
-  record.
+  sha256 of the files in the frozen commit (`python src/phase2/lock.py manifest`, generated just before the
+  freeze). This file itself is covered by the record only.
+- **Code commit.** Gates fixed as of b58cdf6; the frozen commit is the one in the record.
 - **Environment.** `~/envs/lgms_p1`: torch 2.14.0+cu130, scikit-learn 1.9.0, nnunetv2.
 
 <!-- BEGIN MANIFEST-PHASE3 -->
@@ -216,13 +217,11 @@ clean (C0) test results of Phases 0 and 1 were seen earlier (PHASE2_PROTOCOL_FRE
 | `results/phase3_gate_partitions.csv` | `77c254e2eb00868668a737b523656ac3075985966b204eedb5a8f3d61d14574d` |
 | `results/phase3_dgate_thresholds.json` | `df671c1900c82649191175141d73aa4cc7655f77b475c700c8607fa8f1df55bd` |
 | `results/phase3_lr_artifacts.json` | `cecaab140e5f225464e539e8b5076128238155165f3c6533eb5caafabf4260ab` |
-| `slurm/phase3_test.slurm` | `54f092d6386c76eb5707d095ffe0eda61d13c58db2d081231bd61977a53ff4b8` |
-| `reports/PHASE3_SETUP.md` | `63ce157f8be4e3182522fed66c7cdec91b357ac54f6f14fd4de86ff4b9b04b82` |
+| `slurm/phase3_test.slurm` | `d66fc693265eff2af5473f4b4b50466aeef280bffdd56ccc884339793730c48f` |
+| `reports/PHASE3_SETUP.md` | `a826693abc149637dbe854f5d0b66b7117e072396faf4ab038217404f75b1f5d` |
 <!-- END MANIFEST-PHASE3 -->
 
-## 11. Open before the freeze
+## 11. Completed before the freeze
 
-1. The supervisor's reply on the gate constraints (may change section 5; then refit / recalibrate on
-   validation and regenerate this file).
-2. Done: Task 3.8 cost (job 391, PHASE3_SETUP.md section 10); it does not change the gates.
-3. The project lead's check of both drafts; the Phase 3 decision record; `lock.py freeze`.
+- Task 3.8 cost (job 391, PHASE3_SETUP.md section 10); it does not change the gates.
+- The supervisor's reply: no change of the gate constraints; the Phase 3 decision record.

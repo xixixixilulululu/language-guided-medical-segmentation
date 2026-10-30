@@ -1,0 +1,21 @@
+{
+  "decision": "Phase 3 continues; Phase 3 protocol frozen",
+  "date": "2026-10-30",
+  "phase3_protocol": "reports/PHASE3_PROTOCOL_FREEZE.md",
+  "phase2_protocol": "reports/PHASE2_PROTOCOL_FREEZE.md",
+  "gates": {
+    "fixed_as_of_commit": "b58cdf6",
+    "amendments": [],
+    "img": "nnU-Net, seed matched",
+    "dgate_thresholds": "results/phase3_dgate_thresholds.json",
+    "lr_artifacts": "results/phase3_lr_artifacts.json"
+  },
+  "phase2_amendments": ["A1 (2026-10-28): test float32 probabilities for every condition and donor (PHASE2_PROTOCOL.md section 9)"],
+  "history": [
+    "2026-10-27: Phase 3 go / no-go rule applied to the validation benchmark as fixed (PHASE2_PROTOCOL.md section 5.1); basis for Phase 3 recorded",
+    "2026-10-28: gates fitted on QaTa GATE_FIT and calibrated on GATE_CAL (commit b58cdf6), checked by an independent recomputation with separate code, 0 differences; fixed as of b58cdf6",
+    "2026-10-28: the project lead informed the supervisor that on GATE_FIT the C0 / C2 losses of the gates lie beyond the -0.005 development margin; the default was to keep the gates unchanged as planned",
+    "2026-10-30: the supervisor did not ask for a change; the gates are frozen as planned, with no amendment"
+  ],
+  "test_exposure_at_decision": "no counterfactual test condition, Phase 2 test inference or Phase 3 test output exists; clean C0 test results of Phases 0 and 1 were seen earlier"
+}

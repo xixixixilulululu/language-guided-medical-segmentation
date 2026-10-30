@@ -438,10 +438,9 @@ GATE_CAL are reported separately (item 17).
   - Model loading times are in the file but are not comparable: the first process to load a model read it
     from disk (11–35 s), later ones from the file cache (1–3 s).
 
-## 11. Next steps
+## 11. Freeze (2026-10-30)
 
-1. Run `slurm/phase3_cost.slurm` (by hand).
-2. Freeze drafts: `reports/PHASE2_PROTOCOL_FREEZE.md`, `reports/PHASE3_PROTOCOL_FREEZE.md`, the test jobs
-   `slurm/phase2_test_benchmark.slurm` and `slurm/phase3_test.slurm`. **Not frozen**; the lock stays closed.
-3. Nothing is frozen before the supervisor's reply, which may change the gate constraints. A change after that
-   reply is recorded as an amendment (section 8) and the gates and drafts are regenerated.
+- The supervisor did not ask for a change of the gate constraints; no amendment.
+- Frozen with `reports/PHASE2_PROTOCOL_FREEZE.md` and `reports/PHASE3_PROTOCOL_FREEZE.md` (record
+  `configs/phase2_frozen/phase2_lock.json`). This file is not changed after the freeze; test results go to
+  `reports/PHASE3_RESULTS.md`.

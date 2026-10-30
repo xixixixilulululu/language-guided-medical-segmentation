@@ -1,5 +1,5 @@
 #!/bin/bash
-# DRAFT (2026-10-28) - not to be submitted before the freeze (reports/PHASE3_PROTOCOL_FREEZE.md, section 8).
+# Frozen 2026-10-30 - submitted by hand only after `lock.py check` reports OPEN; see reports/PHASE3_PROTOCOL_FREEZE.md, section 8.
 # Phase 3: TEST evaluation with the frozen gates. Nothing is fitted, calibrated or selected here.
 #   1. IMG: nnU-Net test inference (Phase 0 checkpoints of results/phase3_checkpoints.tsv, seeds 1001-1003, both
 #      datasets; imagesTs), float32 probabilities, masks and per-case scores (src/phase3/infer_img.py --split test)

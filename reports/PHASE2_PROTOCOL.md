@@ -1,6 +1,8 @@
-# Phase 2 — Protocol (DRAFT, not frozen)
+# Phase 2 — Protocol (FROZEN 2026-10-30)
 
-Status: 2026-10-27, **draft**.
+Status: **frozen on 2026-10-30** with [PHASE2_PROTOCOL_FREEZE.md](PHASE2_PROTOCOL_FREEZE.md) (record
+`configs/phase2_frozen/phase2_lock.json`); not changed after the freeze. The status notes below are those of
+the drafting stage (2026-10-27).
 - **Covered so far:** Milestone 2.1 text work, i.e. checkpoints, text attributes, conditions and the lock.
 - **Still open:**
   - the inference settings check, the C0 reconciliation and the tolerance rule (after the text-path job);
