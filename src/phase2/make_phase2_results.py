@@ -4,6 +4,12 @@ Tables (between <!-- BEGIN NAME --> and <!-- END NAME -->; a bare <!-- NAME --> 
   RECONCILE   results/phase2_test_c0_reconciliation.csv (P2-2)
   MAIN        results/phase2_main_results_test.csv: Dice mean +- SD over the 3 per-seed image means, in points
   PAIRWISE    results/phase2_pairwise_results_test.csv: the 11 comparisons, unit-weighted delta, 95% t-CI, Holm
+  VALTEST     validation vs test unit-weighted deltas of the 11 comparisons (phase2_pairwise_results_val.csv)
+  SEVERITY    results/phase2_severity_results_test.csv (Task 2.6, attribute distance on S)
+  ATTR        results/phase2_severity_by_attribute_test.csv (harm by changed-attribute combination)
+  SUSCEPT     results/phase2_susceptibility_test.csv (Task 2.7)
+  C2CHANGE    results/phase2_c2_change_test.csv (C0 vs C2 change)
+  D6          results/phase2_d6_sensitivity_test.csv (MosMed without the scope-conflict images)
 The Phase 3 go / no-go rule files of the test split are listed in the report but never tabulated here.
 Usage:  python src/phase2/make_phase2_results.py
 """
@@ -62,7 +68,61 @@ def main():
                           "Holm < 0.05": g["significant_holm_0.05"],
                           "Exploratory": g.exploratory})
         pw.append(f"**{ds}**\n\n" + md(t))
+    k = ["dataset", "method", "comparison"]
+    V = pd.read_csv(R("phase2_pairwise_results_val.csv"))[k + ["unit_weighted_delta", "significant_holm_0.05"]]
+    VT = V.merge(P[k + ["unit_weighted_delta", "significant_holm_0.05"]], on=k, suffixes=("_val", "_test"))
+    vt = []
+    for ds, g in VT.groupby("dataset", sort=False):
+        same = (g.unit_weighted_delta_val > 0) == (g.unit_weighted_delta_test > 0)
+        same_h = g["significant_holm_0.05_val"] == g["significant_holm_0.05_test"]
+        t = pd.DataFrame({"Method": g.method, "Comparison": g.comparison,
+                          "Validation Δ": (100 * g.unit_weighted_delta_val).map("{:+.2f}".format),
+                          "Holm < 0.05 (val)": g["significant_holm_0.05_val"],
+                          "Test Δ": (100 * g.unit_weighted_delta_test).map("{:+.2f}".format),
+                          "Holm < 0.05 (test)": g["significant_holm_0.05_test"],
+                          "Same sign": same, "Same Holm decision": same_h})
+        vt.append(f"**{ds}**: same sign in {int(same.sum())} of {len(g)}; same Holm decision in "
+                  f"{int(same_h.sum())} of {len(g)} (validation {int(g['significant_holm_0.05_val'].sum())}, "
+                  f"test {int(g['significant_holm_0.05_test'].sum())} with Holm p < 0.05)\n\n" + md(t))
+    S6 = pd.read_csv(R("phase2_severity_results_test.csv"))
+    pt = lambda x: f"{100 * x:+.2f}"  # noqa: E731
+    sev = pd.DataFrame({"Dataset": S6.dataset, "Method": S6.method, "Images in S": S6.n_images_S,
+                        "Units": S6.n_units_S, "Coverage": S6.coverage_S.map("{:.1%}".format),
+                        "C0": (100 * S6.mean_C0).map("{:.2f}".format), "C4": (100 * S6.mean_C4).map("{:.2f}".format),
+                        "C5": (100 * S6.mean_C5).map("{:.2f}".format), "C6": (100 * S6.mean_C6).map("{:.2f}".format),
+                        **{f"C0−{c} unit [95% CI]": [f"{pt(r[f'unit_delta_C0-{c}'])} [{pt(r[f'unit_ci95_low_C0-{c}'])}, "
+                                                    f"{pt(r[f'unit_ci95_high_C0-{c}'])}]" for _, r in S6.iterrows()]
+                           for c in ("C4", "C5", "C6")}})
+    A = pd.read_csv(R("phase2_severity_by_attribute_test.csv"))
+    attr = A.pivot_table(index=["dataset", "condition", "changed_attributes", "n_donor_pairs", "n_targets"],
+                         columns="method", values="mean_harm", sort=False).reset_index()
+    attr = pd.DataFrame({"Dataset": attr.dataset, "Condition": attr.condition, "Changed": attr.changed_attributes,
+                         "Donor pairs": attr.n_donor_pairs, "Targets": attr.n_targets,
+                         **{m: attr[m].map(pt) for m in ("LViT-T", "RecLMIS", "DD-CMD")}})
+    U = pd.read_csv(R("phase2_susceptibility_test.csv"))
+    um, up = U[U.kind == "method"], U[U.kind == "pair"]
+    sus_m = pd.DataFrame({"Dataset": um.dataset, "Method": um.method_a, "Images": um.n_images, "Units": um.n_units,
+                          "C0": (100 * um.C0).map("{:.2f}".format), "C0−C1": um["C0-C1"].map(pt),
+                          "C1−C6": um["C1-C6"].map(pt), "H = C0−C6": um.H.map(pt)})
+    sus_p = pd.DataFrame({"Dataset": up.dataset, "Pair": up.method_a + " − " + up.method_b,
+                          "ΔH image": up.image_delta_H.map(pt), "ΔH unit [95% CI]":
+                          [f"{pt(a)} [{pt(b)}, {pt(c)}]" for a, b, c in zip(up.unit_delta_H, up.unit_ci95_low, up.unit_ci95_high)]})
+    C2 = pd.read_csv(R("phase2_c2_change_test.csv"))
+    c2 = pd.DataFrame({"Dataset": C2.dataset, "Method": C2.method, "Images": C2.n_images,
+                       "Mean |ΔDice|": (100 * C2.mean_abs_dDice).map("{:.2f}".format),
+                       "Mean signed C0−C2": C2.mean_signed_dDice.map(pt),
+                       "Masks changed": C2.frac_mask_changed.map("{:.1%}".format),
+                       "Changed > 4 px (DD-CMD)": C2.frac_mask_changed_gt4px.map(lambda x: "" if pd.isna(x) else f"{x:.1%}"),
+                       "Empty flips (per seed)": C2.empty_flips_per_seed})
+    D6 = pd.read_csv(R("phase2_d6_sensitivity_test.csv"))
+    d6 = pd.DataFrame({"Method": D6.method, "Comparison": D6.comparison,
+                       "All images (273) Δ unit": D6.unit_weighted_delta_all.map(pt),
+                       f"Without the {int(D6.d6_images_excluded.iloc[0])} D6 images Δ unit": D6.unit_weighted_delta_without_d6.map(pt)})
     s = open(DOC).read()
+    for name, t in (("VALTEST", "\n\n".join(vt)), ("SEVERITY", md(sev)), ("ATTR", md(attr)),
+                    ("SUSCEPT", md(sus_m) + "\n\n" + md(sus_p)), ("C2CHANGE", md(c2)), ("D6", md(d6))):
+        if f"<!-- {name} -->" in s or f"<!-- BEGIN {name} -->" in s:
+            s = put(s, name, t)
     s = put(s, "RECONCILE", md(rec))
     s = put(s, "MAIN", "\n\n".join(parts))
     s = put(s, "PAIRWISE", "\n\n".join(pw))
