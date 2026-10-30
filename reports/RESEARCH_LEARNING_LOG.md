@@ -5,7 +5,8 @@ asked, mistakes that were found (including mistakes in AI-assisted advice), how 
 rule I took away from each. It covers the training stage (BUSI, Tasks 1–8) and Phases 0, 1 and 2 of this
 project.
 
-Last updated: 2026-10-27 (Phase 2 in progress; reflections E1–E3 added).
+Last updated: 2026-10-30 (reflection E4 and principle 12 added). Part D still describes Phase 2 as in
+progress; the Phase 2 and Phase 3 test results will be added later.
 
 ---
 
@@ -279,6 +280,28 @@ the baselines ourselves, score every method with one evaluator, and check what e
   small-sample results exploratory; do not read meaning into small differences; fix the analysis before
   seeing the results.
 
+### E4. Look for the root cause and a breakthrough, not a list of fixes
+
+- **What happened.** After the Phase 3 test, I asked how the gate's limitations could be improved. The first
+  answer was a list of reasonable fixes: more features, a stronger classifier, a stricter calibration,
+  per-dataset thresholds, fewer collinear features. Each would help a little; none would change the picture.
+  Only when I asked what would really be a breakthrough did the root cause appear.
+- **The root cause.** The limit was the design itself, choosing between two predictions, not how well the
+  choice was tuned. Under C6 (a fully mismatched report), even a perfect selector that knows the answer (the
+  ORACLE) reaches only about 81 Dice, 1.3–1.5 points above nnU-Net alone (79.7). Switching away from the
+  report also throws away what a correct report is worth (81.7–84.8 Dice with the original report). No better
+  switch can go far beyond that ceiling.
+- **A different direction.** Instead of discarding a wrong report, correct it. The reports follow a fixed
+  template (scope, count, location); Phase 2 showed that the harm comes almost entirely from the location; and
+  the location can be read from an image-only mask. The ceiling of this approach is the performance with a
+  correct report, above the perfect selector. This is an idea to be tested on validation, not a result.
+- **Lesson:**
+  - before improving a method, work out its ceiling (what even its ideal version could reach) and why the gap
+    exists;
+  - if the ceiling itself is too low, change the approach instead of tuning it;
+  - my own earlier findings (here, that the location drives the harm) are a good source of new directions;
+  - aim for a breakthrough: ask "what is the root cause?" every time, not only "what else can we try?".
+
 ---
 
 ## Part F — Principles I now follow
@@ -296,3 +319,5 @@ the baselines ourselves, score every method with one evaluator, and check what e
 9. **A convincing explanation is not evidence.** Ask for checkable evidence, not "are you sure?".
 10. **Read a paper as the authors' best case.** Check the code, the baselines and the metrics yourself.
 11. **Count independent units, not images.** With few units, conclusions are exploratory.
+12. **Find the root cause and the ceiling before improving.** If even the ideal version of a method cannot
+    solve the problem, change the approach, not its settings.
