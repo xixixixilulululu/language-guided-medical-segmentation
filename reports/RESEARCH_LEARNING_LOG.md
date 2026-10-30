@@ -298,13 +298,14 @@ the baselines ourselves, score every method with one evaluator, and check what e
     using nnU-Net. They are far below the ceiling, so the ceiling is not what limits them now. What limits them
     is that they do not recognise a wrong report and do not switch when they should.
   - **"Correcting" a wrong report cannot bring back the information.** A correct report is worth 2–5 points
-    over nnU-Net (81.7–84.8 Dice) because a person wrote down where the lesions are. Once the report is wrong,
+    over nnU-Net (81.7–84.8 Dice), largely because it states where the lesions are (an interpretation,
+    consistent with the large loss when the text is removed). Once the report is wrong,
     that information is not in the input any more. A location derived from nnU-Net's mask carries only
     nnU-Net's own opinion. Whether feeding it back to the language-guided model helps is an open question, not
     a ceiling of 82–85.
 - **The root cause, as far as I can tell now.** The gates decide only from the two segmentations and never
-  look at what the report says. So when the two segmentations disagree, they cannot tell whether the report
-  or nnU-Net is wrong.
+  look at what the report says. So when the two segmentations disagree, they cannot reliably tell whether the
+  report or nnU-Net is wrong.
   - **C1 shows it most clearly.** With no text at all, the trivial rule "no text → nnU-Net" gives 79.7; the
     gates give 65–74. C1 is only an illustration, since a real system would apply that rule anyway. The real
     target is the wrong reports (C4–C6).
@@ -312,7 +313,9 @@ the baselines ourselves, score every method with one evaluator, and check what e
     - The existing gate signals separate clean (C0) from fully wrong (C6) reports only moderately: AUROC
       0.68–0.76.
     - When the two masks strongly disagree under the clean report (mask Dice < 0.3, 2.5–4% of the rows), the
-      language-guided model is still the better one in 49–79% of these rows.
+      language-guided model is still the better one in 49–79% of these rows. The share depends on the cutoff
+      (35–85% for mask Dice below 0.5 to 0.1); the point is that a strong disagreement alone does not say which
+      side is wrong.
     - Under C6, in the rows where switching is clearly right (LANG < 0.3, nnU-Net > 0.6), LR-Gate switches only
       33–53%.
 - **Direction now (an idea to test on validation, not a result).** Give the gate a signal of whether the
@@ -322,8 +325,8 @@ the baselines ourselves, score every method with one evaluator, and check what e
     switches under the clean report come with a poor nnU-Net mask (Dice < 0.5), which such a rule would also
     flag.
   - **A small classifier trained to recognise mismatch.** Train it on the training split with real and swapped
-    reports, so that it learns directly whether a report fits an image. Its errors are not tied to nnU-Net's
-    segmentation. Its risk is that it learns how the benchmark swaps reports, which may differ from real
+    reports, so that it learns directly whether a report fits an image. Its errors are not directly tied to
+    nnU-Net's segmentation. Its risk is that it learns how the benchmark swaps reports, which may differ from real
     report errors.
   - **The first measurement** is how well each signal separates C0 from C4–C6 on validation, compared with
     0.68–0.76 now.
