@@ -1,0 +1,172 @@
+{
+  "split": "test",
+  "outcome": "basis for Phase 3",
+  "repeated_signal": [
+    [
+      "MosMedData+",
+      "DD-CMD"
+    ],
+    [
+      "MosMedData+",
+      "RecLMIS"
+    ],
+    [
+      "QaTa-COV19",
+      "DD-CMD"
+    ],
+    [
+      "QaTa-COV19",
+      "LViT-T"
+    ],
+    [
+      "QaTa-COV19",
+      "RecLMIS"
+    ]
+  ],
+  "classification": [
+    {
+      "dataset": "QaTa-COV19",
+      "method": "LViT-T",
+      "comparison": "C0-C5",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "LViT-T",
+      "comparison": "C0-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "LViT-T",
+      "comparison": "C1-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "LViT-T",
+      "comparison": "C1-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "RecLMIS",
+      "comparison": "C0-C5",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "RecLMIS",
+      "comparison": "C0-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "RecLMIS",
+      "comparison": "C1-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "RecLMIS",
+      "comparison": "C1-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "DD-CMD",
+      "comparison": "C0-C5",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "DD-CMD",
+      "comparison": "C0-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "DD-CMD",
+      "comparison": "C1-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "QaTa-COV19",
+      "method": "DD-CMD",
+      "comparison": "C1-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "LViT-T",
+      "comparison": "C0-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "LViT-T",
+      "comparison": "C0-C6",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "LViT-T",
+      "comparison": "C1-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "LViT-T",
+      "comparison": "C1-C6",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "RecLMIS",
+      "comparison": "C0-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "RecLMIS",
+      "comparison": "C0-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "RecLMIS",
+      "comparison": "C1-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "RecLMIS",
+      "comparison": "C1-C6",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "DD-CMD",
+      "comparison": "C0-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "DD-CMD",
+      "comparison": "C0-C6",
+      "classification": "repeated signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "DD-CMD",
+      "comparison": "C1-C5",
+      "classification": "no signal"
+    },
+    {
+      "dataset": "MosMedData+",
+      "method": "DD-CMD",
+      "comparison": "C1-C6",
+      "classification": "no signal"
+    }
+  ]
+}
