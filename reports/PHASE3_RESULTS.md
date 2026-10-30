@@ -334,8 +334,8 @@ row; ties by method order (LViT-T, RecLMIS, DD-CMD), sample id, donor variant.
 The four cases are extremes by construction; they show what the errors look like, not how often they occur
 (section 4.7 gives the rates). In A, the LViT-T prediction under the wrong report is empty (Dice 0.0) and the
 switch recovers nnU-Net's 96.8; in B and C, the switch replaces a good LANG mask (70.0; 95.2 under the original
-text) by a poor nnU-Net mask (0.0; 30.9); in D, RecLMIS under the wrong report misses both lungs (0.3), nnU-Net
-reaches 96.8, and the gate stays with LANG.
+text) by a poor nnU-Net mask (0.0; 30.9); in D, RecLMIS under the wrong report predicts almost no foreground (Dice 0.3)
+while the ground truth covers both lung fields; nnU-Net reaches 96.8, and the gate stays with LANG.
 
 ![Cases](figures/phase3/fig5_cases.png)
 
@@ -403,15 +403,21 @@ better image-only result. Nothing here shows that a gate can tell whether a clin
   CIs that include 0. The ORACLE headroom is 1.90–8.92 points, so the gates do not use it: their thresholds were
   set on QaTa feature distributions, and MosMed's LANG / IMG disagreement differs. This is the same as on
   validation. No MosMed-specific threshold was set (by protocol).
-- Validation and test agree: the GATE_CAL primary values (C4 +1.68 to +2.32, C5 +0.97 to +1.37, C6 +4.44 to
-  +7.64) are of the same size as on test (section 4.2).
+- Validation and test, primary comparisons (LR-Gate − LANG): C4 and C6 are of similar size on GATE_CAL
+  (C4 +1.68 to +2.32, C6 +4.44 to +7.64) and on test (C4 +1.36 to +2.26, C6 +3.74 to +6.53). **C5 is larger on
+  test** (+1.44 to +2.99) than on GATE_CAL (+0.97 to +1.37); the largest difference is LViT-T (+2.99 on test
+  versus +0.97 on GATE_CAL).
 
 ### 5.3 Cost (question 8)
 
 - Per image (Task 3.8, job 391), a gate runs both models: LViT-T 50.15 → 82.64 (LR) / 83.26 (D) ms, RecLMIS
-  21.97 → 60.58 / 61.49 ms, DD-CMD 19.81 → 53.56 / 53.82 ms; peak allocated memory +80 to +82 MB
-  (LViT-T +80.5, RecLMIS +80.0, DD-CMD +81.6), at most 1120 MB reserved. The features and the LR score cost < 1 ms; the extra time is the
-  nnU-Net pass (30.35 ms alone).
+  21.97 → 60.58 (LR) / 61.49 (D) ms, DD-CMD 19.81 → 53.82 (LR) / 53.56 (D) ms; peak allocated memory +80 to
+  +82 MB (LViT-T +80.5, RecLMIS +80.0, DD-CMD +81.6), at most 1120 MB reserved.
+- Most of the extra time is the nnU-Net pass (IMG only: 30.35 ms). A gate takes 2.1–9.2 ms more than
+  "LANG only + IMG only" added together: LViT-T +2.1 (LR) / +2.8 (D), RecLMIS +8.3 / +9.2, DD-CMD +3.7 / +3.4.
+  The modes were measured in separate processes, so this remainder cannot be attributed exactly (feature
+  computation, data handling, process-to-process variation). The time of the features alone was not measured;
+  D-Gate (F1 only) and LR-Gate (F1–F5 + LR score) differ by at most 1 ms in mean latency.
 - The measured benefit is +1.36 to +6.53 points under C4–C6 (and +1.74 to +2.75 under C1) against −0.17 to
   −0.30 points under C0 / C2. Whether that justifies 1.7–2.8 times the latency depends on how often reports are
   missing or wrong in use, which this benchmark does not measure. If the reports are often unreliable, IMG alone
