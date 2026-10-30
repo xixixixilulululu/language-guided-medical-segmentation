@@ -1,0 +1,58 @@
+[
+  {
+    "case": "A",
+    "rule": "C6, switched, largest gain (beneficial)",
+    "method": "LViT-T",
+    "sample_id": "sub-S09376_ses-E17915_run-1_bp-chest_vp-ap_dx",
+    "condition": "C6",
+    "variant_id": "d3",
+    "switched": true,
+    "dice_lang": 0.0,
+    "dice_img": 0.968274,
+    "hd95_lang": 316.783838,
+    "hd95_img": 2.324922,
+    "n_candidates": 2186
+  },
+  {
+    "case": "B",
+    "rule": "C6, switched, smallest gain (harmful)",
+    "method": "RecLMIS",
+    "sample_id": "sub-S09338_ses-E20659_run-1_bp-chest_vp-ap_cr",
+    "condition": "C6",
+    "variant_id": "d1",
+    "switched": true,
+    "dice_lang": 0.699507,
+    "dice_img": 0.0,
+    "hd95_lang": 89.883764,
+    "hd95_img": 144.971721,
+    "n_candidates": 2186
+  },
+  {
+    "case": "C",
+    "rule": "C0, switched, smallest gain (harmful)",
+    "method": "DD-CMD",
+    "sample_id": "sub-S09468_ses-E19891_run-1_bp-chest_vp-pa_cr",
+    "condition": "C0",
+    "variant_id": "0",
+    "switched": true,
+    "dice_lang": 0.952239,
+    "dice_img": 0.308939,
+    "hd95_lang": 7.0,
+    "hd95_img": 80.597709,
+    "n_candidates": 50
+  },
+  {
+    "case": "D",
+    "rule": "C6, not switched, largest gain (missed)",
+    "method": "RecLMIS",
+    "sample_id": "sub-S09406_ses-E18791_run-1_bp-chest_vp-ap_dx",
+    "condition": "C6",
+    "variant_id": "d3",
+    "switched": false,
+    "dice_lang": 0.002676,
+    "dice_img": 0.967943,
+    "hd95_lang": 183.093957,
+    "hd95_img": 2.828427,
+    "n_candidates": 16543
+  }
+]
