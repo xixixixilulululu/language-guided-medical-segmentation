@@ -539,3 +539,15 @@ start	2026-10-30 14:14:46	392	infer.py	QaTa-COV19	ddcmd	1003	C6/d2	b593d7fa50acd
 end	2026-10-30 14:15:14	392	infer.py	QaTa-COV19	ddcmd	1003	C6/d2	b593d7fa50acd86c9f97a5d6f755c876fc82576e	33d641ec0452d513d5b5da4b1538b315087e055e	ok
 start	2026-10-30 14:15:14	392	infer.py	QaTa-COV19	ddcmd	1003	C6/d3	b593d7fa50acd86c9f97a5d6f755c876fc82576e	33d641ec0452d513d5b5da4b1538b315087e055e	ok
 end	2026-10-30 14:15:42	392	infer.py	QaTa-COV19	ddcmd	1003	C6/d3	b593d7fa50acd86c9f97a5d6f755c876fc82576e	33d641ec0452d513d5b5da4b1538b315087e055e	ok
+start	2026-10-30 14:39:10	394	phase3/infer_img.py	QaTa-COV19	nnunet	1001	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+end	2026-10-30 14:40:33	394	phase3/infer_img.py	QaTa-COV19	nnunet	1001	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+start	2026-10-30 14:40:37	394	phase3/infer_img.py	QaTa-COV19	nnunet	1002	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+end	2026-10-30 14:41:53	394	phase3/infer_img.py	QaTa-COV19	nnunet	1002	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+start	2026-10-30 14:41:57	394	phase3/infer_img.py	QaTa-COV19	nnunet	1003	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+end	2026-10-30 14:43:15	394	phase3/infer_img.py	QaTa-COV19	nnunet	1003	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+start	2026-10-30 14:43:18	394	phase3/infer_img.py	MosMedData+	nnunet	1001	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+end	2026-10-30 14:43:32	394	phase3/infer_img.py	MosMedData+	nnunet	1001	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+start	2026-10-30 14:43:35	394	phase3/infer_img.py	MosMedData+	nnunet	1002	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	failed: fatal: unable to access 'https://github.com/xixixixilulululu/language-guided-medical-segmentation.git/': Could not resol
+end	2026-10-30 14:43:50	394	phase3/infer_img.py	MosMedData+	nnunet	1002	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	failed: fatal: unable to access 'https://github.com/xixixixilulululu/language-guided-medical-segmentation.git/': Could not resol
+start	2026-10-30 14:43:53	394	phase3/infer_img.py	MosMedData+	nnunet	1003	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
+end	2026-10-30 14:44:08	394	phase3/infer_img.py	MosMedData+	nnunet	1003	IMG	b593d7fa50acd86c9f97a5d6f755c876fc82576e	fb221cce618994981a0ebf9125f5bcde10a7f98a	ok
