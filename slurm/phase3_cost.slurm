@@ -2,6 +2,8 @@
 # Phase 3, Task 3.8: computational cost per image on a fixed validation subset (src/phase3/cost.py).
 # 64 QaTa validation images (the first in sorted id order), C0 text, seed 1001: LANG only, IMG only (nnU-Net),
 # LANG + IMG + D-Gate and LANG + IMG + LR-Gate for each language model; per-image latency and peak GPU memory.
+# Revised 2026-10-30 (after job 379): one process per method x mode, only that mode's models loaded; 3 warm-up
+# images through the complete path, then the peak counters are reset; allocated and reserved memory reported.
 # Validation only; no gate, threshold or model is changed. Submitted by hand only.
 #SBATCH --job-name=p3_cost
 #SBATCH --partition=gpu
@@ -20,6 +22,14 @@ done
 echo "frozen Phase 1 drivers verified"
 export nnUNet_results=$REPO/runs/nnunet/nnUNet_results_seed1001
 lgms_notify_start
-python src/phase3/cost.py || exit 1
+rm -f runs/phase3/cost/*.json                          # outputs of this job only (merged at the end)
+python src/phase3/cost.py --method nnunet --mode img || exit 1
+for M in lvit reclmis ddcmd; do
+  for MODE in lang dgate lrgate; do
+    echo "=== $(date +%T) $M $MODE"
+    python src/phase3/cost.py --method $M --mode $MODE || exit 1
+  done
+done
+python src/phase3/cost.py --merge || exit 1
 NOTIFY_RESULT="cost table written (results/phase3_computational_cost.csv)"
 echo "done $(date)"

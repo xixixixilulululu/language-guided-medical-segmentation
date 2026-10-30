@@ -217,12 +217,12 @@ clean (C0) test results of Phases 0 and 1 were seen earlier (PHASE2_PROTOCOL_FRE
 | `results/phase3_dgate_thresholds.json` | `df671c1900c82649191175141d73aa4cc7655f77b475c700c8607fa8f1df55bd` |
 | `results/phase3_lr_artifacts.json` | `cecaab140e5f225464e539e8b5076128238155165f3c6533eb5caafabf4260ab` |
 | `slurm/phase3_test.slurm` | `54f092d6386c76eb5707d095ffe0eda61d13c58db2d081231bd61977a53ff4b8` |
-| `reports/PHASE3_SETUP.md` | `83312f5135e9a8399b2c0724b2c7ec3d11b105fd2ed80a6214f3263d66c7fa18` |
+| `reports/PHASE3_SETUP.md` | `63ce157f8be4e3182522fed66c7cdec91b357ac54f6f14fd4de86ff4b9b04b82` |
 <!-- END MANIFEST-PHASE3 -->
 
 ## 11. Open before the freeze
 
 1. The supervisor's reply on the gate constraints (may change section 5; then refit / recalibrate on
    validation and regenerate this file).
-2. Task 3.8 cost run (`slurm/phase3_cost.slurm`); its result is reported, it does not change the gates.
+2. Done: Task 3.8 cost (job 391, PHASE3_SETUP.md section 10); it does not change the gates.
 3. The project lead's check of both drafts; the Phase 3 decision record; `lock.py freeze`.

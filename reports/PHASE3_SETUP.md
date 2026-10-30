@@ -394,12 +394,49 @@ GATE_CAL are reported separately (item 17).
 - Its group-weighted deltas and CIs equal those of `phase3_validation_paired_differences.csv` (Task 3.5)
   exactly, for all 162 shared rows.
 
-**Task 3.8.** `src/phase3/cost.py`, job `slurm/phase3_cost.slurm` (not yet run).
-- Fixed subset: the first 64 QaTa validation sample ids in sorted order, C0 text, seed 1001 checkpoints, 3 untimed
-  warm-up images.
+**Task 3.8.** `src/phase3/cost.py`, job `slurm/phase3_cost.slurm`.
+- Fixed subset: the first 64 QaTa validation sample ids in sorted order, C0 text, seed 1001 checkpoints.
 - Per image, end to end, batch size 1: LANG only; IMG only; LANG + IMG + D-Gate; LANG + IMG + LR-Gate (both
   models and the features). Latency (mean, median, p95) and peak GPU memory per mode.
+- **Measurement design** (revised 2026-10-30):
+  - one process per method × mode, with only the models that mode needs (LANG only: the language model; IMG
+    only: nnU-Net; the gates: both models and the gate parameters);
+  - 3 warm-up images through the complete path (inference + features + gate), then `torch.cuda.synchronize()`
+    and `torch.cuda.reset_peak_memory_stats()`, then the 64 timed images, with a synchronize before and after
+    each one;
+  - memory reported as `max_memory_allocated` and `max_memory_reserved`.
 - Output `results/phase3_computational_cost.csv`.
+- **First measurement (job 379, 2026-10-28) withdrawn for memory.**
+  - Its peak memory of the D-Gate mode was inflated, e.g. LViT-T 66,600 MB against 395 MB for LR-Gate.
+  - Cause: all modes of a method ran in one process, the peak was reset before the warm-up images, and
+    D-Gate was the first mode after model loading. One-time allocations of the first calls were therefore
+    counted in the D-Gate peak.
+  - Fix: the design above.
+  - The file is kept as `results/phase3_computational_cost_job379_superseded.csv` and is not used. Its
+    latencies are not used either; the rerun replaces the whole table.
+- **Single-image nnU-Net vs the rerun.** The single-array predictor used for timing differs from the batch
+  rerun by at most 0.00114 (job 379) and 0.00158 (job 391) in probability (8 images each). This affects only
+  the timing path. The gates use the rerun probabilities (`runs/phase3/val/img`), not these.
+- **Result (job 391, 2026-10-30; NVIDIA GB10).** Per image over the 64 images; memory in MB:
+
+| Method | Mode | Mean ms | Median ms | p95 ms | Max allocated | Max reserved |
+|---|---|---:|---:|---:|---:|---:|
+| nnU-Net | IMG only | 30.35 | 29.99 | 33.68 | 108 | 128 |
+| LViT-T | LANG only | 50.15 | 46.89 | 70.41 | 314 | 342 |
+| LViT-T | LANG + IMG + D-Gate | 83.26 | 81.22 | 100.40 | 395 | 438 |
+| LViT-T | LANG + IMG + LR-Gate | 82.64 | 79.08 | 108.40 | 395 | 438 |
+| RecLMIS | LANG only | 21.97 | 21.85 | 23.90 | 1006 | 1040 |
+| RecLMIS | LANG + IMG + D-Gate | 61.49 | 61.64 | 63.54 | 1086 | 1120 |
+| RecLMIS | LANG + IMG + LR-Gate | 60.58 | 60.58 | 62.79 | 1086 | 1120 |
+| DD-CMD | LANG only | 19.81 | 19.71 | 22.59 | 721 | 780 |
+| DD-CMD | LANG + IMG + D-Gate | 53.56 | 54.13 | 56.05 | 802 | 856 |
+| DD-CMD | LANG + IMG + LR-Gate | 53.82 | 53.76 | 56.33 | 802 | 854 |
+
+  - A gate costs about LANG only + IMG only per image (both models run); D-Gate and LR-Gate differ by
+    ≤ 1 ms in mean latency (the features and the LR score are negligible). Peak memory: the gates need the two
+    models together, at most 1120 MB reserved here.
+  - Model loading times are in the file but are not comparable: the first process to load a model read it
+    from disk (11–35 s), later ones from the file cache (1–3 s).
 
 ## 11. Next steps
 
