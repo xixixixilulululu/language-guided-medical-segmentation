@@ -201,8 +201,11 @@ targets eligible for C4, C5 and C6 (`results/phase2_severity_results_test.csv`, 
 | MosMedData+ | DD-CMD | 273 | 9 | 100.0% | 74.85 | 74.48 | 74.42 | 72.67 | +0.72 [-0.12, +1.56] | +0.55 [-0.84, +1.93] | +2.42 [-0.70, +5.54] |
 <!-- END SEVERITY -->
 
-Harm (C0 − Cx, mean over donor pairs) by changed-attribute combination, descriptive
-(`results/phase2_severity_by_attribute_test.csv`):
+Harm by changed-attribute combination, descriptive (`results/phase2_severity_by_attribute_test.csv`), on S, as
+computed by `src/phase2/analyze_phase2_extra.py` (`severity_by_attribute`): for each (target, donor) pair, harm =
+D(C0) − D(Cx, donor), each averaged over the 3 seeds first; then the donor pairs of the given combination are
+averaged within each target, and finally the targets are averaged (image-weighted; "Donor pairs" and
+"Targets" count the pairs and targets of that combination):
 
 <!-- BEGIN ATTR -->
 | Dataset | Condition | Changed | Donor pairs | Targets | LViT-T | RecLMIS | DD-CMD |
@@ -248,7 +251,8 @@ paired differences of H with 95% t-CIs. Secondary, descriptive (`results/phase2_
 
 ## 9. D6 sensitivity check (MosMedData+, pre-specified, descriptive)
 
-MosMed without the images whose stated scope contradicts the sides named (`results/phase2_d6_sensitivity_test.csv`).
+MosMed without the images whose stated scope contradicts the sides named (`results/phase2_d6_sensitivity_test.csv`):
+removing these 37 images leaves 236 of the 273 test images in 7 of the 9 units.
 
 <!-- BEGIN D6 -->
 | Method | Comparison | All images (273) Δ unit | Without the 37 D6 images Δ unit |
@@ -427,11 +431,11 @@ independently verified reports.
 - **QaTa:** 31 of 33 comparisons have the same sign on both splits and 30 of 33 the same Holm decision
   (validation 30, test 29 with Holm p < 0.05). C0 − C1, C0 − C3c, C0 − C4/C5/C6, C1 − C6 and RecLMIS's C0 − C2
   replicate.
-- **What did not replicate** are three "wrong versus no text" comparisons for one- or two-attribute mismatches:
-  RecLMIS C1 − C4 (validation −2.16, significant; test +0.20, not significant), DD-CMD C1 − C4 (+0.13, not
-  significant; +2.19, significant) and DD-CMD C1 − C5 (−1.98, significant; +1.24, not significant; the largest
-  validation–test difference, 3.22 points). These are close to zero and their sign is not stable; they should
-  not be interpreted as a property of the model.
+- **What did not replicate** are three "wrong versus no text" comparisons for one- or two-attribute mismatches.
+  RecLMIS C1 − C4 (validation −2.16, significant; test +0.20, not significant) and DD-CMD C1 − C5 (−1.98,
+  significant; +1.24, not significant; the largest validation–test difference, 3.22 points) **change sign**.
+  DD-CMD C1 − C4 keeps its sign but changes size and significance (+0.13, not significant; +2.19, significant).
+  None of the three should be interpreted as a fixed property of the model.
 - Phase 2's validation findings that motivated Phase 3 (large C0 − C5 / C0 − C6 harms and positive C1 − C6 on
   QaTa) are confirmed on test.
 
