@@ -2,8 +2,9 @@
 
 Status: 2026-11-02. Phases 0–3 are complete.
 
-This document summarises the work so far. It adds no new analysis: every number is taken from the phase reports
-listed in section 10, and each of those numbers was recomputed independently from the result files (section 7).
+This document summarises the work so far. Every number is taken from the phase reports listed in section 10, except
+the descriptive validation diagnostic in section 9, whose script and output are named there. Section 7 says which
+numbers were recomputed independently.
 Dice is given in points (0–100).
 
 ## In one paragraph
@@ -54,7 +55,10 @@ that report is missing or wrong.
 - MosMedData+ is exploratory throughout, because it has few independent units.
 
 **Test protection.**
-- The analysis of each phase was fixed and pushed before its test evaluation.
+- Phase 0: the analysis plan was fixed before the results of the 18 runs were summarised. A few test scores
+  had been seen earlier: pipeline checks, and the U-Net seed-1001 comparison with the LViT paper. They are listed
+  in PHASE0_RESULTS.md, and no setting was changed after them.
+- Phase 1: the analysis was fixed and pushed before the first test evaluation.
 - For Phases 2–3, both protocols were frozen together (commit b593d7f, 27 files with sha256). A lock program
   refused every test run until then.
 
@@ -178,15 +182,15 @@ Findings. Differences are group-weighted over 472–474 patients, with 95% t-CIs
    - The QaTa gates almost never switch: 0–2.1% of the rows.
    - They change Dice by at most 0.63 points, although the oracle headroom is 1.90–8.92 points.
 7. **Cost.** A gate runs both models: 53.6–83.3 ms per image against 19.8–50.2 ms for LANG alone (1.7–2.8 times),
-   and +80 to +82 MB of GPU memory.
+   and +80 to +82 MB of peak GPU memory. Measured on 64 QaTa validation images on one NVIDIA GB10.
 
 ![QaTa Dice by condition](figures/phase3/fig1_qata_dice.png)
 
 The case figure below shows real cases chosen by a fixed rule (QaTa test, seed 1001, LR-Gate):
-- A: the largest gain from a switch;
-- B: the largest loss from a switch;
-- C: the largest loss from a switch under the original report;
-- D: the largest gain that was missed.
+- A: under C6, the switch with the largest gain;
+- B: under C6, the switch with the largest loss;
+- C: under C0, the switch with the largest loss;
+- D: under C6, the largest gain that was missed (no switch).
 
 ![Cases](figures/phase3/fig5_cases.png)
 
@@ -206,12 +210,15 @@ The case figure below shows real cases chosen by a fixed rule (QaTa test, seed 1
 ## 7. How the results were protected and checked
 
 - **Pre-specified analysis.**
-  - Phases 0–1: fixed and pushed before the test evaluation.
+  - Phase 0: fixed before the 18 runs were summarised. The few test scores seen earlier are listed in its report.
+  - Phase 1: fixed and pushed before the test evaluation.
   - Phases 2–3: both protocols frozen together before any counterfactual test run (commit b593d7f). Test runs
     were possible only through a lock program.
   - Each pre-specified analysis was run once, unchanged.
-- **Independent recomputation.** Every reported test number was recomputed from the per-case result files with
-  separate code.
+- **Independent recomputation.** The test Dice values and all test statistics in this summary were recomputed from
+  the per-case result files with separate code. Three kinds of number were taken from the project's own outputs
+  instead: the text audit counts (window, truncation, distinct texts), the mask-change shares under C2, and the cost
+  measurements.
   - Phase 2: 0 differences in 1602 checks of the main table and comparisons, and in 294 further checks.
   - Phase 3: 0 differences in 14,373,709 checks, including the gate decisions recomputed from the frozen
     parameters.
@@ -242,7 +249,11 @@ The case figure below shows real cases chosen by a fixed rule (QaTa test, seed 1
 
 - **Why the gates fall short.** The gates decide only from the two predictions and never read the report.
   - On validation, the current gate signals separate the original reports from fully mismatched ones only
-    moderately (AUROC 0.68–0.76).
+    moderately: AUROC 0.69–0.77 for C6 against C0 on the GATE_CAL part, which was not used to fit the LR. For C4
+    and C5 it is 0.56–0.74.
+  - This is a descriptive diagnostic, computed after the test.
+    - Script: `src/phase3/diagnostics/gate_detection_auroc_cal.py`
+    - Output: `results/phase3_val_gate_detection_auroc_cal.csv`
   - Would a signal of whether the report fits the image do better? Two possible signals:
     - the stated location compared with the location found by nnU-Net;
     - a classifier trained on real versus swapped reports.

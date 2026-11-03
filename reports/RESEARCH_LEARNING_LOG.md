@@ -369,9 +369,12 @@ the baselines ourselves, score every method with one evaluator, and check what e
   - **C1 shows it most clearly.** With no text at all, the trivial rule "no text → nnU-Net" gives 79.7; the
     gates give 65–74. C1 is only an illustration, since a real system would apply that rule anyway. The real
     target is the wrong reports (C4–C6).
-  - **Validation data (development data) support this.**
+  - **Validation data (development data) support this.** These diagnostics were computed after the test.
+    - Script: `src/phase3/diagnostics/gate_detection_val.py`
+    - Output: `results/phase3_val_gate_detection.txt`
     - The existing gate signals separate clean (C0) from fully wrong (C6) reports only moderately: AUROC
-      0.68–0.76.
+      0.68–0.76 on all validation rows. On the GATE_CAL part alone, which was not used to fit the LR, it is
+      0.69–0.77 (`results/phase3_val_gate_detection_auroc_cal.csv`).
     - When the two masks strongly disagree under the clean report (mask Dice < 0.3, 2.5–4% of the rows), the
       language-guided model is still the better one in 49–79% of these rows. The share depends on the cutoff
       (35–85% for mask Dice below 0.5 to 0.1); the point is that a strong disagreement alone does not say which

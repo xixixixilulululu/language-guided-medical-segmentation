@@ -1,0 +1,12 @@
+AUROC wrong-vs-clean: lvit | C4 F1 0.65 | C4 F2 0.62 | C4 F3 0.63 | C4 LR 0.65 | C6 F1 0.72 | C6 F2 0.76 | C6 F3 0.73 | C6 LR 0.68
+  C6 clear-switch rows: 1390/12807 (11%), LR switched 43%
+  rows with F2 (1 - mask Dice) > 0.7: C0 172 (4.0%), LANG better in 49% | C6 1782 (13.9%), LANG better in 10%
+  C0 harmful LR switches: 82, IMG Dice median 0.35, share with IMG < 0.5: 68%
+AUROC wrong-vs-clean: reclmis | C4 F1 0.67 | C4 F2 0.64 | C4 F3 0.66 | C4 LR 0.70 | C6 F1 0.75 | C6 F2 0.75 | C6 F3 0.75 | C6 LR 0.72
+  C6 clear-switch rows: 816/12807 (6%), LR switched 33%
+  rows with F2 (1 - mask Dice) > 0.7: C0 115 (2.7%), LANG better in 78% | C6 1148 (9.0%), LANG better in 16%
+  C0 harmful LR switches: 73, IMG Dice median 0.38, share with IMG < 0.5: 66%
+AUROC wrong-vs-clean: ddcmd | C4 F1 0.68 | C4 F2 0.64 | C4 F3 0.67 | C4 LR 0.66 | C6 F1 0.76 | C6 F2 0.76 | C6 F3 0.76 | C6 LR 0.69
+  C6 clear-switch rows: 748/12807 (6%), LR switched 53%
+  rows with F2 (1 - mask Dice) > 0.7: C0 107 (2.5%), LANG better in 79% | C6 1011 (7.9%), LANG better in 18%
+  C0 harmful LR switches: 88, IMG Dice median 0.51, share with IMG < 0.5: 49%
