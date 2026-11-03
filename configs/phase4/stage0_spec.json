@@ -1,0 +1,609 @@
+{
+  "version": "phase4-stage0-spec-v1",
+  "date": "2026-11-03",
+  "status": "orientation pending supervisor decision; everything else fixed before any spatial score is computed",
+  "plan": {
+    "file": "reports/PHASE4_PLAN.md",
+    "sha256": "f04901bc5bc62f1911aeb804b47ee108815297e65a5b7ea9cc911330225040bd"
+  },
+  "scope": {
+    "dataset": "QaTa-COV19",
+    "split": "val (development data only; test split refused by src/phase4/guard.py)",
+    "language_model": "DD-CMD seed 1001",
+    "img": "nnU-Net seed 1001 (Phase 3 IMG)",
+    "conditions": [
+      "C0",
+      "C2",
+      "C4",
+      "C5",
+      "C6"
+    ]
+  },
+  "sources": {
+    "lang_masks": {
+      "C0": "runs/phase2/val/ddcmd/QaTa-COV19/seed1001/masks_C0_0.npz (job 369)",
+      "C4-C6": "runs/phase2/val/ddcmd/QaTa-COV19/seed1001/masks_C{4,5,6}_d{1,2,3}.npz (job 370)",
+      "C2": "runs/phase3/val/lang/ddcmd/QaTa-COV19/seed1001/masks_C2_0.npz (job 371, the Phase 3 rerun scored by Phase 3; not the job 370 C2 masks)"
+    },
+    "img_masks": "runs/phase3/val/img/nnunet/QaTa-COV19/seed1001/masks.npz (job 371; packed bits, probability > 0.5)",
+    "features": "results/phase3_reliability_features.csv.gz (F1-F5, unchanged)",
+    "dice": {
+      "lang": "results/phase2_val_per_case.csv.gz (C0, C4-C6), results/phase3_lang_rerun_val_per_case.csv.gz (C2)",
+      "img": "results/phase3_img_val_per_case.csv.gz"
+    },
+    "groups_and_partitions": "results/phase3_gate_partitions.csv (GATE_FIT / GATE_CAL, Phase 3 groups; not regrouped)",
+    "manifest": "src/phase2/conditions.py build('QaTa-COV19', 'val'), eligible rows (frozen Phase 2 rules)",
+    "location": "src/phase2/texts.py attributes('QaTa-COV19', 'val'), field 'location', including the frozen D5 typo rules; for C4-C6 rows the donor's own location (the counterfactual text equals the donor's report)"
+  },
+  "grid": {
+    "array": "common 224 x 224; row 0 = top, column 0 = image left; LANG, IMG and ground truth share this layout (no flip, transpose or rotation at evaluation)",
+    "column_split": 112,
+    "columns": {
+      "image_left": [
+        0,
+        111
+      ],
+      "image_right": [
+        112,
+        223
+      ]
+    },
+    "row_edges": [
+      0,
+      75,
+      149,
+      224
+    ],
+    "rows": {
+      "upper": [
+        0,
+        74
+      ],
+      "middle": [
+        75,
+        148
+      ],
+      "lower": [
+        149,
+        223
+      ]
+    },
+    "row_rule": "edges round(224 k / 3) for k = 1, 2 -> 75, 149; cells are 75 / 74 / 75 rows",
+    "note": "image-coordinate proxy, not a lung-zone segmentation; ground-truth masks are not used to define regions"
+  },
+  "orientation": {
+    "value": "pending supervisor decision",
+    "options_in_code": {
+      "patient_left_on_image_right": "patient left = image-right half",
+      "patient_left_on_image_left": "patient left = image-left half",
+      "max_of_both": "both mappings computed, the higher agreement kept per row"
+    },
+    "rule": "set once by a separate commit before any spatial score is computed; never chosen from scores"
+  },
+  "lookup": {
+    "rule": "location 'left:<zones>;right:<zones>' (patient sides); zones of one side are united; 'all' = upper + middle + lower of that side; the cells of both sides are united",
+    "unavailable": "empty / not parsed location, any side 'unspecified', an unknown zone token",
+    "table_patient_side_zones": {
+      "(empty: not parsed)": {
+        "unavailable": "location_not_parsed"
+      },
+      "left:all": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:all;right:all": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:all;right:lower": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:all;right:middle": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "middle"
+        ]
+      },
+      "left:all;right:middle+lower": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:all;right:unspecified": {
+        "unavailable": "location_unspecified"
+      },
+      "left:all;right:upper": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper"
+        ]
+      },
+      "left:all;right:upper+lower": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:all;right:upper+middle": {
+        "left": [
+          "upper",
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "middle"
+        ]
+      },
+      "left:lower": {
+        "left": [
+          "lower"
+        ]
+      },
+      "left:lower;right:all": {
+        "left": [
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:lower;right:lower": {
+        "left": [
+          "lower"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:lower;right:middle": {
+        "left": [
+          "lower"
+        ],
+        "right": [
+          "middle"
+        ]
+      },
+      "left:lower;right:middle+lower": {
+        "left": [
+          "lower"
+        ],
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:lower;right:upper": {
+        "left": [
+          "lower"
+        ],
+        "right": [
+          "upper"
+        ]
+      },
+      "left:lower;right:upper+lower": {
+        "left": [
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:middle": {
+        "left": [
+          "middle"
+        ]
+      },
+      "left:middle+lower": {
+        "left": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:middle+lower;right:all": {
+        "left": [
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:middle+lower;right:lower": {
+        "left": [
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:middle+lower;right:middle": {
+        "left": [
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "middle"
+        ]
+      },
+      "left:middle+lower;right:middle+lower": {
+        "left": [
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:middle+lower;right:upper+lower": {
+        "left": [
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:middle+lower;right:upper+middle": {
+        "left": [
+          "middle",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "middle"
+        ]
+      },
+      "left:middle;right:all": {
+        "left": [
+          "middle"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:middle;right:lower": {
+        "left": [
+          "middle"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:middle;right:middle": {
+        "left": [
+          "middle"
+        ],
+        "right": [
+          "middle"
+        ]
+      },
+      "left:middle;right:upper+lower": {
+        "left": [
+          "middle"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:upper": {
+        "left": [
+          "upper"
+        ]
+      },
+      "left:upper+lower": {
+        "left": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:upper+lower;right:all": {
+        "left": [
+          "upper",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:upper+lower;right:lower": {
+        "left": [
+          "upper",
+          "lower"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:upper+lower;right:middle+lower": {
+        "left": [
+          "upper",
+          "lower"
+        ],
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:upper+lower;right:upper+lower": {
+        "left": [
+          "upper",
+          "lower"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:upper+middle": {
+        "left": [
+          "upper",
+          "middle"
+        ]
+      },
+      "left:upper+middle;right:all": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:upper+middle;right:lower": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:upper+middle;right:middle": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "middle"
+        ]
+      },
+      "left:upper+middle;right:middle+lower": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:upper+middle;right:upper": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "upper"
+        ]
+      },
+      "left:upper+middle;right:upper+lower": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:upper+middle;right:upper+middle": {
+        "left": [
+          "upper",
+          "middle"
+        ],
+        "right": [
+          "upper",
+          "middle"
+        ]
+      },
+      "left:upper;right:all": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "left:upper;right:lower": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "lower"
+        ]
+      },
+      "left:upper;right:middle": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "middle"
+        ]
+      },
+      "left:upper;right:middle+lower": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "left:upper;right:upper": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "upper"
+        ]
+      },
+      "left:upper;right:upper+lower": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "upper",
+          "lower"
+        ]
+      },
+      "left:upper;right:upper+middle": {
+        "left": [
+          "upper"
+        ],
+        "right": [
+          "upper",
+          "middle"
+        ]
+      },
+      "right:all": {
+        "right": [
+          "upper",
+          "middle",
+          "lower"
+        ]
+      },
+      "right:lower": {
+        "right": [
+          "lower"
+        ]
+      },
+      "right:middle": {
+        "right": [
+          "middle"
+        ]
+      },
+      "right:middle+lower": {
+        "right": [
+          "middle",
+          "lower"
+        ]
+      },
+      "right:upper": {
+        "right": [
+          "upper"
+        ]
+      },
+      "right:upper+lower": {
+        "right": [
+          "upper",
+          "lower"
+        ]
+      }
+    },
+    "coverage_of_table": "every location value of the QaTa validation targets and of every C4-C6 donor row of the frozen manifest"
+  },
+  "unavailable_rules": {
+    "order": [
+      "lateral_view",
+      "img_empty",
+      "location_not_parsed",
+      "location_unspecified",
+      "location_unknown_token"
+    ],
+    "lateral_view": "file name contains '_vp-ll_' (project lead's rule 2026-11-03); covid_* and sub-* without a view token are kept",
+    "img_empty": "IMG binary mask has no lesion pixel",
+    "location_not_parsed": "Phase 2 location empty (parse failed)",
+    "location_unspecified": "a side named without zone",
+    "location_unknown_token": "a token outside left/right and upper/middle/lower/all",
+    "treatment": "unavailable is not 0 and not 'incorrect'; such rows keep the F1-F5 (Baseline LR) decision in later stages"
+  },
+  "score": {
+    "spatial_agreement": "IMG lesion pixels in the report-allowed cells / all IMG lesion pixels",
+    "spatial_mismatch": "1 - spatial_agreement",
+    "mask": "frozen IMG binary mask only (never the ground truth, never LANG)"
+  },
+  "stage0": {
+    "denominator": "QaTa validation targets eligible (frozen manifest) for C0, >= 1 location-only C4 donor (changed_attributes == 'location') and >= 1 C6 donor",
+    "denominator_counts": {
+      "all": {
+        "images": 1421,
+        "groups": 1186
+      },
+      "GATE_FIT": {
+        "images": 851,
+        "groups": 708
+      },
+      "GATE_CAL": {
+        "images": 570,
+        "groups": 478
+      }
+    },
+    "eligible_target": "not lateral, IMG nonempty, C0 location mappable, >= 1 mappable location-only C4 donor, >= 1 mappable C6 donor",
+    "eligible_group": "a group with at least one eligible denominator image (groups with all images eligible are reported descriptively)",
+    "criterion": "GO only if the orientation is established by the supervisor-approved rule without medical judgment AND eligible images >= 80% and eligible groups >= 80% of the denominator (whole validation set); GATE_FIT and GATE_CAL are reported separately",
+    "fixed": "the denominator is not changed after any outcome is seen"
+  },
+  "stage1": {
+    "data": "Stage 0-eligible targets in GATE_FIT only; DD-CMD seed 1001; frozen C0, C4 location-only and C6 assignments",
+    "per_target_scores": "C0: the target's score; C4: mean of the available location-only C4 donor scores; C6: mean of the available C6 donor scores",
+    "auroc": "image level, two values per target (C0 label 0, donor-averaged C4 label 1), score = spatial_mismatch, sklearn roc_auc_score (ties count one half); descriptive repeat for C0 vs donor-averaged C6",
+    "paired_difference": "image-weighted mean of [C4 - C0] and of [C6 - C0] spatial_mismatch over the same targets; group-level summaries reported descriptively",
+    "criterion": "continue only if AUROC(C0 vs C4 location-only) >= 0.65 AND mean(C4 - C0) > 0 AND mean(C6 - C0) > 0; engineering screening criteria, not significance tests",
+    "no_rescue": "no alternative grid, mapping, mask threshold or feature after a failure"
+  }
+}
