@@ -1,0 +1,66 @@
+spec_version,table,part,item,numerator,denominator,ratio
+phase4-stage0-spec-v1,coverage,all,images,1384,1421,0.9740
+phase4-stage0-spec-v1,coverage,all,groups (>= 1 eligible image),1156,1186,0.9747
+phase4-stage0-spec-v1,coverage_descriptive,all,groups (all images eligible),1150,1186,0.9696
+phase4-stage0-spec-v1,unavailable_reason_any,all,lateral_view,32,1421,0.0225
+phase4-stage0-spec-v1,unavailable_reason_any,all,img_empty,4,1421,0.0028
+phase4-stage0-spec-v1,unavailable_reason_any,all,c0_location_not_parsed,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,all,c0_location_unspecified,1,1421,0.0007
+phase4-stage0-spec-v1,unavailable_reason_any,all,c0_location_unknown_token,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,all,no_mappable_c4_location_only_donor,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,all,no_mappable_c6_donor,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,all,lateral_view,32,1421,0.0225
+phase4-stage0-spec-v1,unavailable_reason_first,all,img_empty,4,1421,0.0028
+phase4-stage0-spec-v1,unavailable_reason_first,all,c0_location_not_parsed,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,all,c0_location_unspecified,1,1421,0.0007
+phase4-stage0-spec-v1,unavailable_reason_first,all,c0_location_unknown_token,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,all,no_mappable_c4_location_only_donor,0,1421,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,all,no_mappable_c6_donor,0,1421,0.0000
+phase4-stage0-spec-v1,donor_distribution,all,mappable location-only C4 donors = 1,5,1421,0.0035
+phase4-stage0-spec-v1,donor_distribution,all,mappable location-only C4 donors = 2,64,1421,0.0450
+phase4-stage0-spec-v1,donor_distribution,all,mappable location-only C4 donors = 3,1352,1421,0.9514
+phase4-stage0-spec-v1,donor_distribution,all,mappable C6 donors = 2,2,1421,0.0014
+phase4-stage0-spec-v1,donor_distribution,all,mappable C6 donors = 3,1419,1421,0.9986
+phase4-stage0-spec-v1,coverage,GATE_CAL,images,553,570,0.9702
+phase4-stage0-spec-v1,coverage,GATE_CAL,groups (>= 1 eligible image),463,478,0.9686
+phase4-stage0-spec-v1,coverage_descriptive,GATE_CAL,groups (all images eligible),462,478,0.9665
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,lateral_view,13,570,0.0228
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,img_empty,3,570,0.0053
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,c0_location_not_parsed,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,c0_location_unspecified,1,570,0.0018
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,c0_location_unknown_token,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,no_mappable_c4_location_only_donor,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_CAL,no_mappable_c6_donor,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,lateral_view,13,570,0.0228
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,img_empty,3,570,0.0053
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,c0_location_not_parsed,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,c0_location_unspecified,1,570,0.0018
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,c0_location_unknown_token,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,no_mappable_c4_location_only_donor,0,570,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_CAL,no_mappable_c6_donor,0,570,0.0000
+phase4-stage0-spec-v1,donor_distribution,GATE_CAL,mappable location-only C4 donors = 1,4,570,0.0070
+phase4-stage0-spec-v1,donor_distribution,GATE_CAL,mappable location-only C4 donors = 2,32,570,0.0561
+phase4-stage0-spec-v1,donor_distribution,GATE_CAL,mappable location-only C4 donors = 3,534,570,0.9368
+phase4-stage0-spec-v1,donor_distribution,GATE_CAL,mappable C6 donors = 3,570,570,1.0000
+phase4-stage0-spec-v1,coverage,GATE_FIT,images,831,851,0.9765
+phase4-stage0-spec-v1,coverage,GATE_FIT,groups (>= 1 eligible image),693,708,0.9788
+phase4-stage0-spec-v1,coverage_descriptive,GATE_FIT,groups (all images eligible),688,708,0.9718
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,lateral_view,19,851,0.0223
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,img_empty,1,851,0.0012
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,c0_location_not_parsed,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,c0_location_unspecified,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,c0_location_unknown_token,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,no_mappable_c4_location_only_donor,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_any,GATE_FIT,no_mappable_c6_donor,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,lateral_view,19,851,0.0223
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,img_empty,1,851,0.0012
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,c0_location_not_parsed,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,c0_location_unspecified,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,c0_location_unknown_token,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,no_mappable_c4_location_only_donor,0,851,0.0000
+phase4-stage0-spec-v1,unavailable_reason_first,GATE_FIT,no_mappable_c6_donor,0,851,0.0000
+phase4-stage0-spec-v1,donor_distribution,GATE_FIT,mappable location-only C4 donors = 1,1,851,0.0012
+phase4-stage0-spec-v1,donor_distribution,GATE_FIT,mappable location-only C4 donors = 2,32,851,0.0376
+phase4-stage0-spec-v1,donor_distribution,GATE_FIT,mappable location-only C4 donors = 3,818,851,0.9612
+phase4-stage0-spec-v1,donor_distribution,GATE_FIT,mappable C6 donors = 2,2,851,0.0024
+phase4-stage0-spec-v1,donor_distribution,GATE_FIT,mappable C6 donors = 3,849,851,0.9976
