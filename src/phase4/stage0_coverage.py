@@ -7,6 +7,7 @@ DD-CMD seed 1001 rows of the frozen Phase 2 manifest; IMG = nnU-Net seed 1001, P
   eligible     not a lateral view (file name "_vp-ll_"), IMG mask nonempty, C0 location mappable, >= 1 mappable
                location-only C4 donor and >= 1 mappable C6 donor
   group        eligible if at least one of its denominator images is eligible
+Check: the generated C4-C6 donor rows equal the frozen results/phase2_donor_manifest_val.csv (else stop).
 Read: the manifest and the Phase 2 location parse (no text is written out), the partition file, and the IMG
 binary masks only to test whether they are empty. LANG masks, ground truth, scores, Dice and AUROC are not read
 or computed.
@@ -39,6 +40,26 @@ def check_spec():
     if (g["column_split"], tuple(g["row_edges"])) != (S.COL_SPLIT, S.ROW_EDGES):
         raise ValueError("configs/phase4/stage0_spec.json and src/phase4/spatial.py disagree on the grid")
     return spec
+
+
+FROZEN_DONORS = os.path.join(REPO, "results", "phase2_donor_manifest_val.csv")
+DONOR_COLS = ["dataset", "target_id", "condition", "variant", "donor_id", "changed_attributes"]
+
+
+def check_manifest(man, frozen=FROZEN_DONORS):
+    """The C4-C6 donor rows of conditions.build() must equal the frozen Phase 2 donor manifest row by row
+    (dataset, target_id, condition, variant, donor_id, changed_attributes), else stop. Returns the row count."""
+    m = man[man.condition.isin(["C4", "C5", "C6"])].rename(columns={"sample_id": "target_id", "variant_id": "variant",
+                                                                     "donor_sample_id": "donor_id"})
+    a = m[DONOR_COLS].astype(str).sort_values(DONOR_COLS).reset_index(drop=True)
+    b = pd.read_csv(frozen, dtype=str, keep_default_na=False)
+    b = b[b.dataset == DATASET][DONOR_COLS].sort_values(DONOR_COLS).reset_index(drop=True)
+    if not a.equals(b):
+        d = a.merge(b, how="outer", indicator=True)
+        d = d[d._merge != "both"]
+        raise SystemExit(f"donor manifest differs from {os.path.relpath(frozen, REPO)}: {len(a)} vs {len(b)} rows, "
+                         f"{len(d)} rows not in both:\n{d.head(20).to_string(index=False)}")
+    return len(a)
 
 
 def target_table(man, loc, img_nonempty):
@@ -91,6 +112,7 @@ def main():
     from phase2 import texts as T
     man, _ = C.build(DATASET, SPLIT)
     man = man[man.eligible]
+    check_manifest(man)
     guard.require_dev_ids(set(man.sample_id) | set(man.donor_sample_id.dropna()) - {""})
     loc = T.attributes(DATASET, SPLIT).set_index("sample_id").location.to_dict()
     z = np.load(IMG_MASKS)

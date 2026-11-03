@@ -1,0 +1,7 @@
+scope,partition,condition,n_targets,n_pairs,n_a,n_b,n_c,n_targets_with_any_b
+text-eligible: Stage 0 denominator minus lateral views minus unmappable C0 (IMG emptiness not read),all,C4_location,1388,4092,1249,327,2516,264
+text-eligible: Stage 0 denominator minus lateral views minus unmappable C0 (IMG emptiness not read),all,C6,1388,4162,700,56,3406,51
+text-eligible: Stage 0 denominator minus lateral views minus unmappable C0 (IMG emptiness not read),CAL,C4_location,556,1629,512,122,995,98
+text-eligible: Stage 0 denominator minus lateral views minus unmappable C0 (IMG emptiness not read),CAL,C6,556,1668,244,18,1406,15
+text-eligible: Stage 0 denominator minus lateral views minus unmappable C0 (IMG emptiness not read),FIT,C4_location,832,2463,737,205,1521,166
+text-eligible: Stage 0 denominator minus lateral views minus unmappable C0 (IMG emptiness not read),FIT,C6,832,2494,456,38,2000,36
