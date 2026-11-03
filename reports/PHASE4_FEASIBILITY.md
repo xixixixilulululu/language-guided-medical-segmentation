@@ -24,11 +24,20 @@ nnU-Net seed 1001 IMG mask (job 371), F1–F5 and the per-case Dice; no row is m
 - Not established: whether the image-left half is the patient's left or right. The QaTa package has PNG files
   without metadata, the text files have only image name and text, the archive readme says nothing about
   orientation, and the LViT paper does not say whether "left" in its texts means the patient's or the image's
-  left. File names give the view (ap / pa / ll) for most `sub-*` images only; 590 `covid_*` images of the
-  denominator have no metadata. Options put to the supervisor by the project lead: (a) STOP at Stage 0 as the
-  plan specifies; (b) a global rule fixed on the training split (one-sided reports versus the side of the
-  ground-truth lesion, criterion fixed in advance, validation masks not used); (c) no left/right commitment:
-  both mappings computed, the higher agreement kept. None of them has been run.
+  left. The QaTa-COV19 dataset paper (Degerli et al.) and other papers that use these texts (e.g. SSA, SGSeg) do
+  not state it either. File names give the view (ap / pa / ll) for most `sub-*` images only; 590 `covid_*` images
+  of the denominator have no metadata. Options put to the supervisor by the project lead: (a) STOP at Stage 0 as
+  the plan specifies; (b) a global rule fixed on the training split (one-sided reports versus the side of the
+  ground-truth lesion, criterion fixed in advance, validation masks not used); (c) no left/right commitment: both
+  mappings computed, the higher agreement kept. None of them has been run.
+
+**Orientation sensitivity, text only (`src/phase4/stage0_mirror.py` → `results/phase4_stage0_mirror_counts.csv`,
+commit 328d514; no score computed).** On the 1388 text-eligible targets (the denominator minus 32 lateral views
+and the 1 "unspecified" C0; IMG emptiness not read), each pair of a target and a mappable donor was classed by
+patient-side cells: a, the donor cells cover the target cells; b, they cover them only after a left/right swap; c,
+otherwise. Location-only C4: 4092 pairs, a 1249 (30.5%), b 327 (8.0%), c 2516 (61.5%). C6: 4162 pairs, a 700
+(16.8%), b 56 (1.3%), c 3406 (81.8%). Class b can be flagged by option (b) but not by option (c); class a cannot
+be flagged under either. This compares report text with report text; the actual score uses the nnU-Net mask.
 
 **Training augmentation (recorded, no conclusion drawn).** The language-guided models were trained with
 geometric augmentation applied to image and mask while the text was unchanged:

@@ -1,7 +1,7 @@
 # Related work and possible paper directions (for discussion)
 
-Status: 2026-11-02 (second version, more papers read). A literature note to support the choice of the next
-step. It is **not** a claim that a gap exists.
+Status: 2026-11-02 (second version, more papers read); 2026-11-03: D5 is now being tested as Phase 4, and section
+5 is shortened. A literature note to support the choice of the next step. It is **not** a claim that a gap exists.
 
 **How it was made:**
 - web searches on 2026-11-02;
@@ -44,9 +44,9 @@ step. It is **not** a claim that a gap exists.
    - Missing text: ProLearn. Incomplete text: ARSeg. An internal text weight that never reaches zero: RELiF.
    - Image-level abstention (selective prediction) for segmentation: Soft Dice Confidence.
    - A post-hoc fallback to an image-only model, evaluated under wrong reports, was not found.
-6. **Suggestion.** A benchmark-and-analysis paper (Option A, section 5) can be written from results we already
-   have. A cheap addition, a left/right-swap condition (section 4, D7), would answer the most likely reviewer
-   question about realistic errors.
+6. **Possible use.** The existing results could support a benchmark-and-analysis paper (Option A, section 5). A
+   left/right-swap condition (section 4, D7) would address the most likely question about realistic errors. The
+   direction is the supervisor's decision.
 
 ## 2. Evidence matrix
 
@@ -117,15 +117,14 @@ test time.
 | D2 | Which part of the report drives the harm, and what the models actually read | Location-only change 12.6–13.8 points vs count or scope 0.1–1.1; deleting the location 11.43–21.76; LViT-T reads 10 word vectors; RecLMIS cuts 101 of 1429 validation reports | — |
 | D3 | A wrong report is worse than no report | C1 − C6 +3.12 / +7.60 / +11.39 (all significant). RADAR agrees on QaTa (wrong 70.33 < empty 76.90), and on MosMed both show the reverse | The hypothesis that stronger text–mask coupling (SSA, C2Seg) increases the harm is **untested** |
 | D4 | A model-agnostic fallback to an image-only model | Post-hoc gate: 9/9 significant gains, cost 0.17–0.30 under the correct report; limits measured (11–33% of headroom; nnU-Net alone better when the report is wrong; AUROC 0.69–0.77 on GATE_CAL) | A better detector (D5) |
-| D5 | Check the report against the image before trusting it (new method) | Nothing yet | A location signal from the image (e.g. lung-zone anatomy masks, as in MIMIC-ILS); a validation test; a fresh test protocol |
+| D5 | Check the report against the image before trusting it (new method) | **In progress as Phase 4** (supervisor's plan, 2026-11-03): a staged feasibility pilot that compares the report location with the nnU-Net mask on a coarse 2 × 3 image grid; Stage 0 awaits the left/right orientation decision | Results of the pilot; if it passes, a fresh test protocol |
 | D6 | Strong image-only baselines under one evaluator (supporting) | Phase 0–1: LViT Table II's U-Net on MosMedData+ is 9.4 points below our reproduction; gains over nnU-Net 2–5 points on QaTa | Not a paper on its own |
 | **D7** | **A realistic error type: swap left and right in the original report** | The parser already reads scope, count and location; Phase 2 shows the location drives the harm | A new condition: free on validation; on test it needs a pre-registered addendum (supervisor's decision) |
 
-## 5. A concrete paper sketch (Option A, for discussion)
+## 5. What the existing results could support (Option A, for discussion only)
 
-**Possible titles:**
-- *When the Report Is Wrong: A Counterfactual Audit of Language-Guided Lesion Segmentation*
-- *Wrong Reports Hurt More Than No Reports in Language-Guided Segmentation*
+This section only lists what our results already answer. The direction, and whether and where to submit, are the
+supervisor's decision.
 
 **Research questions** (all answered by existing results, except the left/right part of RQ2):
 - RQ1. How much do frozen language-guided models depend on the paired report? (C0 vs C1)
@@ -160,20 +159,11 @@ test time.
 | MosMedData+ is small | Labelled exploratory throughout (9 units); its slice-level split is stated | — |
 | The texts are templated | Stated, with the effective-input audit | — |
 
-**Option B** adds D5 as a method. It needs validation experiments and then a fresh test protocol, and its effect
-is unknown.
+**Option B** adds D5 as a method; Phase 4 is now testing whether it is feasible. If it is, it still needs a fresh
+test protocol.
 
-**Timeline** (MICCAI 2027: Auckland, 26 Sep–1 Oct 2027; the deadline is not announced, and the 2026 deadline was
-26 Feb):
-
-| When | Step |
-|---|---|
-| November | Choose the direction |
-| December | Optional additions: D7 on validation, then a pre-registered test addendum if approved |
-| January | Writing |
-| February | Internal review and submission |
-
-ISBI 2027 has passed. MIDL 2027 dates are not announced.
+**Venue dates, for reference:** MICCAI 2027 is in Auckland, 26 Sep–1 Oct 2027; its deadline is not announced (the
+2026 deadline was 26 Feb). ISBI 2027 has passed. MIDL 2027 dates are not announced.
 
 ## 6. Practical points
 
