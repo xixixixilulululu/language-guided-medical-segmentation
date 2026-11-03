@@ -386,8 +386,12 @@ reported in PHASE2_VALIDATION_SUMMARY.md; test: section 4). MosMed has 11 valida
   seeds, donors averaged), ties by sample id; the images at the 10 / 30 / 50 / 70 / 90% positions; seed 1001,
   donor d1 (`results/phase2_test_case_selection.json`). **Label error:** the title of these two case figures
   reads "<dataset> validation: …" although they show **test** cases (all files are named `phase2_test_*`). The
-  title text is fixed in the frozen `src/phase2/analyze_phase2_extra.py` (`fig_cases`) and is not changed;
-  figures 1–4 are labelled correctly (figures 1 and 3 say "(test)"; 2 and 4 name no split).
+  title text is fixed in the frozen `src/phase2/analyze_phase2_extra.py` (`fig_cases`) and is not changed.
+- **Second label error (found 2026-11-02):** in figures 1 and 3 the MosMedData+ panel title reads
+  "(exploratory: 11 units)", the validation count. The test set has **9** units, as stated in sections 3–4 and
+  in the titles of figures 2 and 4. The text "11 units" is fixed in the same frozen file (line 295) and is not
+  changed. The data and the plotted values of figures 1 and 3 are those of the test split; only this label
+  is wrong.
 
 ## 12. Interpretation and conclusions
 
