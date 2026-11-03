@@ -21,8 +21,9 @@ that report is missing or wrong.
   mismatched reports for all three models (9 of 9 significant). It costs 0.2–0.3 points under the correct
   report, but recovers only 11–33% of the oracle headroom. Whenever the report is wrong or missing, nnU-Net alone
   is better than the gate.
-- **Protocol.** All test results come from protocols fixed before the test data were used, and were checked by an
-  independent recomputation.
+- **Protocol.** All test results come from analyses fixed in advance. Phase 0 is the one exception: a few
+  test scores had been seen before its plan was fixed, and they are recorded in its report. The results were
+  checked by an independent recomputation (section 7).
 
 ## 1. Research question and phases
 
@@ -113,7 +114,8 @@ QaTa-COV19 test Dice (mean ± SD over 3 seeds; C3c–C6 on the 2081 eligible ima
 | RecLMIS | 84.77 ± 0.33 | 68.03 ± 3.53 | 83.84 ± 0.52 | 84.32 ± 0.06 | 83.28 ± 1.00 | 72.66 ± 2.91 | 71.13 ± 0.51 | 72.48 ± 0.36 | 61.20 ± 1.02 |
 | DD-CMD | 84.64 ± 0.10 | 71.30 ± 2.89 | 84.63 ± 0.09 | 83.57 ± 0.29 | 83.41 ± 0.29 | 62.53 ± 10.30 | 72.12 ± 0.49 | 72.85 ± 0.11 | 60.92 ± 3.11 |
 
-Findings on QaTa-COV19. Differences are unit-weighted, with Holm correction across 11 comparisons per model.
+Findings on QaTa-COV19. The comparisons are unit-weighted, with Holm correction across 11 comparisons per
+model. The attribute-level numbers in item 3 are image-weighted and descriptive.
 
 1. **The models depend strongly on the text.** Removing it (C0 − C1) costs +12.35 to +20.13 points.
 2. **A fully mismatched report is worse than no report.** C0 − C6 is +23.31 to +24.40. C1 − C6 is +3.12
@@ -163,7 +165,8 @@ not a method.
 | DD-CMD | C0 | 84.64 | 84.41 | 84.39 | 79.72 | 86.17 |
 | DD-CMD | C6 | 60.92 | 65.16 | 67.60 | 79.66 | 81.16 |
 
-Findings. Differences are group-weighted over 472–474 patients, with 95% t-CIs.
+Findings. Items 1–3 and 5 are group-weighted differences over 472–474 patients, with 95% t-CIs. Item 4 uses the
+image-weighted table above.
 
 1. **Primary family: LR-Gate − LANG under C4–C6.** All 9 are significant after Holm, +1.36 to +6.53 points.
 2. **Secondary family: LR-Gate − D-Gate.** All 9 are significant, +0.76 to +2.68.
@@ -216,9 +219,12 @@ The case figure below shows real cases chosen by a fixed rule (QaTa test, seed 1
     were possible only through a lock program.
   - Each pre-specified analysis was run once, unchanged.
 - **Independent recomputation.** The test Dice values and all test statistics in this summary were recomputed from
-  the per-case result files with separate code. Three kinds of number were taken from the project's own outputs
-  instead: the text audit counts (window, truncation, distinct texts), the mask-change shares under C2, and the cost
-  measurements.
+  the per-case result files with separate code. The following were taken from the project's own outputs and not
+  recomputed independently:
+  - the text audit counts (window, truncation, distinct texts);
+  - the mask-change shares under C2;
+  - the Phase 1 empty-prediction counts;
+  - the cost measurements.
   - Phase 2: 0 differences in 1602 checks of the main table and comparisons, and in 294 further checks.
   - Phase 3: 0 differences in 14,373,709 checks, including the gate decisions recomputed from the frozen
     parameters.
