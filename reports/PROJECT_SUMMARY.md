@@ -3,7 +3,7 @@
 Status: 2026-11-02. Phases 0–3 are complete.
 
 This document summarises the work so far. It adds no new analysis: every number is taken from the phase reports
-listed in section 9, and each of those numbers was recomputed independently from the result files (section 7).
+listed in section 10, and each of those numbers was recomputed independently from the result files (section 7).
 Dice is given in points (0–100).
 
 ## In one paragraph
