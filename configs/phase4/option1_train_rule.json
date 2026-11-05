@@ -1,0 +1,62 @@
+{
+  "version": "phase4-option1-train-rule-v1",
+  "date": "2026-11-05",
+  "purpose": "Option 1 of the orientation question (a global rule fixed on the training split): do one-sided training reports agree with the image half that holds the ground-truth lesion? Preparation only; the supervisor has not chosen an option. Validation data are not read.",
+  "data": {
+    "dataset": "QaTa-COV19",
+    "split": "train",
+    "ids": "lgms.data.split_ids('QaTa-COV19', 'train'); assert no intersection with split_ids('QaTa-COV19', 'val') and split_ids('QaTa-COV19', 'test') (test: id list only)",
+    "masks": "lgms.data.read_mask('QaTa-COV19', 'train', id) (ground truth of the training split only)",
+    "report_location": "results/phase2_text_attributes.csv rows with dataset == 'QaTa-COV19' and split == 'train' (Phase 2 parse, not re-parsed); every training id must have exactly one row",
+    "grid": "common 224 x 224 array; image-right half = columns 112-223 (as in configs/phase4/stage0_spec.json)"
+  },
+  "exclusions": {
+    "order": ["lateral_view", "mask_empty", "parse_not_ok", "not_one_sided"],
+    "lateral_view": "file name contains '_vp-ll_'",
+    "mask_empty": "the ground-truth mask has no lesion pixel",
+    "parse_not_ok": "parse_ok is false",
+    "not_one_sided": "the location names both sides or no side",
+    "counting": "each excluded report is counted once, under the first reason in this order"
+  },
+  "one_sided": "the location names only 'left' or only 'right' (any zones, 'unspecified' included: only the side is needed)",
+  "lesion_side": {
+    "fraction": "f = lesion pixels in columns 112-223 / all lesion pixels",
+    "primary": "f > 1/2 -> image right; f < 1/2 -> image left; f = 1/2 -> excluded and counted",
+    "robust": "f >= 2/3 -> image right; f <= 1/3 -> image left; 1/3 < f < 2/3 -> excluded and counted"
+  },
+  "conventions": {
+    "A": "patient left on image right (spec value 'patient_left_on_image_right'): a left report agrees if the lesion side is image right, a right report if image left",
+    "B": "patient left on image left (spec value 'patient_left_on_image_left'): a left report agrees if the lesion side is image left, a right report if image right",
+    "agreement": "one-sided reports whose lesion side matches the convention / one-sided reports with a lesion side (after the exclusions of the definition in use)"
+  },
+  "groups": {
+    "all": "every training report",
+    "sub": "file name starts with 'sub-'",
+    "covid": "file name starts with 'covid_'",
+    "other": "neither prefix: counted in 'all' only and described separately; not used in rules 1-3 and 5",
+    "all_by_side": "within 'all': left-only reports and right-only reports separately (rule 4)",
+    "sub_by_view": "within 'sub': 'vp-ap', 'vp-pa', no view token; descriptive only"
+  },
+  "wilson": "Wilson score interval, 95%, z = 1.959963984540054; lower bound = (p + z^2/(2n) - z*sqrt(p(1-p)/n + z^2/(4n^2))) / (1 + z^2/n)",
+  "rules": {
+    "1": "the same convention has the higher agreement (strictly > the other) in all, sub and covid",
+    "2": "that convention has agreement >= 0.90 in all, sub and covid",
+    "3": "that convention has a Wilson 95% lower bound >= 0.85 in all, sub and covid",
+    "4": "in 'all', the agreement of that convention is >= 0.85 for left-only reports and >= 0.85 for right-only reports",
+    "5": "sub and covid each have >= 30 one-sided reports with a lesion side; otherwise the overall result is 'insufficient sample'",
+    "6": "with the robust lesion-side definition, rules 1-5 have the same truth values and the same winning convention as with the primary definition",
+    "7": "sub-* by patient (patient id from src/phase2/texts.py groups()): each patient votes by the majority of its one-sided reports (agree / disagree with the winning convention, primary definition); patients with a tie are excluded and counted; patient-level agreement >= 0.90"
+  },
+  "interpretations": {
+    "winning_convention": "the convention named by rule 1 (primary definition); if rule 1 fails there is no winner and rules 2, 3, 4, 6 and 7 are false",
+    "rule_5_counts": "reports with a lesion side under the primary definition; for rule 6 the robust counts are used",
+    "rule_7_definition": "primary lesion-side definition"
+  },
+  "result": {
+    "insufficient_sample": "rule 5 is false",
+    "pass": "rules 1-7 are all true",
+    "fail": "rule 5 is true and any other rule is false"
+  },
+  "stop_conditions": "training ids overlap validation or test ids; this file changes after its commit; parse_ok is false for more than 5% of the QaTa training rows; any unit test fails; any mask or text outside the training split would be needed",
+  "output": "results/phase4_option1_train_orientation.csv (group labels and numbers only; no text, no per-image rows)"
+}
