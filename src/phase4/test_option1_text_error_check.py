@@ -109,5 +109,30 @@ run("checkout", "-q", "--", E.RULE); os.makedirs(os.path.join(d0, "results")); o
 run("add", "-A"); run("commit", "-qm", "out")
 check("output already present stops", stops(E.preflight, d0, ext, good))
 
+# rule v2: capitalisation
+check("capitalise changes only the first character (after stripping)",
+      E.capitalise("  bilateral pulmonary infection, lower left lung.  ") == "Bilateral pulmonary infection, lower left lung."
+      and E.capitalise("unilateral X Y") == "Unilateral X Y" and E.capitalise("") == "")
+P2 = E.parse_v2(T.parse)
+pb = P2("bilateral pulmonary infection, two infected areas, lower left lung and upper right lung.")
+pu = P2("unilateral pulmonary infection, one infected area, middle right lung.")
+pn = P2("no pulmonary infection, zero infected areas.")
+check("lower-case 'bilateral ...' parses after capitalisation", pb["parse_ok"] and pb["scope"] == "Bilateral" and pb["location"] == "left:lower;right:upper")
+check("lower-case 'unilateral ...' parses after capitalisation", pu["parse_ok"] and pu["scope"] == "Unilateral" and pu["location"] == "right:middle")
+check("lower-case 'no ...' parses after capitalisation", pn["parse_ok"] and pn["scope"] == "No" and pn["count"] == 0)
+check("without capitalisation the lower-case text is not parsed (the v1 failure)", not T.parse("bilateral pulmonary infection, two infected areas, lower left lung and upper right lung.")["parse_ok"])
+import hashlib as _h  # noqa: E402
+repo_v1 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), E.RULE_V1)
+check("v1 rule file unchanged (sha256 of its commit b811353)", _h.sha256(open(repo_v1, "rb").read()).hexdigest() == E.RULE_V1_SHA)
+check("script reads rule v2 and records rule_version v2", E.RULE.endswith("option1_text_error_rule_v2.json") and E.RULE_VERSION == "v2")
+d1 = tempfile.mkdtemp()
+run1 = lambda *a: subprocess.run(["git", "-C", d1, *a], capture_output=True, check=True)  # noqa: E731
+run1("init", "-q"); run1("config", "user.email", "t@t"); run1("config", "user.name", "t")
+os.makedirs(os.path.join(d1, "configs", "phase4")); open(os.path.join(d1, E.RULE), "w").write("{}\n")
+run1("add", "-A"); run1("commit", "-qm", "rule v2")
+check("fresh repository with rule v2 and no v1 file runs", not stops(E.preflight, d1, ext, good))
+open(os.path.join(d1, E.RULE_V1), "w").write("changed v1\n"); run1("add", "-A"); run1("commit", "-qm", "v1 changed")
+check("a changed v1 rule file stops (clean tree, everything else valid)", stops(E.preflight, d1, ext, good))
+
 print("ALL CHECKS PASSED" if not FAILED else f"FAILED: {FAILED}")
 sys.exit(1 if FAILED else 0)

@@ -1,6 +1,8 @@
 """Phase 4, option 1 supplement: do SGSeg's revised report texts explain the reports that disagree with convention B?
 
-Rule: configs/phase4/option1_text_error_rule.json (committed before this program; read, never changed).
+Rule: configs/phase4/option1_text_error_rule_v2.json (committed before running; read, never changed). v2 replaces
+only the parsing step of v1 (configs/phase4/option1_text_error_rule.json, which stays unchanged and is checked):
+each SGSeg caption is stripped and its first character upper-cased before src/phase2/texts.py parse().
 Training split only. External file: SGSeg annotation.json (outside the repository); its "test" key is deleted
 right after loading and never read; SGSeg items that are not our training ids are dropped unseen.
 Self-checks (exit status 9): rule tracked with one commit, unchanged, an ancestor of HEAD; clean working tree;
@@ -21,7 +23,10 @@ REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(REPO, "src"))
 from phase4 import option1_train_check as O  # noqa: E402
 
-RULE = os.path.join("configs", "phase4", "option1_text_error_rule.json")
+RULE = os.path.join("configs", "phase4", "option1_text_error_rule_v2.json")
+RULE_V1 = os.path.join("configs", "phase4", "option1_text_error_rule.json")
+RULE_V1_SHA = "46a3fb25578603d6d9fe0e86a7af311118672501dac8029248412ced1c9799de"
+RULE_VERSION = "v2"
 OUT = os.path.join("results", "phase4_option1_text_error_check.csv")
 EXTERNAL = os.path.expanduser("~/datasets/external/sgseg/annotation.json")
 EXTERNAL_SHA = "6f62c4b40ed460de53a8e4a80cc7633569853ab8fe2f4cca3cfc216af9e59fb0"
@@ -40,6 +45,9 @@ def preflight(repo=REPO, external=EXTERNAL, external_sha=EXTERNAL_SHA):
         commit, sha = O.preflight(repo=repo, rule=RULE, out=OUT)
     except SystemExit:
         stop("self-check of the rule / working tree / output failed (see above)")
+    v1 = os.path.join(repo, RULE_V1)
+    if os.path.exists(v1) and hashlib.sha256(open(v1, "rb").read()).hexdigest() != RULE_V1_SHA:
+        stop(f"{RULE_V1} changed (v1 must stay unchanged)")
     if not os.path.exists(external):
         stop(f"{external} missing")
     ext = hashlib.sha256(open(external, "rb").read()).hexdigest()
@@ -76,6 +84,17 @@ def match_training(d, train_ids):
     if missing or dup:
         stop(f"training ids in SGSeg train + valid: {len(found)} of {len(train_ids)} found, {missing} missing, {dup} duplicated")
     return found
+
+
+def capitalise(caption):
+    """Rule v2: strip, then upper-case the first character only."""
+    c = str(caption).strip()
+    return c[:1].upper() + c[1:]
+
+
+def parse_v2(parse):
+    """parse() applied to the capitalised caption (parse itself unchanged)."""
+    return lambda caption: parse(capitalise(caption))
 
 
 def norm(t):
@@ -144,9 +163,13 @@ def main():
     if set(train) & (val | test):
         stop("training ids overlap validation or test ids")
     captions = match_training(load_external(EXTERNAL), train)
-    bad = sum(not T.parse(c)["parse_ok"] for c in captions.values()) / len(captions)
+    parse = parse_v2(T.parse)
+    parsed = [parse(c) for c in captions.values()]
+    bad = sum(not p["parse_ok"] for p in parsed) / len(parsed)
     if bad > 0.05:
-        stop(f"revised captions not parsed: {bad:.1%} (> 5%)")
+        import collections
+        reasons = collections.Counter(p["parse_note"] for p in parsed if not p["parse_ok"]).most_common(10)
+        stop(f"capitalised revised captions not parsed: {bad:.1%} (> 5%); reasons: {reasons}")
     A = pd.read_csv(os.path.join(REPO, O.ATTR), dtype=str, keep_default_na=False)
     A = A[(A.dataset == O.DATASET) & (A.split == "train")].set_index("sample_id")
     items = []
@@ -163,9 +186,9 @@ def main():
         stop(f"option 1 recomputation gives {len(R)} reports / {int(R.agree_B.sum())} agreeing (expected 1129 / 1085)")
     R["original"] = R.sample_id.map(A.raw_text)
     R["revised"] = R.sample_id.map(captions)
-    rows, summary, _ = analyse(R, T.parse)
+    rows, summary, _ = analyse(R, parse)
     summary["revised_parse_failure_share_all_training"] = bad
-    meta = {"run_time_utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
+    meta = {"rule_version": RULE_VERSION, "run_time_utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
             "rule_commit": commit, "rule_sha256": sha, "external_sha256": ext}
     out = pd.DataFrame(rows + [summary])
     for k, v in meta.items():
