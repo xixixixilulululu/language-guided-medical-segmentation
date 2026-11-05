@@ -1,0 +1,22 @@
+{
+  "decision": "GO",
+  "date": "2026-11-05",
+  "reasons": {
+    "coverage": "eligible images 1384 / 1421 (97.4%) and groups 1156 / 1186 (97.5%), both >= 80% (results/phase4_stage0_coverage.csv, commit a1fa01e; spec cb5687d)",
+    "orientation": "supervisor-approved exception (2026-11-05): option 1 used as text-to-image coordinate alignment, not anatomical orientation; spec orientation 'patient_left_on_image_left'"
+  },
+  "commits": {
+    "plan": "53b052b",
+    "spec_rules": "cb5687d",
+    "coverage": "a1fa01e",
+    "mirror_counts": "328d514",
+    "option1_rule": "ee14b30",
+    "option1_result": "d83862a",
+    "sgseg_check_rule_v2": "4fdd05d",
+    "sgseg_check_result": "3d44316",
+    "vertical_check_rule": "23d79a8",
+    "vertical_check_result": "6f9b473"
+  },
+  "known_limitation": "vertical grid (result 6f9b473): lower-only reports have a median of 13% of the lesion in the grid's lower band (rows 149-223); lower-only agreement 82.1%, combined 82.7% (< 90%); the plan's grid is kept unchanged",
+  "note": "no validation spatial score, Dice or AUROC was computed before this decision"
+}

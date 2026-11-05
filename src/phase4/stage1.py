@@ -14,6 +14,8 @@ score (positive) per target; the same for C6 (descriptive); per-group mean diffe
 Decision (spec "stage1"): AUROC(C0 vs C4) >= 0.65 and mean(C4 - C0) > 0 and mean(C6 - C0) > 0.
 A pre-declared sensitivity orientation in the spec ("stage1_sensitivity_orientation") gives a second, labelled
 output "sensitivity, not used for the decision".
+After scoring, the eligible GATE_FIT images and groups must equal results/phase4_stage0_coverage.csv (831 / 693),
+else exit 8 with no output written and no score printed.
 Refuses to run (exit 8) unless: the spec orientation is set (not pending) and the spec has
 "orientation_decision" (decided_by, date, commit); results/phase4_stage0_decision.json exists with decision GO;
 the working tree is clean and HEAD is on origin; the output files do not exist.
@@ -77,6 +79,21 @@ def require_fit(ids, partition):
     bad = [i for i in ids if partition.get(i) != "GATE_FIT"]
     if bad:
         stop(f"{len(bad)} non-GATE_FIT id(s), e.g. {bad[0]}; Stage 1 uses GATE_FIT only")
+
+
+COVERAGE = os.path.join("results", "phase4_stage0_coverage.csv")
+
+
+def check_eligibility(T, group, repo=REPO):
+    """Stop (no output, no score printed) unless the eligible GATE_FIT images and groups equal the Stage 0 coverage."""
+    c = pd.read_csv(os.path.join(repo, COVERAGE))
+    c = c[(c.table == "coverage") & (c.part == "GATE_FIT")].set_index("item").numerator
+    want = (int(c["images"]), int(c["groups (>= 1 eligible image)"]))
+    E = T[T.eligible]
+    got = (len(E), E.sample_id.map(group).nunique())
+    if got != want:
+        stop(f"eligible GATE_FIT images / groups {got} differ from the Stage 0 coverage {want}")
+    return got
 
 
 def auroc(neg, pos):
@@ -148,6 +165,7 @@ def main():
     group = part.group_id.to_dict()
     o = spec["orientation"]["value"]
     T = target_scores(fit, img, loc, d4, d6, o)
+    check_eligibility(T, group)                                         # before any output or printed score
     rows = [summarise(T, group, f"primary ({o})")]
     sens = spec.get("stage1_sensitivity_orientation")
     if sens:

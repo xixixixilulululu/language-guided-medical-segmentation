@@ -1,7 +1,7 @@
 {
   "version": "phase4-stage0-spec-v1",
   "date": "2026-11-03",
-  "status": "orientation pending supervisor decision; everything else fixed before any spatial score is computed",
+  "status": "orientation set on 2026-11-05 (supervisor-approved exception: text-to-image coordinate alignment); everything else unchanged since commit cb5687d and fixed before any spatial score is computed",
   "plan": {
     "file": "reports/PHASE4_PLAN.md",
     "sha256": "f04901bc5bc62f1911aeb804b47ee108815297e65a5b7ea9cc911330225040bd"
@@ -72,13 +72,14 @@
     "note": "image-coordinate proxy, not a lung-zone segmentation; ground-truth masks are not used to define regions"
   },
   "orientation": {
-    "value": "pending supervisor decision",
+    "value": "patient_left_on_image_left",
     "options_in_code": {
       "patient_left_on_image_right": "patient left = image-right half",
       "patient_left_on_image_left": "patient left = image-left half",
       "max_of_both": "both mappings computed, the higher agreement kept per row"
     },
-    "rule": "set once by a separate commit before any spatial score is computed; never chosen from scores"
+    "rule": "set once by a separate commit before any spatial score is computed; never chosen from scores",
+    "meaning": "text-to-image coordinate alignment: a report's 'left' is image columns 0-111 and 'right' is columns 112-223; 'upper' / 'middle' / 'lower' are image rows 0-74 / 75-148 / 149-223 as in the plan's grid. This is NOT the patient's anatomical orientation (in standard chest X-ray display the patient's left is usually on the image right). The code name 'patient_left_on_image_left' is kept only for compatibility."
   },
   "lookup": {
     "rule": "location 'left:<zones>;right:<zones>' (patient sides); zones of one side are united; 'all' = upper + middle + lower of that side; the cells of both sides are united",
@@ -605,5 +606,15 @@
     "paired_difference": "image-weighted mean of [C4 - C0] and of [C6 - C0] spatial_mismatch over the same targets; group-level summaries reported descriptively",
     "criterion": "continue only if AUROC(C0 vs C4 location-only) >= 0.65 AND mean(C4 - C0) > 0 AND mean(C6 - C0) > 0; engineering screening criteria, not significance tests",
     "no_rescue": "no alternative grid, mapping, mask threshold or feature after a failure"
-  }
+  },
+  "orientation_decision": {
+    "decided_by": "supervisor (Dr. Xu), 2026-11-05",
+    "date": "2026-11-05",
+    "commit": "d83862a",
+    "rule_commit": "ee14b30",
+    "basis": "option 1 on the training split: convention 'patient_left_on_image_left' agrees with 96.1% of 1,129 one-sided reports, all 7 pre-set criteria met (result d83862a, rule ee14b30); SGSeg's revised texts give the same agreement (3d44316)",
+    "exception": "The plan's Stage 0 step 3 requires the orientation to be established from documentation and code, otherwise STOP. The supervisor approved an exception for this pilot: the training-split alignment (option 1) is used as text-to-image coordinate alignment, not as anatomical orientation.",
+    "sensitivity": "none: option 2 is not run (supervisor's decision)"
+  },
+  "known_limitation_vertical": "An extra training-split check added by the project lead (rule 23d79a8, result 6f9b473) failed its pre-set criterion: up and down are not flipped (median lesion centroid row 66 for upper-only reports, 130 for lower-only reports), but for lower-only reports a median of only 13% of the lesion lies in the grid's lower band (rows 149-223), most of it in the middle band (lower-only agreement 82.1%, combined agreement 82.7%, both < 90%). The plan's equal-thirds grid is kept unchanged, as the plan requires (no regions from ground-truth masks). A Stage 1 failure may therefore reflect the grid rather than the idea."
 }

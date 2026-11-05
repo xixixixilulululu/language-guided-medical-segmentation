@@ -90,5 +90,21 @@ check("refused: HEAD not pushed to origin", refused(St.preflight, d))
 d, run = repo(); open(os.path.join(d, St.OUT_SUMMARY), "w").write("x"); run("add", "-A"); run("commit", "-qm", "o"); run("push", "-q", "origin", "main")
 check("refused: output present", refused(St.preflight, d))
 
+# eligibility check against the Stage 0 coverage
+import pandas as _pd  # noqa: E402
+cov = tempfile.mkdtemp(); os.makedirs(os.path.join(cov, "results"))
+_pd.DataFrame([{"table": "coverage", "part": "GATE_FIT", "item": "images", "numerator": 2},
+               {"table": "coverage", "part": "GATE_FIT", "item": "groups (>= 1 eligible image)", "numerator": 1},
+               {"table": "coverage", "part": "GATE_CAL", "item": "images", "numerator": 9}]).to_csv(os.path.join(cov, St.COVERAGE), index=False)
+Te = _pd.DataFrame({"sample_id": ["a", "b", "c"], "eligible": [True, True, False]})
+check("eligibility equal to the coverage passes", St.check_eligibility(Te, {"a": "g1", "b": "g1", "c": "g2"}, cov) == (2, 1))
+check("image count differs -> stop", refused(St.check_eligibility, Te.assign(eligible=[True, True, True]), {"a": "g1", "b": "g1", "c": "g1"}, cov))
+check("group count differs -> stop", refused(St.check_eligibility, Te, {"a": "g1", "b": "g2", "c": "g3"}, cov))
+check("a stop writes no output file", not os.path.exists(os.path.join(cov, St.OUT_SUMMARY)) and not os.path.exists(os.path.join(cov, St.OUT_SCORES)))
+import inspect  # noqa: E402
+src = inspect.getsource(St.main)                                    # main() only: no match on a function definition
+check("the check runs before any output or printed score in main()",
+      src.index("check_eligibility(T, group)") < src.index("summarise(T, group") < src.index("os.replace(") < src.index("print(pd.DataFrame(rows)"))
+
 print("ALL CHECKS PASSED" if not FAILED else f"FAILED: {FAILED}")
 sys.exit(1 if FAILED else 0)

@@ -1,8 +1,47 @@
-# Phase 4 — Spatial evidence feasibility (DRAFT, Stage 0 in progress)
+# Phase 4 — Spatial evidence feasibility
 
-Status: 2026-11-03. **Stage 0 not decided** (no GO / STOP): the patient left/right orientation is pending the
-supervisor's decision. Plan: [PHASE4_PLAN.md](PHASE4_PLAN.md) (sha256 f04901bc…040bd). Validation split only;
-the test split is refused by `src/phase4/guard.py`. No spatial score, Dice or AUROC has been computed.
+Status: 2026-11-05. **Stage 0: GO (with a documented exception and a known limitation); Stage 1 in progress.**
+Plan: [PHASE4_PLAN.md](PHASE4_PLAN.md) (sha256 f04901bc…040bd). Validation split only; the test split is refused
+by `src/phase4/guard.py`. Before the Stage 1 run below, no validation spatial score, Dice or AUROC had been
+computed.
+
+## Stage 0 decision: GO, with a documented exception and a known limitation
+
+**The plan's rule.** Stage 0 step 3 asks for the correspondence between image coordinates and the patient's left
+and right to be established from documented metadata and the existing code; if it cannot be, Phase 4 stops. The
+code establishes only that all masks and images share one array layout; nothing in the data or the documentation
+says which image half the texts call "left" (section "Stage 0 records" below).
+
+**The exception (supervisor, 2026-11-05).** For this pilot the supervisor approved option 1: the left/right
+correspondence learned on the training split is used as a *text-to-image coordinate alignment* — a report's "left"
+means image columns 0–111 and "right" columns 112–223, with the plan's rows 0–74 / 75–148 / 149–223 for upper /
+middle / lower. It is not a statement about the patient's anatomy; in the usual chest X-ray display the patient's
+left is on the image right, the opposite of what the texts do here. In the spec this is `orientation.value =
+patient_left_on_image_left` (the code name is kept for compatibility), with the decision, its basis and the
+exception recorded under `orientation_decision`. Option 2 was not run (supervisor's decision); there is no
+sensitivity orientation.
+
+**Option 1 on the training split** (rule `configs/phase4/option1_train_rule.json`, commit ee14b30, fixed before
+any data were read; result d83862a). One-sided training reports were compared with the image half that holds most
+of the ground-truth lesion. Seven criteria were fixed in advance: one convention better in all reports, `sub-*`
+and `covid_*`; agreement ≥ 0.90 and Wilson lower bound ≥ 0.85 in each; ≥ 0.85 for left-only and right-only
+reports; ≥ 30 reports per group; the same outcome under a stricter lesion-side definition; ≥ 0.90 at patient
+level. All seven held for the convention "text left = image left": 1,085 of 1,129 reports (96.1%; Wilson lower
+bound 0.948), 603 of 624 patients.
+
+**SGSeg's revised texts** (rule v2 4fdd05d, result 3d44316). With SGSeg's corrected training texts the agreement
+is the same (96.1%); none of the 44 disagreeing reports was changed to the other side (pre-set reading: the
+revisions explain little of the disagreement).
+
+**Known limitation: the vertical bands** (an extra check added by the project lead; rule 23d79a8, result 6f9b473;
+not a criterion of the plan). Up and down are not flipped: the median lesion centroid is row 66 for upper-only and
+row 130 for lower-only training reports. But for lower-only reports a median of only 13% of the lesion lies in the
+grid's lower band (rows 149–223); most of it is in the middle band. The pre-set criterion (≥ 90%) failed:
+lower-only 82.1%, combined 82.7%. The plan's equal-thirds grid is kept unchanged, as the plan requires (regions
+are not derived from ground-truth masks). A Stage 1 failure may therefore reflect the grid rather than the idea.
+
+**Decision.** Coverage 1384 / 1421 images (97.4%) and 1156 / 1186 groups (97.5%), both ≥ 80%; orientation by the
+approved exception: **GO** (`results/phase4_stage0_decision.json`).
 
 ## Stage 0 records so far
 
@@ -29,7 +68,8 @@ nnU-Net seed 1001 IMG mask (job 371), F1–F5 and the per-case Dice; no row is m
   of the denominator have no metadata. Options put to the supervisor by the project lead: (a) STOP at Stage 0 as
   the plan specifies; (b) a global rule fixed on the training split (one-sided reports versus the side of the
   ground-truth lesion, criterion fixed in advance, validation masks not used); (c) no left/right commitment: both
-  mappings computed, the higher agreement kept. None of them has been run.
+  mappings computed, the higher agreement kept. Option (b) ("option 1") was later run on the training split and
+  chosen by the supervisor (decision section above); (c) ("option 2") was not run.
 
 **Orientation sensitivity, text only (`src/phase4/stage0_mirror.py` → `results/phase4_stage0_mirror_counts.csv`,
 commit 328d514; no score computed).** On the 1388 text-eligible targets (the denominator minus 32 lateral views
@@ -60,4 +100,4 @@ Denominator: validation targets with C0, ≥ 1 location-only C4 donor and ≥ 1 
 Unavailable targets (37; the reasons do not overlap): lateral view 32, empty IMG mask 4, C0 location
 "unspecified" 1; no target lacks a mappable C4 location-only or C6 donor. Mappable location-only C4 donors per
 target: 3 for 1352, 2 for 64, 1 for 5; mappable C6 donors: 3 for 1419, 2 for 2. The coverage passes the 80%
-thresholds, but the Stage 0 decision also requires the orientation, which is open.
+thresholds; the decision is in the section above.
