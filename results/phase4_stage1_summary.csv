@@ -1,0 +1,2 @@
+label,n_targets,n_eligible_images,n_groups,n_excluded_images,n_c4_rows_unavailable,n_c6_rows_unavailable,mean_c4_minus_c0,mean_c6_minus_c0,auroc_c0_vs_c4,auroc_c0_vs_c6_descriptive,groups_mean_c4_minus_c0_positive,groups_mean_c6_minus_c0_positive,group_weighted_mean_c4_minus_c0,group_weighted_mean_c6_minus_c0,decision
+primary (patient_left_on_image_left),851,831,693,20,61,62,0.117583,0.317318,0.620288,0.71443,414,474,0.10164,0.297541,STOP

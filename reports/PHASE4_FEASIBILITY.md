@@ -1,9 +1,41 @@
 # Phase 4 — Spatial evidence feasibility
 
-Status: 2026-11-05. **Stage 0: GO (with a documented exception and a known limitation); Stage 1 in progress.**
-Plan: [PHASE4_PLAN.md](PHASE4_PLAN.md) (sha256 f04901bc…040bd). Validation split only; the test split is refused
-by `src/phase4/guard.py`. Before the Stage 1 run below, no validation spatial score, Dice or AUROC had been
-computed.
+Status: 2026-11-05. **Stage 0: GO (with a documented exception and a known limitation); Stage 1: STOP. Phase 4
+stopped at Stage 1.** Plan: [PHASE4_PLAN.md](PHASE4_PLAN.md) (sha256 f04901bc…040bd). Validation split only; the
+test split is refused by `src/phase4/guard.py`. Before the Stage 1 run below, no validation spatial score, Dice or
+AUROC had been computed; GATE_CAL was never read.
+
+## Stage 1: spatial score on GATE_FIT — STOP
+
+`src/phase4/stage1.py`, run once on 2026-11-05 (18:18 UTC) after commit 19b8666; orientation
+`patient_left_on_image_left` (text-to-image alignment); the plan's grid unchanged; DD-CMD seed 1001 report
+assignments, nnU-Net seed 1001 masks; GATE_FIT only. The eligible images and groups equal the Stage 0 coverage
+(831 / 693). Outputs: `results/phase4_spatial_scores_val.csv` (frozen; ids and numbers only) and
+`results/phase4_stage1_summary.csv`. Both AUROCs were recomputed independently with
+`sklearn.metrics.roc_auc_score` from the scores file and agree (differences ≤ 3 × 10⁻⁷, from the 6-digit storage).
+
+| Quantity | Value |
+|---|---|
+| GATE_FIT targets in the denominator | 851 |
+| Eligible images / groups | 831 / 693 |
+| Excluded images (no C0 score: lateral view or empty IMG) | 20 |
+| Unavailable donor rows, C4 location-only / C6 (all 851 targets) | 61 / 62 |
+| AUROC, C0 vs donor-averaged C4 location-only | **0.620** |
+| AUROC, C0 vs donor-averaged C6 (descriptive) | 0.714 |
+| mean(C4 − C0) spatial mismatch, image-weighted | +0.118 |
+| mean(C6 − C0) spatial mismatch, image-weighted | +0.317 |
+| Group-weighted mean(C4 − C0) / mean(C6 − C0) | +0.102 / +0.298 |
+| Groups with a positive mean C4 − C0 / C6 − C0 | 414 / 474 of 693 |
+| Criterion (spec): AUROC(C0 vs C4) ≥ 0.65 and both mean differences > 0 | AUROC criterion not met |
+| **Decision** | **STOP** |
+
+**Phase 4 stopped at Stage 1.** The score moves in the expected direction (higher mismatch for the changed
+reports, more for C6 than for location-only C4), but it does not separate C0 from location-only C4 well enough by
+the fixed screening criterion. As the plan requires, no other grid, alignment, threshold or feature was tried, and
+Stage 2 was not started. The known limitation of the vertical bands (section "Stage 0 decision": for lower-only
+training reports a median of only 13% of the lesion lies in the grid's lower band) may be one of the reasons: the
+equal-thirds grid may place many "lower" lesions in the middle band. This is a possible explanation, not a tested
+one.
 
 ## Stage 0 decision: GO, with a documented exception and a known limitation
 
