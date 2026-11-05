@@ -1,0 +1,5 @@
+row,group,n,n_agree,agreement,centroid_row_q10,centroid_row_q50,centroid_row_q90,median_band_share,n_reports,n_excl_lateral_view,n_excl_mask_empty,n_excl_parse_not_ok,n_excl_not_in_a_group,rule_1,rule_2,rule_3,result,run_time_utc,rule_commit,rule_sha256
+group,upper_only,67,66,0.985075,39.1814,66.5311,93.7419,0.692308,,,,,,,,,,2026-11-05 06:28:35,23d79a84922788f2ccda6705489c1e62ec225f76,ca0299729358ffb9161d95e9f2c88df08d205c1b943aa6752b6464f70c9b3fe9
+group,lower_only,1958,1608,0.821246,103.904,130.396,158.951,0.130212,,,,,,,,,,2026-11-05 06:28:35,23d79a84922788f2ccda6705489c1e62ec225f76,ca0299729358ffb9161d95e9f2c88df08d205c1b943aa6752b6464f70c9b3fe9
+group,combined,2025,1674,0.826667,,,,,,,,,,,,,,2026-11-05 06:28:35,23d79a84922788f2ccda6705489c1e62ec225f76,ca0299729358ffb9161d95e9f2c88df08d205c1b943aa6752b6464f70c9b3fe9
+summary,,,,,,,,,5716,84,0,24,3583,False,False,True,fail,2026-11-05 06:28:35,23d79a84922788f2ccda6705489c1e62ec225f76,ca0299729358ffb9161d95e9f2c88df08d205c1b943aa6752b6464f70c9b3fe9
