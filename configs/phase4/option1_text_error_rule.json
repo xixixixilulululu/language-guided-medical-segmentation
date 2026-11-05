@@ -1,0 +1,46 @@
+{
+  "version": "phase4-option1-text-error-rule-v1",
+  "date": "2026-11-05",
+  "purpose": "Descriptive check on the training split: can SGSeg's revised report texts explain the one-sided training reports that disagree with convention B in option 1? It does not change the option 1 rule or result.",
+  "external_data": {
+    "url": "https://raw.githubusercontent.com/ShuchangYe-bib/SGSeg/ee3c03444c4097c1115a4155c3ba8dd89c98aa55/data/QaTa/prompts/annotation.json",
+    "local_path": "~/datasets/external/sgseg/annotation.json (outside the repository, never committed)",
+    "sha256": "6f62c4b40ed460de53a8e4a80cc7633569853ab8fe2f4cca3cfc216af9e59fb0",
+    "structure": "{'train': [...], 'valid': [...], 'test': [...]}; items have image_path (e.g. 'mask_covid_12.png', lower case) and caption",
+    "test_key": "deleted immediately after loading; never accessed",
+    "matching": "only SGSeg 'train' and 'valid' items; key = image_path without the 'mask_' prefix and '.png', compared case-insensitively with our training ids (lgms.data.split_ids('QaTa-COV19', 'train')); items that are not our training ids are dropped without being printed or processed; SGSeg's own split is not used",
+    "coverage": "each of our 5716 training ids must occur exactly once in train + valid; otherwise stop and report the numbers (test is not searched)"
+  },
+  "reports": {
+    "set": "the 1129 one-sided training reports with a lesion side under the option 1 primary definition, recomputed in memory with the functions of src/phase4/option1_train_check.py; it must give exactly 1129 reports, 1085 agreeing with convention B; otherwise stop",
+    "original_text": "raw_text of results/phase2_text_attributes.csv (dataset QaTa-COV19, split train)",
+    "revised_side": "SGSeg caption parsed with src/phase2/texts.py parse() (rules unchanged), side from option1_train_check.one_sided()",
+    "parse_failure_stop": "stop if parse_ok is false for more than 5% of the revised captions of our 5716 training ids"
+  },
+  "classes": {
+    "R1": "revised text equals the original (lower case, whitespace runs collapsed to one space, ends stripped)",
+    "R2": "changed, still a one-sided report of the same side",
+    "R3": "changed, now a one-sided report of the opposite side",
+    "R4": "changed, and now two-sided, without a side, or not parsed (parse_ok false)"
+  },
+  "outputs": {
+    "counts": "R1-R4 counts for the agreeing (1085) and the disagreeing (44) reports; repeated within sub-* and covid_*",
+    "revised_agreement": "agreement with convention B using the revised side, over reports whose revised text is one-sided and parsed, with the option 1 primary lesion side (descriptive)",
+    "fisher": "two-sided Fisher exact test (scipy.stats.fisher_exact) of the R3 share, disagreeing versus agreeing reports (2 x 2: group x R3 / not R3)",
+    "file": "results/phase4_option1_text_error_check.csv (counts only; no text, no per-image rows)"
+  },
+  "interpretation_fixed_in_advance": {
+    "scope": "about SGSeg's revisions only, not about whether a report is right or wrong",
+    "explains_most": "R3 >= 50% of the 44 disagreeing reports AND Fisher p < 0.01 -> 'SGSeg's revisions explain most of the disagreement'",
+    "explains_little": "R3 < 25% of the 44 -> 'SGSeg's revisions explain little of the disagreement'",
+    "otherwise": "'SGSeg's revisions explain part of the disagreement'",
+    "agreeing_group_flag": "R3 count and share among the 1085 agreeing reports; if >= 5%: 'SGSeg may use another orientation convention; manual review needed'"
+  },
+  "interpretations": {
+    "parse_failure_denominator": "the revised captions of all 5716 training ids",
+    "R4_parse": "a revised caption with parse_ok false is R4 even if a side could be read",
+    "revised_agreement_lesion_side": "the option 1 primary lesion side of the same image"
+  },
+  "limitations": "How SGSeg revised the texts is not documented; the revisions may have used the masks, so this is not fully independent evidence. Few R3 cases may only mean that SGSeg did not revise those reports. The check does not change the option 1 result.",
+  "stop_conditions": "external sha256 differs; training ids missing or duplicated in SGSeg train + valid; option 1 recomputation is not 1129 / 1085; revised parse failures > 5%; this rule changes after its commit; any unit test fails; any validation or test content of ours would be needed"
+}
