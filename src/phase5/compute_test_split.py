@@ -34,7 +34,15 @@ OUTS = {"results": R("phase5_test_results.csv"), "pairwise": R("phase5_pairwise_
 STRATS = ["LANG", "IMG", "D-Gate", "LR-Gate", "SDC-Fallback", "Fixed Average"]
 MIXED = ["LANG", "IMG", "LR-Gate", "SDC-Fallback", "Fixed Average"]          # the plan's five (spec "mixed_reliability")
 POST_HOC = "post-hoc supplementary, descriptive (test split seen in Phases 2-3)"
-_GT = {}
+_GT = {}                                                # filled in every worker by init_worker()
+
+
+def init_worker():
+    """Pool initializer: each worker reads the test ground truth itself (no reliance on fork)."""
+    from lgms import data
+    ids, _, masks = data.load_split_arrays(DATASET, "test")
+    _GT.clear()
+    _GT.update(zip(ids, masks))
 
 
 def preflight(repo=guards.REPO):
@@ -184,7 +192,6 @@ def main():
     lock.require_open(what="Phase 5 test computation")
     n_manifest = preflight()
     log("start", f"manifest files verified: {n_manifest}")
-    from lgms import data
     from phase3 import evaluate_gates as E
     D, arch = E.load_rows("test")
     if arch != "nnunet":
@@ -193,9 +200,7 @@ def main():
     D = D[(D.dataset == DATASET) & D.condition.isin(core.CONDS)].copy()
     if len(D) != N_ROWS:
         guards.stop(f"{len(D)} test rows, expected {N_ROWS}")
-    ids, _, masks = data.load_split_arrays(DATASET, "test")
-    _GT.update(zip(ids, masks))
-    with Pool(9) as pool:
+    with Pool(9, initializer=init_worker) as pool:
         parts = pool.map(test_rows, [(m, s) for m in core.METHODS for s in core.SEEDS])
     X = pd.DataFrame([x for p in parts for x in p], columns=core.KEYS + ["sdc"] + [f"fa_{k}" for k in core.METRICS])
     D = D.merge(X, on=core.KEYS, how="left", validate="one_to_one")
@@ -215,8 +220,9 @@ def main():
     for k in core.METRICS:
         pc[f"fixed_average_{k}"] = D[f"fa_{k}"].to_numpy()
     out["per_case"] = pc
-    for k in ("results", "pairwise", "compute", "mixed", "crossover", "per_case"):
+    for k in ("results", "pairwise", "compute", "mixed", "crossover"):
         guards.write_atomic(out[k], guards.REPO, OUTS[k], float_format="%.10g")
+    guards.write_atomic(out["per_case"], guards.REPO, OUTS["per_case"], float_format="%.17g")   # full precision (SDC < tau)
     log("end", f"rows {len(D)}")
     print(out["crossover"].to_string(index=False))
 

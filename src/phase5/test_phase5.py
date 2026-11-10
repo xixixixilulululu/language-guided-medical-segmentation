@@ -80,8 +80,12 @@ check("no positive objective -> never fall back (t = +inf, tau = -inf)", chn.thr
       and not C.sdc_switch([0.0, 1.0], C.tau_from_t(chn.threshold)).any())
 
 # Fixed Average
-pa, ba = C.fixed_average(np.array([0.4, 0.6, 1.0, 0.0]), np.array([0.6, 0.4, 0.2, 0.0]))
-check("Fixed Average 0.5 / 0.5; exactly 0.5 is background", np.allclose(pa, [0.5, 0.5, 0.6, 0.0]) and ba.tolist() == [False, False, True, False])
+pa, ba = C.fixed_average(np.array([0.25, 0.75, 1.0, 0.0], np.float32), np.array([0.75, 0.25, 0.2, 0.0], np.float32))
+check("Fixed Average 0.5 / 0.5: exactly 0.5 (0.25 and 0.75) is background", pa[0] == 0.5 and pa[1] == 0.5
+      and ba.tolist() == [False, False, True, False])
+pf, bf = C.fixed_average(np.array([0.4], np.float32), np.array([0.6], np.float32))
+check("Fixed Average in float64: float32 0.4 and 0.6 average to 0.5000000149 -> foreground", pf.dtype == np.float64
+      and pf[0] > 0.5 and bf.tolist() == [True], f"{pf[0]!r}")
 gt = np.zeros((224, 224), np.uint8); gt[10:20, 10:20] = 1
 m = np.zeros((224, 224), bool); m[10:20, 10:20] = True
 sc = C.score_mask(m, gt)

@@ -4,7 +4,8 @@ Rules: configs/phase5/spec.json ("sdc", "sdc_threshold"). Rows as src/phase3/gat
 merged one-to-one on the keys, QaTa, conditions C0, C2, C4, C5, C6, partition GATE_CAL per model x seed. SDC per
 row from the LANG probability map of src/phase3/features.py passes() (validation C2 from the Phase 3 rerun).
 Threshold: gates.calibrate(cal, "neg_sdc") with neg_sdc = -SDC (unchanged rule); reported as tau = -t.
-Self-checks (exit 10): spec committed once and unchanged, an ancestor of HEAD; clean tree; outputs absent.
+Self-checks (exit 10): spec committed once and unchanged, an ancestor of HEAD; clean tree; HEAD on origin/main;
+outputs absent.
 Outputs: results/phase5_sdc_calibration.csv (tau at full precision), results/phase5_sdc_val.csv.gz (keys + SDC).
 Usage (Slurm job slurm/phase5_calibrate.slurm):  python src/phase5/calibrate_sdc.py
 """
@@ -55,6 +56,7 @@ def calibration_row(m, s, curve, ch, why):
 def main():
     commit = guards.committed_unchanged(REPO, guards.SPEC)
     guards.clean_tree(REPO)
+    guards.on_origin(REPO)
     guards.outputs_absent(REPO, [OUT_CAL, OUT_SDC])
     from phase3 import gates as G
     from phase4 import guard

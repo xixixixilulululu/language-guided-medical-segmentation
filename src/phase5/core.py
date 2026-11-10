@@ -31,8 +31,9 @@ def sdc(p):
 
 
 def fixed_average(p_lang, p_img):
-    """(P_avg, B_avg): 0.5 / 0.5 average of the stored float32 maps; B_avg = P_avg > 0.5 (strict)."""
-    p = 0.5 * np.asarray(p_lang, np.float32) + 0.5 * np.asarray(p_img, np.float32)
+    """(P_avg, B_avg): 0.5 / 0.5 average of the stored float32 maps, computed in float64 (a float32 sum would round
+    values just above 0.5 down to 0.5); B_avg = P_avg > 0.5 (strict)."""
+    p = 0.5 * np.asarray(p_lang).astype(np.float64) + 0.5 * np.asarray(p_img).astype(np.float64)
     return p, metrics.binarize(p)
 
 
