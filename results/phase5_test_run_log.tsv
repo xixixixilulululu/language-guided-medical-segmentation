@@ -1,0 +1,3 @@
+event	time_utc	job_id	head	note
+start	2026-11-10 17:28:21	476	6573689d9faadfeb68d1e7370428aace41535dbf	manifest files verified: 2763
+end	2026-11-10 17:30:40	476	6573689d9faadfeb68d1e7370428aace41535dbf	rows 206595

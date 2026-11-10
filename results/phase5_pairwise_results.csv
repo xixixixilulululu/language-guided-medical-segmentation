@@ -1,0 +1,49 @@
+comparison,kind,dataset,method,condition,n_images,n_groups,delta,ci95_low,ci95_high,label,margin,ci95_low_above_margin
+LR-Gate - SDC-Fallback,main,QaTa-COV19,DD-CMD,C4,2081,472,-0.01939720389,-0.02561730797,-0.01317709981,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,DD-CMD,C5,2081,472,-0.01970651535,-0.0246926302,-0.0147204005,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,DD-CMD,C6,2081,472,-0.02659371029,-0.0330272011,-0.02016021947,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,LViT-T,C4,2081,472,-0.06027895448,-0.07324852472,-0.04730938425,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,LViT-T,C5,2081,472,-0.01235353325,-0.01946863294,-0.005238433555,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,LViT-T,C6,2081,472,-0.03198889128,-0.0418292392,-0.02214854336,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,RecLMIS,C4,2081,472,-0.03411770631,-0.04329870674,-0.02493670588,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,RecLMIS,C5,2081,472,-0.01607392362,-0.02174326911,-0.01040457813,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - SDC-Fallback,main,QaTa-COV19,RecLMIS,C6,2081,472,-0.02387839765,-0.03124356284,-0.01651323246,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,DD-CMD,C4,2081,472,-0.03434357389,-0.03755716016,-0.03112998761,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,DD-CMD,C5,2081,472,-0.04049385632,-0.0441239539,-0.03686375874,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,DD-CMD,C6,2081,472,-0.03594606592,-0.04130467704,-0.0305874548,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,LViT-T,C4,2081,472,-0.09783829561,-0.1064807797,-0.08919581149,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,LViT-T,C5,2081,472,-0.05910984393,-0.06453035312,-0.05368933474,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,LViT-T,C6,2081,472,-0.1082324396,-0.1150576204,-0.1014072587,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,RecLMIS,C4,2081,472,-0.08330032894,-0.09094159408,-0.07565906381,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,RecLMIS,C5,2081,472,-0.06656296771,-0.07231629303,-0.0608096424,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+LR-Gate - Fixed Average,main,QaTa-COV19,RecLMIS,C6,2081,472,-0.1128118652,-0.1202441532,-0.1053795772,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",,
+IMG - LANG,clean_cost,QaTa-COV19,DD-CMD,C0,2113,474,-0.06507580004,-0.07418682342,-0.05596477666,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+IMG - LANG,clean_cost,QaTa-COV19,DD-CMD,C2,2113,474,-0.0650033017,-0.07408248371,-0.05592411969,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+IMG - LANG,clean_cost,QaTa-COV19,LViT-T,C0,2113,474,-0.02273390707,-0.03243866424,-0.01302914991,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+IMG - LANG,clean_cost,QaTa-COV19,LViT-T,C2,2113,474,-0.02188575034,-0.0314667784,-0.01230472228,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+IMG - LANG,clean_cost,QaTa-COV19,RecLMIS,C0,2113,474,-0.06578681122,-0.07581018389,-0.05576343854,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+IMG - LANG,clean_cost,QaTa-COV19,RecLMIS,C2,2113,474,-0.05330027302,-0.06316604614,-0.0434344999,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+D-Gate - LANG,clean_cost,QaTa-COV19,DD-CMD,C0,2113,474,-0.002571074145,-0.004303664089,-0.0008384842004,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+D-Gate - LANG,clean_cost,QaTa-COV19,DD-CMD,C2,2113,474,-0.002551016801,-0.004271338276,-0.0008306953264,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+D-Gate - LANG,clean_cost,QaTa-COV19,LViT-T,C0,2113,474,-0.001802845442,-0.003186421238,-0.0004192696456,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+D-Gate - LANG,clean_cost,QaTa-COV19,LViT-T,C2,2113,474,-0.001689753624,-0.003028910447,-0.0003505968001,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+D-Gate - LANG,clean_cost,QaTa-COV19,RecLMIS,C0,2113,474,-0.002901502327,-0.004723141958,-0.001079862695,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+D-Gate - LANG,clean_cost,QaTa-COV19,RecLMIS,C2,2113,474,-0.002001494899,-0.003889386091,-0.0001136037058,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+LR-Gate - LANG,clean_cost,QaTa-COV19,DD-CMD,C0,2113,474,-0.002951467874,-0.004483720609,-0.001419215139,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+LR-Gate - LANG,clean_cost,QaTa-COV19,DD-CMD,C2,2113,474,-0.002776271338,-0.004224773265,-0.001327769411,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+LR-Gate - LANG,clean_cost,QaTa-COV19,LViT-T,C0,2113,474,-0.002984940102,-0.005564166577,-0.0004057136277,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+LR-Gate - LANG,clean_cost,QaTa-COV19,LViT-T,C2,2113,474,-0.002788935185,-0.005246333443,-0.0003315369256,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+LR-Gate - LANG,clean_cost,QaTa-COV19,RecLMIS,C0,2113,474,-0.002464811426,-0.004182650407,-0.0007469724449,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+LR-Gate - LANG,clean_cost,QaTa-COV19,RecLMIS,C2,2113,474,-0.001707866013,-0.003410148339,-5.583686254e-06,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+SDC-Fallback - LANG,clean_cost,QaTa-COV19,DD-CMD,C0,2113,474,-0.009477265656,-0.01292151794,-0.006033013371,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+SDC-Fallback - LANG,clean_cost,QaTa-COV19,DD-CMD,C2,2113,474,-0.009490636165,-0.0129625612,-0.006018711134,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+SDC-Fallback - LANG,clean_cost,QaTa-COV19,LViT-T,C0,2113,474,0.006623131129,-0.0004853216672,0.01373158392,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+SDC-Fallback - LANG,clean_cost,QaTa-COV19,LViT-T,C2,2113,474,0.005078217983,-0.001839120347,0.01199555631,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+SDC-Fallback - LANG,clean_cost,QaTa-COV19,RecLMIS,C0,2113,474,-0.005470711139,-0.009198276087,-0.00174314619,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+SDC-Fallback - LANG,clean_cost,QaTa-COV19,RecLMIS,C2,2113,474,-0.0001571937719,-0.004330749624,0.00401636208,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+Fixed Average - LANG,clean_cost,QaTa-COV19,DD-CMD,C0,2113,474,0.001470931413,-0.001329944035,0.004271806861,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+Fixed Average - LANG,clean_cost,QaTa-COV19,DD-CMD,C2,2113,474,0.001292517153,-0.001525767564,0.00411080187,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+Fixed Average - LANG,clean_cost,QaTa-COV19,LViT-T,C0,2113,474,0.01409293191,0.007352982389,0.02083288143,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+Fixed Average - LANG,clean_cost,QaTa-COV19,LViT-T,C2,2113,474,0.01352203609,0.006890001458,0.02015407073,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,True
+Fixed Average - LANG,clean_cost,QaTa-COV19,RecLMIS,C0,2113,474,-0.01420536481,-0.02046765044,-0.00794307918,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
+Fixed Average - LANG,clean_cost,QaTa-COV19,RecLMIS,C2,2113,474,-0.005419390439,-0.01200229735,0.00116351647,"post-hoc supplementary, descriptive (test split seen in Phases 2-3)",-0.005,False
