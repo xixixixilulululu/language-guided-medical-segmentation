@@ -1,0 +1,119 @@
+{
+  "version": "phase5-spec-v1",
+  "date": "2026-11-10",
+  "plan": {
+    "file": "reports/PHASE5_PLAN.md",
+    "sha256": "8c415df813cefa7177b7324bded1c69e48edaed0054571a5e0f71b6cc39ab2ff",
+    "commit": "b97d07f"
+  },
+  "status": "Phase 5 is a post-hoc supplementary comparison: the QaTa test split was already evaluated and seen in Phases 2 and 3. It is not an independent confirmation. Phase 4 remains STOP (38eb77d); no spatial experiment.",
+  "scope": {
+    "dataset": "QaTa-COV19 only",
+    "language_models": [
+      "lvit (LViT-T)",
+      "reclmis (RecLMIS)",
+      "ddcmd (DD-CMD)"
+    ],
+    "seeds": [
+      1001,
+      1002,
+      1003
+    ],
+    "img": "frozen nnU-Net, seed matched (Phase 3 IMG)",
+    "conditions": [
+      "C0",
+      "C2",
+      "C4",
+      "C5",
+      "C6"
+    ],
+    "not_used": "C1, C3a-C3c, MosMedData+ (no new baseline on them)",
+    "no_training": "no segmentation training, no new split, D-Gate and LR-Gate unchanged",
+    "test_rows": "206,595 rows = 3 models x 3 seeds x (C0 2113 + C2 2113 + C4, C5, C6 2081 targets x 3 donors each); asserted before any output"
+  },
+  "inputs": {
+    "rows_and_probabilities": "as src/phase3/features.py passes() / one_run(): LANG C0, C4-C6 from runs/phase2/<split>/<method>/QaTa-COV19/seed<k>/probs_<cond>_<variant>.npz; validation C2 from the Phase 3 rerun runs/phase3/val/lang/...; test C2 from runs/phase2/test (amendment A1); IMG from runs/phase3/<split>/img/nnunet/QaTa-COV19/seed<k>/probs.npz; row keys dataset, method, seed, sample_id, condition, variant_id, donor_sample_id",
+    "binary_masks": "B = P > 0.5 (src/lgms/metrics.py THRESHOLD, strict); on test every row asserts packbits(P > 0.5) == the archived mask (LANG masks_<cond>_<variant>.npz, IMG masks.npz)",
+    "ground_truth": "test masks read as in the Phase 2 test inference: lgms.data.load_split_arrays('QaTa-COV19', 'test') under slurm/env_phase1.sh",
+    "existing_tables": "results/phase3_reliability_features[_test].csv.gz, results/phase3_feature_labels[_test].csv.gz, results/phase2_test_per_case.csv.gz, results/phase3_img_test_per_case.csv.gz, results/phase3_dgate_thresholds.json, results/phase3_lr_artifacts.json, results/phase3_fallback_selection.csv, results/phase3_gate_partitions.csv, results/phase3_computational_cost.csv"
+  },
+  "sdc": {
+    "formula": "SDC = 2 * sum(P_lang * B_lang) / [sum(P_lang) + sum(B_lang)], float64, B_lang = P_lang > 0.5 (the scored LANG mask)",
+    "empty": "SDC = 0 when the denominator is 0 (P_lang all zero; then B_lang is empty)",
+    "source": "Borges, Pacheco, Silva, Soft Dice Confidence, Machine Learning 2026, DOI 10.1007/s10994-026-07096-w; arXiv 2402.10665 v6 eq. 22 (SDC(0,0) = 0)",
+    "note": "the paper's example binarisation is p >= gamma; here, as the plan requires, the evaluator's scored mask P > 0.5 is used (they differ only at pixels exactly equal to 0.5)",
+    "rule": "fall back to B_img if SDC < tau, else keep B_lang"
+  },
+  "sdc_threshold": {
+    "per": "one tau per language model x seed; QaTa GATE_CAL only (validation)",
+    "rows": "as src/phase3/gates.py main(): features and labels merged one-to-one on the keys, QaTa only, conditions C0, C2, C4, C5, C6, then partition == GATE_CAL per model x seed",
+    "selection": "src/phase3/gates.py calibrate(cal, 'neg_sdc') with neg_sdc = -SDC, unchanged: candidates {-inf, +inf} and every distinct neg_sdc on these rows; rule neg_sdc > t; Delta(c) by donors -> images -> groups (nested_weights) with C0 / C2 on all eligible GATE_CAL images and C4-C6 on S_CAL (targets eligible for C4, C5 and C6); objective mean Delta(C4, C5, C6); feasible if all five Delta >= -0.005; ties (<= 1e-12) to the higher t, i.e. fewer fallbacks; if the best feasible objective is <= 0: t = +inf (never fall back)",
+    "reporting": "tau = -t in SDC units (t = +inf -> tau = -inf, never fall back); stored at full precision; calibration fallback rates as calibrate() (switched rows / rows), as in results/phase3_lr_calibration.csv"
+  },
+  "fixed_average": {
+    "formula": "P_avg = 0.5 * P_lang + 0.5 * P_img (float32 maps as stored); B_avg = P_avg > 0.5 (a pixel exactly 0.5 is background)",
+    "scoring": "lgms.metrics.case_metrics(lgms.metrics.binarize(P_avg), gt > 0) as src/evaluate.py _score; empty = not (P_avg > 0.5).any()",
+    "no_tuning": "no weight or threshold is tuned"
+  },
+  "strategies": {
+    "LANG": "always B_lang",
+    "IMG": "always B_img",
+    "D-Gate": "Phase 3, unchanged (results/phase3_dgate_thresholds.json)",
+    "LR-Gate": "Phase 3, unchanged (results/phase3_lr_artifacts.json)",
+    "SDC-Fallback": "B_img if SDC < tau(model, seed) else B_lang; its per-case metrics are those of the selected LANG or IMG row (same masks, same evaluator)",
+    "Fixed Average": "B_avg, scored anew"
+  },
+  "aggregation": {
+    "tables": "as src/phase3/evaluate_gates.py image_weighted(): per seed, donors averaged within image, then images; mean +- SD over the 3 seeds; fallback_rate image-weighted the same way",
+    "paired": "as src/phase3/stats_phase3.py group_differences(): donor differences within image and seed -> seeds within image -> images within group (Phase 2 / Phase 3 groups) -> equal-weight groups",
+    "ci": "stats_phase3.t_over_groups(): mean and 95% t-interval over groups (ddof 1); no p-values are output"
+  },
+  "comparisons": {
+    "main_post_hoc": "LR-Gate - SDC-Fallback and LR-Gate - Fixed Average under C4, C5, C6 for each language model (post-hoc supplementary, not a confirmatory family)",
+    "clean_cost": "strategy - LANG under C0 and C2 for IMG, D-Gate, LR-Gate, SDC-Fallback, Fixed Average, with the 95% CI and the -0.005 development margin shown; no equivalence or safety claim"
+  },
+  "mixed_reliability": {
+    "population": "the common QaTa test targets eligible for C4, C5 and C6 (2081 images, 472 groups); C0 restricted to the same targets",
+    "D": "D(C) = group-weighted mean Dice (donors -> seeds -> images -> groups) per model x strategy on that population",
+    "wrong": "D_wrong = [D(C4) + D(C5) + D(C6)] / 3 (equal-weight benchmark stress-test mixture, not a real error distribution)",
+    "expected": "E(p) = (1 - p) D(C0) + p D_wrong; curves at p = 0.00, 0.01, ..., 1.00 for plotting only",
+    "crossover": "for A vs B: delta_clean = D_A(C0) - D_B(C0), delta_wrong = D_A(wrong) - D_B(wrong); if delta_wrong != delta_clean, p* = -delta_clean / (delta_wrong - delta_clean), reported if 0 <= p* <= 1; otherwise (or delta_wrong == delta_clean) 'none'",
+    "pairs": "LR-Gate, SDC-Fallback and Fixed Average each versus always-LANG and versus always-IMG; and the range of p in [0, 1] where the strategy is better than both fixed choices",
+    "sensitivity": "crossovers only, with D_wrong replaced by D(C4), D(C5) or D(C6) alone",
+    "caveat": "a crossover is not a clinical threshold",
+    "strategies": "LANG, IMG, LR-Gate, SDC-Fallback, Fixed Average only: the plan's Task 5.4 report items and Figure 2 list these five, so D-Gate does not enter Task 5.4 (curves, crossovers, better-than-both ranges); D-Gate stays in results/phase5_test_results.csv and in the C0 / C2 cost comparison"
+  },
+  "compute": {
+    "source": "results/phase3_computational_cost.csv (job 391; validation, first 64 sorted QaTa ids, seed 1001, C0): mean_ms of 'LANG only' per model and of 'IMG only'",
+    "formula": "LR-Gate, D-Gate, Fixed Average: LANG_time + IMG_time; SDC-Fallback: LANG_time + fallback_rate x IMG_time, fallback_rate = the image-weighted SDC fallback rate of the test results table (mean of the 3 seeds), per model x condition; approximation (score overhead ignored)"
+  },
+  "outputs": {
+    "files": [
+      "results/phase5_sdc_calibration.csv",
+      "results/phase5_sdc_val.csv.gz (GATE_CAL rows: keys and SDC)",
+      "results/phase5_test_results.csv",
+      "results/phase5_pairwise_results.csv",
+      "results/phase5_compute_summary.csv",
+      "results/phase5_mixed_reliability.csv",
+      "results/phase5_crossover_summary.csv",
+      "results/phase5_test_per_case.csv.gz (keys, SDC, SDC-Fallback switch, Fixed Average dice / miou / hd95 / assd / empty)",
+      "results/phase5_test_run_log.tsv",
+      "reports/PHASE5_PROTOCOL_FREEZE.md",
+      "reports/PHASE5_RESULTS.md"
+    ],
+    "figures": [
+      "reports/figures/phase5/fig1_strategies.png: Dice under C0, C4, C5, C6 for LANG, IMG, LR-Gate, SDC-Fallback, Fixed Average, three models",
+      "reports/figures/phase5/fig2_mixed_reliability.png: expected Dice versus p for the same five strategies (equal C4/C5/C6 mixture), LR-Gate crossovers with always-LANG and always-IMG marked when they exist"
+    ]
+  },
+  "order": "plan -> spec, code and synthetic tests -> SDC calibration on GATE_CAL (Slurm) -> freeze document and artifact sha256 manifest (Slurm) -> one test computation (Slurm) after checking the manifest, a clean tree and HEAD on origin/main -> figures and results report",
+  "after_freeze": "the test computation runs once; no rule, threshold or gate is changed after the Phase 5 test comparison is seen",
+  "programs": {
+    "calibration": "src/phase5/calibrate_sdc.py (slurm/phase5_calibrate.slurm)",
+    "manifest": "src/phase5/make_manifest.py (slurm/phase5_manifest.slurm)",
+    "test_split": "src/phase5/compute_test_split.py (slurm/phase5_test.slurm; named so that it is never collected as a unit test)",
+    "figures": "src/phase5/make_figures.py (reads the output files only)",
+    "core": "src/phase5/core.py, src/phase5/guards.py",
+    "tests": "src/phase5/test_phase5.py (synthetic data only)"
+  }
+}
