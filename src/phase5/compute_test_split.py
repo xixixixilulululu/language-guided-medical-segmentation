@@ -3,7 +3,8 @@
 Rules: configs/phase5/spec.json; freeze: reports/PHASE5_PROTOCOL_FREEZE.md; inputs: configs/phase5/artifact_manifest.tsv.
 Before anything of the test split is read (exit 10 otherwise): Phase 2 lock open; spec, freeze document, manifest
 and SDC calibration each committed once and unchanged, ancestors of HEAD; clean tree; HEAD on origin/main; every
-manifest file has its recorded sha256; outputs absent. Then: 206,595 rows asserted; every LANG / IMG archived mask
+manifest file has its recorded sha256; result files absent (the append-only run log may exist and records every
+attempt). Then: 206,595 rows asserted; every LANG / IMG archived mask
 equals packbits(P > 0.5); SDC-Fallback and Fixed Average added to the Phase 3 strategies; tables, paired
 differences (95% t-CI, no p), compute summary, mixed reliability and exact crossovers.
 Usage (Slurm job slurm/phase5_test.slurm):  python src/phase5/compute_test_split.py
@@ -45,12 +46,17 @@ def init_worker():
     _GT.update(zip(ids, masks))
 
 
+def result_outputs():
+    """Result files that must not exist yet; the run log is append-only and records every attempt."""
+    return [v for k, v in OUTS.items() if k != "log"]
+
+
 def preflight(repo=guards.REPO):
     for f in (guards.SPEC, FREEZE, MANIFEST, CALIB):
         guards.committed_unchanged(repo, f)
     guards.clean_tree(repo)
     guards.on_origin(repo)
-    guards.outputs_absent(repo, OUTS.values())
+    guards.outputs_absent(repo, result_outputs())
     m = pd.read_csv(os.path.join(repo, MANIFEST), sep="\t", dtype=str)
     for path, sha in zip(m.path, m.sha256):
         full = os.path.expanduser(path) if path.startswith("~") else os.path.join(repo, path)

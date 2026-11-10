@@ -129,5 +129,16 @@ Gu.write_atomic(pd.DataFrame({"a": [1, 2]}), d, "results/y.csv.gz")
 check("atomic write produces a readable gzip file and no temporary file",
       pd.read_csv(os.path.join(d, "results", "y.csv.gz")).a.tolist() == [1, 2] and not os.path.exists(os.path.join(d, "results", "y.csv.gz.tmp")))
 
+# compute_test_split: the run log is append-only and does not block a resubmission; result files do
+from phase5 import compute_test_split as T  # noqa: E402
+ro = T.result_outputs()
+check("result outputs exclude the run log and include every result file",
+      T.OUTS["log"] not in ro and set(ro) == {v for k, v in T.OUTS.items() if k != "log"} and len(ro) == 6)
+d2 = tempfile.mkdtemp(); os.makedirs(os.path.join(d2, "results"))
+open(os.path.join(d2, T.OUTS["log"]), "w").write("event\ttime_utc\tjob_id\thead\tnote\nstart\tx\t1\th\t\n")
+check("an existing run log (interrupted attempt) does not stop the pre-check", not stops(Gu.outputs_absent, d2, ro))
+open(os.path.join(d2, T.OUTS["results"]), "w").write("x")
+check("an existing result file stops the pre-check", stops(Gu.outputs_absent, d2, ro))
+
 print("ALL CHECKS PASSED" if not FAILED else f"FAILED: {FAILED}")
 sys.exit(1 if FAILED else 0)
