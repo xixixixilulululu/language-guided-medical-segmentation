@@ -33,6 +33,8 @@ digits (60 rows × 15 columns, 0 mismatches), as stated in the freeze document.
 | DD-CMD | C5 | 72.85 | 79.66 | 73.46 | 74.82 | 76.08 | 78.39 |
 | DD-CMD | C6 | 60.92 | 79.66 | 65.16 | 67.60 | 68.41 | 70.07 |
 
+mIoU, HD95, ASSD and the empty-prediction rate for every strategy × model × condition, with their SD over seeds, are in `results/phase5_test_results.csv`.
+
 Fallback rates (% of images, image-weighted):
 
 | Model | Condition | D-Gate | LR-Gate | SDC-Fallback |
