@@ -65,6 +65,14 @@ def preflight(repo=guards.REPO):
     return len(m)
 
 
+def read_taus(path):
+    """{(method code, seed): tau}. tau is read as the stored string and converted with float(): pandas' default
+    float parser can be 1 ulp off for 17-digit decimals (found for 4 of the 9 thresholds with pandas 3.0.5)."""
+    cal = pd.read_csv(path, dtype={"threshold": str})
+    code = {v: k for k, v in core.NAME.items()}
+    return {(code[m], int(s)): float(t) for m, s, t in zip(cal.model, cal.seed, cal.threshold)}
+
+
 def test_rows(args):
     """Per-row SDC and Fixed Average of one model x seed (test), with the archived-mask checks."""
     m, s = args
@@ -212,9 +220,7 @@ def main():
     D = D.merge(X, on=core.KEYS, how="left", validate="one_to_one")
     if D.sdc.isna().any() or len(D) != N_ROWS:
         guards.stop("SDC / Fixed Average rows do not match the test rows one to one")
-    cal = pd.read_csv(os.path.join(guards.REPO, CALIB))
-    code = {v: k for k, v in core.NAME.items()}
-    taus = {(code[r.model], int(r.seed)): float(r.threshold) for r in cal.itertuples()}
+    taus = read_taus(os.path.join(guards.REPO, CALIB))
     S, sw = build_strategies(D, taus)
     res = E.image_weighted(S)
     res = res[res.strategy.isin(STRATS)]

@@ -140,5 +140,19 @@ check("an existing run log (interrupted attempt) does not stop the pre-check", n
 open(os.path.join(d2, T.OUTS["results"]), "w").write("x")
 check("an existing result file stops the pre-check", stops(Gu.outputs_absent, d2, ro))
 
+# tau read exactly: the 9 stored strings of results/phase5_sdc_calibration.csv (job 469, commit 9110861)
+TAU_STR = [("LViT-T", 1001, "0.76623150762105452"), ("LViT-T", 1002, "0.80686778269080872"),
+           ("LViT-T", 1003, "0.76610056565580087"), ("RecLMIS", 1001, "0.79282069500849839"),
+           ("RecLMIS", 1002, "0.6821835250294308"), ("RecLMIS", 1003, "0.74428603387047898"),
+           ("DD-CMD", 1001, "0.96497024557188282"), ("DD-CMD", 1002, "0.94450605392916853"),
+           ("DD-CMD", 1003, "0.95831055514840158")]
+d3 = tempfile.mkdtemp(); pc = os.path.join(d3, "cal.csv")
+with open(pc, "w") as f:
+    f.write("model,seed,threshold,C0_delta\n" + "".join(f"{m},{s},{t},-0.004\n" for m, s, t in TAU_STR))
+got = T.read_taus(pc)
+code = {v: k for k, v in C.NAME.items()}
+check("read_taus returns float(stored string) exactly for all 9 thresholds",
+      all(got[(code[m], s)] == float(t) for m, s, t in TAU_STR) and len(got) == 9)
+
 print("ALL CHECKS PASSED" if not FAILED else f"FAILED: {FAILED}")
 sys.exit(1 if FAILED else 0)
