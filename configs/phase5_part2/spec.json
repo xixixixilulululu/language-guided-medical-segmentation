@@ -1,0 +1,106 @@
+{
+  "version": "phase5-part2-spec-v1",
+  "date": "2026-11-11",
+  "plan": {
+    "file": "reports/PHASE5_PART2_PLAN.md",
+    "sha256": "157c67db89bc0e1a34ad6cfc9a49ceafc3d061590f359b2d85471932c67b8120",
+    "commit": "c8854eb"
+  },
+  "status": "Post-hoc sensitivity analysis of the Phase 5 Fixed Average finding with a second image-only backbone (U-Net); the QaTa-COV19 test split was already examined in Phases 2, 3 and 5. Not an independent confirmation.",
+  "scope": {
+    "dataset": "QaTa-COV19 only",
+    "language_models": [
+      "lvit (LViT-T)",
+      "reclmis (RecLMIS)",
+      "ddcmd (DD-CMD)"
+    ],
+    "seeds": [
+      1001,
+      1002,
+      1003
+    ],
+    "img": "frozen Phase 0 U-Net, seed matched (results/phase3_checkpoints.tsv rows 20, 22, 24; sha256 checked by src/phase3/infer_img.py)",
+    "conditions": [
+      "C0",
+      "C2",
+      "C4",
+      "C5",
+      "C6"
+    ],
+    "strategies": [
+      "LANG",
+      "U-Net IMG",
+      "U-Net Fixed Average"
+    ],
+    "not_done": "no segmentation training, no gate, no SDC, no TransUNet, no weight or threshold search, no new text, no MosMedData+",
+    "counts": "asserted: 206,595 rows; C4-C6: 2081 images / 472 groups each; C0 and C2: 2113 images / 474 groups each"
+  },
+  "unet_inference": {
+    "program": "src/phase3/infer_img.py --arch unet --dataset QaTa-COV19 --seeds 1001 1002 1003 --split test (unchanged, inference only)",
+    "job": "slurm/phase5_part2_unet_infer.slurm (sources slurm/env_phase1.sh as slurm/phase3_test.slurm)",
+    "settings": "configs/unet.yaml (deterministic: true), eval mode, no_grad, UNetDataset(train=False), sigmoid output of the model, no TTA",
+    "outputs": "runs/phase3/test/img/unet/QaTa-COV19/seed<k>/: probs.npz (float32), masks.npz (packbits of P > 0.5), per_case.csv, reconcile_phase0.csv, passes.tsv",
+    "test_log": "infer_img.py appends start / end rows to results/phase2_test_eval_log.tsv (append-only; not in the Phase 2 lock record); the appended rows are committed with the inference results; their 'Phase 3 IMG test inference' wording comes from the reused program",
+    "data_root": "test images and masks from LGMS_COMMON_ROOT = ~/datasets/phase1/common224_trainval, whose QaTa-COV19 test and test.txt are links (src/phase1/analysis_lock.py link_test) to ~/datasets/common224/QaTa-COV19/; checked with readlink -f and recorded in reports/PHASE5_PART2_SETUP.md"
+  },
+  "reconciliation": {
+    "rule": "as the deterministic-model tier of P2-2 (PHASE2_PROTOCOL.md 4.7): for every seed, the mask P > 0.5 must equal the Phase 0 archived PNG mask (runs/unet/QaTa-COV19/seed<k>/eval_test/masks/<id>.png, written from float32 probabilities, src/lgms/runner.py lines 87 and 93) pixel by pixel, and the per-case Dice must equal the archived per_case.csv within 1e-6 (6 stored decimals)",
+    "basis": "U-Net is run deterministically (configs/unet.yaml line 58) and the Phase 3 validation rerun reproduced the archive exactly (results/phase3_rerun_checks.csv rows 2-4: 0 cases, 0 pixels, 0 Dice difference)",
+    "reported": "per seed: images with a mask difference, maximum pixel difference, mean and maximum |Delta Dice| (all expected 0)",
+    "if_not_identical": "stop, find the cause and report; a pipeline error (checkpoint, preprocessing, data) is fixed and that checkpoint is rerun once, both runs recorded; numerical non-determinism: keep the result and report it; never rerun until it passes",
+    "program": "src/phase5_part2/reconcile_unet.py (run in the inference job) -> results/phase5_part2_unet_img_test_per_case.csv.gz (keys, metrics and reconciliation columns)"
+  },
+  "inputs": {
+    "rows_and_groups": "results/phase3_feature_labels_test.csv.gz (keys, group), QaTa, conditions C0, C2, C4, C5, C6",
+    "lang": "per-case metrics from results/phase2_test_per_case.csv.gz merged on the keys; float32 probability maps from src/phase3/features.py passes(m, 'QaTa-COV19', s, 'test') (the same files as Phase 5, listed in configs/phase5/artifact_manifest.tsv)",
+    "img": "U-Net probs.npz, masks.npz and per_case.csv of the inference above, merged on (seed, sample_id)",
+    "ground_truth": "lgms.data.load_split_arrays('QaTa-COV19', 'test') under slurm/env_phase1.sh, read in each worker (Pool initializer)",
+    "mask_check": "every LANG and U-Net archived mask is checked to equal packbits(P > 0.5) row by row before any output"
+  },
+  "fixed_average": {
+    "formula": "P_avg = 0.5 * P_lang + 0.5 * P_img_unet, computed in float64 from the stored float32 maps (src/phase5/core.py fixed_average); B_avg = P_avg > 0.5 (a pixel exactly 0.5 is background)",
+    "scoring": "src/phase5/core.py score_mask = lgms.metrics.case_metrics(mask, gt > 0) plus empty",
+    "no_tuning": "no weight or threshold is tuned"
+  },
+  "aggregation": {
+    "tables": "src/phase3/evaluate_gates.py image_weighted (donors within image and seed, then images; mean +- SD over the 3 seeds)",
+    "paired": "src/phase3/stats_phase3.py group_differences (donors within image and seed -> seeds within image -> images within group -> equal-weight groups) and t_over_groups (95% t-interval, ddof 1); no p-values are output",
+    "main": "U-Net Fixed Average - LANG and U-Net Fixed Average - U-Net IMG under C4, C5, C6 per model",
+    "clean": "U-Net Fixed Average - LANG and U-Net IMG - LANG under C0 and C2 per model; no equivalence or safety claim"
+  },
+  "mixed_reliability": {
+    "population": "common test targets eligible for C4, C5 and C6 (2081 images, 472 groups; asserted); C0 on the same targets",
+    "D": "group-weighted mean Dice (src/phase5/core.py group_weighted_mean)",
+    "wrong": "D_wrong = [D(C4) + D(C5) + D(C6)] / 3",
+    "expected": "E(p) = (1 - p) D(C0) + p D_wrong at p = 0.00, ..., 1.00 for summary values only",
+    "crossovers": "exact (src/phase5/core.py crossover): U-Net Fixed Average vs LANG and vs U-Net IMG; the range of p where it beats both (better_interval, intersect), written as plain floats with its width; repeated with C4, C5 or C6 alone",
+    "caveat": "p is a scenario parameter, not an estimate of report-error prevalence"
+  },
+  "backbone_consistency": {
+    "rows": [
+      "LViT-T",
+      "RecLMIS",
+      "DD-CMD"
+    ],
+    "img_clean_dice": "image-weighted Dice of IMG under C0 (2113 images, mean of 3 seeds): U-Net from this analysis; nnU-Net read from results/phase5_test_results.csv (strategy IMG, condition C0)",
+    "gain_over_lang": "group-weighted paired Fixed Average - LANG with 95% CI under C4, C5, C6 for both backbones; for nnU-Net computed in Part 2 from the committed Phase 5 per-row results (results/phase5_test_per_case.csv.gz, Fixed Average) and results/phase2_test_per_case.csv.gz (LANG): a descriptive statistic, no new inference",
+    "nnunet_check": "the image-weighted Dice difference Fixed Average - LANG from these per-row data must equal results/phase5_test_results.csv within 1e-6 for every model x condition used; otherwise stop",
+    "p_range": "U-Net from this analysis; nnU-Net read from results/phase5_crossover_summary.csv (better_than_both_p_range, parsed from its np.float64 text)",
+    "qualitative_conclusion": "the judging rule is fixed in reports/PHASE5_PART2_PROTOCOL_FREEZE.md before the test computation (one function in src/phase5_part2/compute.py)"
+  },
+  "outputs": [
+    "results/phase5_part2_unet_img_test_per_case.csv.gz (after inference)",
+    "results/phase5_part2_unet_test_results.csv",
+    "results/phase5_part2_unet_pairwise.csv",
+    "results/phase5_part2_unet_mixed_reliability.csv",
+    "results/phase5_part2_unet_crossovers.csv",
+    "results/phase5_part2_backbone_consistency.csv",
+    "results/phase5_part2_unet_test_per_case.csv.gz (keys and U-Net Fixed Average metrics, %.17g)",
+    "results/phase5_part2_test_run_log.tsv (append-only)",
+    "reports/PHASE5_PART2_SETUP.md",
+    "reports/PHASE5_PART2_PROTOCOL_FREEZE.md",
+    "reports/PHASE5_PART2_UNET_SENSITIVITY.md"
+  ],
+  "before_the_test_computation": "freeze document committed once; manifest sha256 verified; clean tree; HEAD on origin/main; result files absent; the run log is append-only",
+  "order": "spec, code, synthetic tests and inference job -> U-Net inference and reconciliation, setup report -> manifest and freeze draft -> one test computation -> report"
+}
