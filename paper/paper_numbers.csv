@@ -1,0 +1,175 @@
+item,method,condition_or_comparison,strategy,quantity,source_file,source_column,raw_value,transform,displayed_value
+fig1a,LViT-T,C0-C1,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.201288,*100,20.13
+fig1a,LViT-T,C0-C1,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.188611,*100,18.86
+fig1a,LViT-T,C0-C1,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.213966,*100,21.40
+fig1b,LViT-T,C0-C1,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-42.6957,negate,42.70
+fig1b,LViT-T,C0-C1,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-38.7107,negate,38.71
+fig1b,LViT-T,C0-C1,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-46.7686,negate,46.77
+fig1a,LViT-T,C0-C3c,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.114305,*100,11.43
+fig1a,LViT-T,C0-C3c,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.103817,*100,10.38
+fig1a,LViT-T,C0-C3c,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.124794,*100,12.48
+fig1b,LViT-T,C0-C3c,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-24.4076,negate,24.41
+fig1b,LViT-T,C0-C3c,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-21.1526,negate,21.15
+fig1b,LViT-T,C0-C3c,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-27.7569,negate,27.76
+fig1a,LViT-T,C0-C4,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.158795,*100,15.88
+fig1a,LViT-T,C0-C4,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.146618,*100,14.66
+fig1a,LViT-T,C0-C4,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.170972,*100,17.10
+fig1b,LViT-T,C0-C4,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-32.8449,negate,32.84
+fig1b,LViT-T,C0-C4,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-29.146,negate,29.15
+fig1b,LViT-T,C0-C4,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-36.4959,negate,36.50
+fig1a,LViT-T,C0-C5,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.110904,*100,11.09
+fig1a,LViT-T,C0-C5,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.101051,*100,10.11
+fig1a,LViT-T,C0-C5,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.120756,*100,12.08
+fig1b,LViT-T,C0-C5,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-27.1213,negate,27.12
+fig1b,LViT-T,C0-C5,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-24.0479,negate,24.05
+fig1b,LViT-T,C0-C5,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-30.1919,negate,30.19
+fig1a,LViT-T,C0-C6,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.233058,*100,23.31
+fig1a,LViT-T,C0-C6,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.220192,*100,22.02
+fig1a,LViT-T,C0-C6,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.245924,*100,24.59
+fig1b,LViT-T,C0-C6,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-52.9023,negate,52.90
+fig1b,LViT-T,C0-C6,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-49.631,negate,49.63
+fig1b,LViT-T,C0-C6,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-56.2885,negate,56.29
+fig1a,RecLMIS,C0-C1,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.168076,*100,16.81
+fig1a,RecLMIS,C0-C1,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.157152,*100,15.72
+fig1a,RecLMIS,C0-C1,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.178999,*100,17.90
+fig1b,RecLMIS,C0-C1,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-39.1795,negate,39.18
+fig1b,RecLMIS,C0-C1,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-36.6304,negate,36.63
+fig1b,RecLMIS,C0-C1,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-41.778,negate,41.78
+fig1a,RecLMIS,C0-C3c,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.131876,*100,13.19
+fig1a,RecLMIS,C0-C3c,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.119402,*100,11.94
+fig1a,RecLMIS,C0-C3c,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.14435,*100,14.44
+fig1b,RecLMIS,C0-C3c,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-27.0241,negate,27.02
+fig1b,RecLMIS,C0-C3c,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-23.7969,negate,23.80
+fig1b,RecLMIS,C0-C3c,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-30.2948,negate,30.29
+fig1a,RecLMIS,C0-C4,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.170039,*100,17.00
+fig1a,RecLMIS,C0-C4,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.156766,*100,15.68
+fig1a,RecLMIS,C0-C4,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.183311,*100,18.33
+fig1b,RecLMIS,C0-C4,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-31.079,negate,31.08
+fig1b,RecLMIS,C0-C4,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-28.5209,negate,28.52
+fig1b,RecLMIS,C0-C4,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-33.6079,negate,33.61
+fig1a,RecLMIS,C0-C5,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.142403,*100,14.24
+fig1a,RecLMIS,C0-C5,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.132502,*100,13.25
+fig1a,RecLMIS,C0-C5,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.152303,*100,15.23
+fig1b,RecLMIS,C0-C5,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-32.4683,negate,32.47
+fig1b,RecLMIS,C0-C5,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-30.1848,negate,30.18
+fig1b,RecLMIS,C0-C5,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-34.6884,negate,34.69
+fig1a,RecLMIS,C0-C6,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.244042,*100,24.40
+fig1a,RecLMIS,C0-C6,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.232002,*100,23.20
+fig1a,RecLMIS,C0-C6,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.256081,*100,25.61
+fig1b,RecLMIS,C0-C6,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-60.0807,negate,60.08
+fig1b,RecLMIS,C0-C6,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-57.4277,negate,57.43
+fig1b,RecLMIS,C0-C6,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-62.7189,negate,62.72
+fig1a,DD-CMD,C0-C1,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.123531,*100,12.35
+fig1a,DD-CMD,C0-C1,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.1132,*100,11.32
+fig1a,DD-CMD,C0-C1,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.133863,*100,13.39
+fig1b,DD-CMD,C0-C1,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-27.1865,negate,27.19
+fig1b,DD-CMD,C0-C1,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-25.1226,negate,25.12
+fig1b,DD-CMD,C0-C1,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-29.3226,negate,29.32
+fig1a,DD-CMD,C0-C3c,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.217563,*100,21.76
+fig1a,DD-CMD,C0-C3c,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.20552,*100,20.55
+fig1a,DD-CMD,C0-C3c,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.229606,*100,22.96
+fig1b,DD-CMD,C0-C3c,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-48.6433,negate,48.64
+fig1b,DD-CMD,C0-C3c,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-45.3132,negate,45.31
+fig1b,DD-CMD,C0-C3c,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-52.107,negate,52.11
+fig1a,DD-CMD,C0-C4,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.145277,*100,14.53
+fig1a,DD-CMD,C0-C4,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.135062,*100,13.51
+fig1a,DD-CMD,C0-C4,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.155493,*100,15.55
+fig1b,DD-CMD,C0-C4,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-29.3338,negate,29.33
+fig1b,DD-CMD,C0-C4,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-27.11,negate,27.11
+fig1b,DD-CMD,C0-C4,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-31.4821,negate,31.48
+fig1a,DD-CMD,C0-C5,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.135759,*100,13.58
+fig1a,DD-CMD,C0-C5,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.126974,*100,12.70
+fig1a,DD-CMD,C0-C5,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.144544,*100,14.45
+fig1b,DD-CMD,C0-C5,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-34.7401,negate,34.74
+fig1b,DD-CMD,C0-C5,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-32.4838,negate,32.48
+fig1b,DD-CMD,C0-C5,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-36.9587,negate,36.96
+fig1a,DD-CMD,C0-C6,LANG,dice_drop,results/phase2_pairwise_results_test.csv,unit_weighted_delta,0.237317,*100,23.73
+fig1a,DD-CMD,C0-C6,LANG,dice_drop_ci95_low,results/phase2_pairwise_results_test.csv,ci95_low,0.226793,*100,22.68
+fig1a,DD-CMD,C0-C6,LANG,dice_drop_ci95_high,results/phase2_pairwise_results_test.csv,ci95_high,0.247841,*100,24.78
+fig1b,DD-CMD,C0-C6,LANG,hd95_increase,results/phase2_pairwise_results_test.csv,hd95_unit_weighted_delta,-59.31,negate,59.31
+fig1b,DD-CMD,C0-C6,LANG,hd95_increase_ci95_low,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_high,-56.9664,negate,56.97
+fig1b,DD-CMD,C0-C6,LANG,hd95_increase_ci95_high,results/phase2_pairwise_results_test.csv,hd95_boot_ci95_low,-61.6475,negate,61.65
+fig2_endpoint,LViT-T,p=0,LANG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7465562394,*100,74.66
+fig2_endpoint,LViT-T,p=1,LANG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.5789706936,*100,57.90
+fig2_endpoint,LViT-T,p=0,IMG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7234160736,*100,72.34
+fig2_endpoint,LViT-T,p=1,IMG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7234160736,*100,72.34
+fig2_endpoint,LViT-T,p=0,Fixed Average,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7605507007,*100,76.06
+fig2_endpoint,LViT-T,p=1,Fixed Average,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7066193217,*100,70.66
+fig2_range,LViT-T,equal C4/C5/C6,Fixed Average,band_lo,results/phase5_part2_backbone_consistency.csv,nnunet_p_lo,0,none,0.000
+fig2_range,LViT-T,equal C4/C5/C6,Fixed Average,band_hi,results/phase5_part2_backbone_consistency.csv,nnunet_p_hi,0.6885532641,none,0.689
+fig2_endpoint,RecLMIS,p=0,LANG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.789730056,*100,78.97
+fig2_endpoint,RecLMIS,p=1,LANG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.6042358265,*100,60.42
+fig2_endpoint,RecLMIS,p=0,IMG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7234160736,*100,72.34
+fig2_endpoint,RecLMIS,p=1,IMG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7234160736,*100,72.34
+fig2_endpoint,RecLMIS,p=0,Fixed Average,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7752924466,*100,77.53
+fig2_endpoint,RecLMIS,p=1,Fixed Average,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7135899645,*100,71.36
+fig2_range,RecLMIS,equal C4/C5/C6,Fixed Average,band_lo,results/phase5_part2_backbone_consistency.csv,nnunet_p_lo,0.1166282057,none,0.117
+fig2_range,RecLMIS,equal C4/C5/C6,Fixed Average,band_hi,results/phase5_part2_backbone_consistency.csv,nnunet_p_hi,0.8407501812,none,0.841
+fig2_endpoint,DD-CMD,p=0,LANG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7886167542,*100,78.86
+fig2_endpoint,DD-CMD,p=1,LANG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.6158321532,*100,61.58
+fig2_endpoint,DD-CMD,p=0,IMG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7234160736,*100,72.34
+fig2_endpoint,DD-CMD,p=1,IMG,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7234160736,*100,72.34
+fig2_endpoint,DD-CMD,p=0,Fixed Average,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.7902371915,*100,79.02
+fig2_endpoint,DD-CMD,p=1,Fixed Average,expected_dice,results/phase5_mixed_reliability.csv,expected_dice,0.6799448291,*100,67.99
+fig2_range,DD-CMD,equal C4/C5/C6,Fixed Average,band_lo,results/phase5_part2_backbone_consistency.csv,nnunet_p_lo,0,none,0.000
+fig2_range,DD-CMD,equal C4/C5/C6,Fixed Average,band_hi,results/phase5_part2_backbone_consistency.csv,nnunet_p_hi,0.6058544439,none,0.606
+table2,LViT-T,C0,LANG,C0 Dice,results/phase5_test_results.csv,dice,0.8171307389,*100,81.71
+table2,LViT-T,C6,LANG,C6 Dice,results/phase5_test_results.csv,dice,0.5769975379,*100,57.70
+table2,LViT-T,C6,LANG,C6 HD95,results/phase5_test_results.csv,hd95,66.30259785,none,66.30
+table2,LViT-T,C6,LANG,C6 Empty (%),results/phase5_test_results.csv,empty,0.01147952373,*100,1.15
+table2,LViT-T,C0,IMG,C0 Dice,results/phase5_test_results.csv,dice,0.7972414434,*100,79.72
+table2,LViT-T,C6,IMG,C6 Dice,results/phase5_test_results.csv,dice,0.7966200605,*100,79.66
+table2,LViT-T,C6,IMG,C6 HD95,results/phase5_test_results.csv,hd95,29.27531731,none,29.28
+table2,LViT-T,C6,IMG,C6 Empty (%),results/phase5_test_results.csv,empty,0.003684126221,*100,0.37
+table2,LViT-T,C0,LR-Gate,C0 Dice,results/phase5_test_results.csv,dice,0.8153861134,*100,81.54
+table2,LViT-T,C6,LR-Gate,C6 Dice,results/phase5_test_results.csv,dice,0.6494670369,*100,64.95
+table2,LViT-T,C6,LR-Gate,C6 HD95,results/phase5_test_results.csv,hd95,56.47083441,none,56.47
+table2,LViT-T,C6,LR-Gate,C6 Empty (%),results/phase5_test_results.csv,empty,0.01308131774,*100,1.31
+table2,LViT-T,C0,SDC-Fallback,C0 Dice,results/phase5_test_results.csv,dice,0.8223768673,*100,82.24
+table2,LViT-T,C6,SDC-Fallback,C6 Dice,results/phase5_test_results.csv,dice,0.6663808556,*100,66.64
+table2,LViT-T,C6,SDC-Fallback,C6 HD95,results/phase5_test_results.csv,hd95,52.33361952,none,52.33
+table2,LViT-T,C6,SDC-Fallback,C6 Empty (%),results/phase5_test_results.csv,empty,0.002669656682,*100,0.27
+table2,LViT-T,C0,Fixed Average,C0 Dice,results/phase5_test_results.csv,dice,0.8275759277,*100,82.76
+table2,LViT-T,C6,Fixed Average,C6 Dice,results/phase5_test_results.csv,dice,0.7623460769,*100,76.23
+table2,LViT-T,C6,Fixed Average,C6 HD95,results/phase5_test_results.csv,hd95,36.45061507,none,36.45
+table2,LViT-T,C6,Fixed Average,C6 Empty (%),results/phase5_test_results.csv,empty,0.005018954562,*100,0.50
+table2,RecLMIS,C0,LANG,C0 Dice,results/phase5_test_results.csv,dice,0.8476887209,*100,84.77
+table2,RecLMIS,C6,LANG,C6 Dice,results/phase5_test_results.csv,dice,0.6120104233,*100,61.20
+table2,RecLMIS,C6,LANG,C6 HD95,results/phase5_test_results.csv,hd95,63.97066106,none,63.97
+table2,RecLMIS,C6,LANG,C6 Empty (%),results/phase5_test_results.csv,empty,0.004431630092,*100,0.44
+table2,RecLMIS,C0,IMG,C0 Dice,results/phase5_test_results.csv,dice,0.7972414434,*100,79.72
+table2,RecLMIS,C6,IMG,C6 Dice,results/phase5_test_results.csv,dice,0.7966200605,*100,79.66
+table2,RecLMIS,C6,IMG,C6 HD95,results/phase5_test_results.csv,hd95,29.27531731,none,29.28
+table2,RecLMIS,C6,IMG,C6 Empty (%),results/phase5_test_results.csv,empty,0.003684126221,*100,0.37
+table2,RecLMIS,C0,LR-Gate,C0 Dice,results/phase5_test_results.csv,dice,0.8463101186,*100,84.63
+table2,RecLMIS,C6,LR-Gate,C6 Dice,results/phase5_test_results.csv,dice,0.6504407681,*100,65.04
+table2,RecLMIS,C6,LR-Gate,C6 HD95,results/phase5_test_results.csv,hd95,58.82393544,none,58.82
+table2,RecLMIS,C6,LR-Gate,C6 Empty (%),results/phase5_test_results.csv,empty,0.006567355438,*100,0.66
+table2,RecLMIS,C0,SDC-Fallback,C0 Dice,results/phase5_test_results.csv,dice,0.8453016651,*100,84.53
+table2,RecLMIS,C6,SDC-Fallback,C6 Dice,results/phase5_test_results.csv,dice,0.6625752237,*100,66.26
+table2,RecLMIS,C6,SDC-Fallback,C6 HD95,results/phase5_test_results.csv,hd95,56.15509898,none,56.16
+table2,RecLMIS,C6,SDC-Fallback,C6 Empty (%),results/phase5_test_results.csv,empty,0.001815366544,*100,0.18
+table2,RecLMIS,C0,Fixed Average,C0 Dice,results/phase5_test_results.csv,dice,0.8365124214,*100,83.65
+table2,RecLMIS,C6,Fixed Average,C6 Dice,results/phase5_test_results.csv,dice,0.7696429439,*100,76.96
+table2,RecLMIS,C6,Fixed Average,C6 HD95,results/phase5_test_results.csv,hd95,35.36530956,none,35.37
+table2,RecLMIS,C6,Fixed Average,C6 Empty (%),results/phase5_test_results.csv,empty,0.003256981152,*100,0.33
+table2,DD-CMD,C0,LANG,C0 Dice,results/phase5_test_results.csv,dice,0.8464044128,*100,84.64
+table2,DD-CMD,C6,LANG,C6 Dice,results/phase5_test_results.csv,dice,0.6092468246,*100,60.92
+table2,DD-CMD,C6,LANG,C6 HD95,results/phase5_test_results.csv,hd95,63.80227119,none,63.80
+table2,DD-CMD,C6,LANG,C6 Empty (%),results/phase5_test_results.csv,empty,0.001388221475,*100,0.14
+table2,DD-CMD,C0,IMG,C0 Dice,results/phase5_test_results.csv,dice,0.7972414434,*100,79.72
+table2,DD-CMD,C6,IMG,C6 Dice,results/phase5_test_results.csv,dice,0.7966200605,*100,79.66
+table2,DD-CMD,C6,IMG,C6 HD95,results/phase5_test_results.csv,hd95,29.27531731,none,29.28
+table2,DD-CMD,C6,IMG,C6 Empty (%),results/phase5_test_results.csv,empty,0.003684126221,*100,0.37
+table2,DD-CMD,C0,LR-Gate,C0 Dice,results/phase5_test_results.csv,dice,0.8439049602,*100,84.39
+table2,DD-CMD,C6,LR-Gate,C6 Dice,results/phase5_test_results.csv,dice,0.6760234919,*100,67.60
+table2,DD-CMD,C6,LR-Gate,C6 HD95,results/phase5_test_results.csv,hd95,54.60922153,none,54.61
+table2,DD-CMD,C6,LR-Gate,C6 Empty (%),results/phase5_test_results.csv,empty,0.002669656682,*100,0.27
+table2,DD-CMD,C0,SDC-Fallback,C0 Dice,results/phase5_test_results.csv,dice,0.8414058949,*100,84.14
+table2,DD-CMD,C6,SDC-Fallback,C6 Dice,results/phase5_test_results.csv,dice,0.6840579579,*100,68.41
+table2,DD-CMD,C6,SDC-Fallback,C6 HD95,results/phase5_test_results.csv,hd95,54.05303146,none,54.05
+table2,DD-CMD,C6,SDC-Fallback,C6 Empty (%),results/phase5_test_results.csv,empty,0.002189118479,*100,0.22
+table2,DD-CMD,C0,Fixed Average,C0 Dice,results/phase5_test_results.csv,dice,0.8488640806,*100,84.89
+table2,DD-CMD,C6,Fixed Average,C6 Dice,results/phase5_test_results.csv,dice,0.7006745805,*100,70.07
+table2,DD-CMD,C6,Fixed Average,C6 HD95,results/phase5_test_results.csv,hd95,49.97561668,none,49.98
+table2,DD-CMD,C6,Fixed Average,C6 Empty (%),results/phase5_test_results.csv,empty,0.002135725346,*100,0.21
