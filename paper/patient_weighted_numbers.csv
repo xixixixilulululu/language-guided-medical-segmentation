@@ -1,0 +1,76 @@
+item,method,strategy,condition,image_set,n_images,n_groups,value_full,value_rounded,source_files
+c0_dice_all,LViT-T,LANG,C0,all,2113,474,74.68516466368848,74.69,results/phase3_test_per_case.csv.gz
+c0_dice_common,LViT-T,LANG,C0,common_S,2081,472,74.65562394381708,74.66,results/phase3_test_per_case.csv.gz
+c6_dice,LViT-T,LANG,C6,common_S,2081,472,51.34982164610405,51.35,results/phase3_test_per_case.csv.gz
+c6_hd95,LViT-T,LANG,C6,common_S,2081,472,80.14679518314945,80.15,results/phase3_test_per_case.csv.gz
+c6_empty_pct,LViT-T,LANG,C6,common_S,2081,472,1.877202817964732,1.88,results/phase3_test_per_case.csv.gz
+c0_dice_all,LViT-T,IMG,C0,all,2113,474,72.41177395622968,72.41,results/phase3_test_per_case.csv.gz
+c0_dice_common,LViT-T,IMG,C0,common_S,2081,472,72.34160736424923,72.34,results/phase3_test_per_case.csv.gz
+c6_dice,LViT-T,IMG,C6,common_S,2081,472,72.34160736424923,72.34,results/phase3_test_per_case.csv.gz
+c6_hd95,LViT-T,IMG,C6,common_S,2081,472,39.95814210273176,39.96,results/phase3_test_per_case.csv.gz
+c6_empty_pct,LViT-T,IMG,C6,common_S,2081,472,0.8199427690953115,0.82,results/phase3_test_per_case.csv.gz
+c0_dice_all,LViT-T,LR-Gate,C0,all,2113,474,74.38667065347333,74.39,results/phase3_test_per_case.csv.gz
+c0_dice_common,LViT-T,LR-Gate,C0,common_S,2081,472,74.34479748375593,74.34,results/phase3_test_per_case.csv.gz
+c6_dice,LViT-T,LR-Gate,C6,common_S,2081,472,57.88004915658911,57.88,results/phase3_test_per_case.csv.gz
+c6_hd95,LViT-T,LR-Gate,C6,common_S,2081,472,70.47812261118284,70.48,results/phase3_test_per_case.csv.gz
+c6_empty_pct,LViT-T,LR-Gate,C6,common_S,2081,472,2.3676666267548123,2.37,results/phase3_test_per_case.csv.gz
+c0_dice_all,LViT-T,SDC-Fallback,C0,all,2113,474,75.34747777657532,75.35,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c0_dice_common,LViT-T,SDC-Fallback,C0,common_S,2081,472,75.29837418099947,75.30,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_dice,LViT-T,SDC-Fallback,C6,common_S,2081,472,61.07893828445433,61.08,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_hd95,LViT-T,SDC-Fallback,C6,common_S,2081,472,62.14578645167392,62.15,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_empty_pct,LViT-T,SDC-Fallback,C6,common_S,2081,472,0.5320558286659981,0.53,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c0_dice_all,LViT-T,Fixed Average,C0,all,2113,474,76.09445785454521,76.09,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c0_dice_common,LViT-T,Fixed Average,C0,common_S,2081,472,76.05507007461568,76.06,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_dice,LViT-T,Fixed Average,C6,common_S,2081,472,68.70329311395525,68.70,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_hd95,LViT-T,Fixed Average,C6,common_S,2081,472,48.963638921553105,48.96,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_empty_pct,LViT-T,Fixed Average,C6,common_S,2081,472,0.961175516260262,0.96,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c0_dice_all,RecLMIS,LANG,C0,all,2113,474,78.99045507783364,78.99,results/phase3_test_per_case.csv.gz
+c0_dice_common,RecLMIS,LANG,C0,common_S,2081,472,78.97300560220894,78.97,results/phase3_test_per_case.csv.gz
+c6_dice,RecLMIS,LANG,C6,common_S,2081,472,54.56885505877378,54.57,results/phase3_test_per_case.csv.gz
+c6_hd95,RecLMIS,LANG,C6,common_S,2081,472,77.13852720398374,77.14,results/phase3_test_per_case.csv.gz
+c6_empty_pct,RecLMIS,LANG,C6,common_S,2081,472,0.7358134089289308,0.74,results/phase3_test_per_case.csv.gz
+c0_dice_all,RecLMIS,IMG,C0,all,2113,474,72.41177395622968,72.41,results/phase3_test_per_case.csv.gz
+c0_dice_common,RecLMIS,IMG,C0,common_S,2081,472,72.34160736424923,72.34,results/phase3_test_per_case.csv.gz
+c6_dice,RecLMIS,IMG,C6,common_S,2081,472,72.34160736424923,72.34,results/phase3_test_per_case.csv.gz
+c6_hd95,RecLMIS,IMG,C6,common_S,2081,472,39.95814210273176,39.96,results/phase3_test_per_case.csv.gz
+c6_empty_pct,RecLMIS,IMG,C6,common_S,2081,472,0.8199427690953115,0.82,results/phase3_test_per_case.csv.gz
+c0_dice_all,RecLMIS,LR-Gate,C0,all,2113,474,78.74397393522841,78.74,results/phase3_test_per_case.csv.gz
+c0_dice_common,RecLMIS,LR-Gate,C0,common_S,2081,472,78.72664182407422,78.73,results/phase3_test_per_case.csv.gz
+c6_dice,RecLMIS,LR-Gate,C6,common_S,2081,472,58.3061909496702,58.31,results/phase3_test_per_case.csv.gz
+c6_hd95,RecLMIS,LR-Gate,C6,common_S,2081,472,71.67387674079204,71.67,results/phase3_test_per_case.csv.gz
+c6_empty_pct,RecLMIS,LR-Gate,C6,common_S,2081,472,1.1879420613252014,1.19,results/phase3_test_per_case.csv.gz
+c0_dice_all,RecLMIS,SDC-Fallback,C0,all,2113,474,78.44338396397407,78.44,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c0_dice_common,RecLMIS,SDC-Fallback,C0,common_S,2081,472,78.42229205534855,78.42,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_dice,RecLMIS,SDC-Fallback,C6,common_S,2081,472,60.69403071489805,60.69,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_hd95,RecLMIS,SDC-Fallback,C6,common_S,2081,472,66.43201182458563,66.43,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_empty_pct,RecLMIS,SDC-Fallback,C6,common_S,2081,472,0.3246753246753247,0.32,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c0_dice_all,RecLMIS,Fixed Average,C0,all,2113,474,77.56991859684041,77.57,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c0_dice_common,RecLMIS,Fixed Average,C0,common_S,2081,472,77.52924466450631,77.53,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_dice,RecLMIS,Fixed Average,C6,common_S,2081,472,69.58737746768794,69.59,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_hd95,RecLMIS,Fixed Average,C6,common_S,2081,472,47.91102112499285,47.91,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_empty_pct,RecLMIS,Fixed Average,C6,common_S,2081,472,0.7395942883231019,0.74,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c0_dice_all,DD-CMD,LANG,C0,all,2113,474,78.9193539603276,78.92,results/phase3_test_per_case.csv.gz
+c0_dice_common,DD-CMD,LANG,C0,common_S,2081,472,78.86167542264322,78.86,results/phase3_test_per_case.csv.gz
+c6_dice,DD-CMD,LANG,C6,common_S,2081,472,55.12995807872476,55.13,results/phase3_test_per_case.csv.gz
+c6_hd95,DD-CMD,LANG,C6,common_S,2081,472,76.243451897491,76.24,results/phase3_test_per_case.csv.gz
+c6_empty_pct,DD-CMD,LANG,C6,common_S,2081,472,0.3767599318446776,0.38,results/phase3_test_per_case.csv.gz
+c0_dice_all,DD-CMD,IMG,C0,all,2113,474,72.41177395622968,72.41,results/phase3_test_per_case.csv.gz
+c0_dice_common,DD-CMD,IMG,C0,common_S,2081,472,72.34160736424923,72.34,results/phase3_test_per_case.csv.gz
+c6_dice,DD-CMD,IMG,C6,common_S,2081,472,72.34160736424923,72.34,results/phase3_test_per_case.csv.gz
+c6_hd95,DD-CMD,IMG,C6,common_S,2081,472,39.95814210273176,39.96,results/phase3_test_per_case.csv.gz
+c6_empty_pct,DD-CMD,IMG,C6,common_S,2081,472,0.8199427690953115,0.82,results/phase3_test_per_case.csv.gz
+c0_dice_all,DD-CMD,LR-Gate,C0,all,2113,474,78.6242071729451,78.62,results/phase3_test_per_case.csv.gz
+c0_dice_common,DD-CMD,LR-Gate,C0,common_S,2081,472,78.57086136643962,78.57,results/phase3_test_per_case.csv.gz
+c6_dice,DD-CMD,LR-Gate,C6,common_S,2081,472,59.70832945298429,59.71,results/phase3_test_per_case.csv.gz
+c6_hd95,DD-CMD,LR-Gate,C6,common_S,2081,472,69.85853857736763,69.86,results/phase3_test_per_case.csv.gz
+c6_empty_pct,DD-CMD,LR-Gate,C6,common_S,2081,472,0.6528766274528987,0.65,results/phase3_test_per_case.csv.gz
+c0_dice_all,DD-CMD,SDC-Fallback,C0,all,2113,474,77.97162739469029,77.97,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c0_dice_common,DD-CMD,SDC-Fallback,C0,common_S,2081,472,77.93276995770448,77.93,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_dice,DD-CMD,SDC-Fallback,C6,common_S,2081,472,62.36770048181749,62.37,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_hd95,DD-CMD,SDC-Fallback,C6,common_S,2081,472,65.15102822338395,65.15,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c6_empty_pct,DD-CMD,SDC-Fallback,C6,common_S,2081,472,0.5091777337540049,0.51,results/phase3_test_per_case.csv.gz;results/phase5_test_per_case.csv.gz
+c0_dice_all,DD-CMD,Fixed Average,C0,all,2113,474,79.06644710159803,79.07,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c0_dice_common,DD-CMD,Fixed Average,C0,common_S,2081,472,79.02371915021959,79.02,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_dice,DD-CMD,Fixed Average,C6,common_S,2081,472,63.30293604475064,63.30,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_hd95,DD-CMD,Fixed Average,C6,common_S,2081,472,64.04653474438913,64.05,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
+c6_empty_pct,DD-CMD,Fixed Average,C6,common_S,2081,472,0.587905895109285,0.59,results/phase5_test_per_case.csv.gz;results/phase3_test_per_case.csv.gz
